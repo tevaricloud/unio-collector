@@ -1,0 +1,4 @@
+from unio_collector.aws.ec2.public_ipv4_record import PublicIpv4RegionRecord as PublicIpv4RegionRecord
+from unio_collector.aws.network.nat_gateway_record import NatGatewayRecord as NatGatewayRecord
+from unio_collector.aws.network.private_link_record import PrivateLinkRegionRecord as PrivateLinkRegionRecord
+from unio_collector.aws.network.transit_gateway_record import TransitGatewayRegionRecord as TransitGatewayRegionRecord

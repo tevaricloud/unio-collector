@@ -1,0 +1,25 @@
+"""Frozen Itero version-one scanner membership."""
+
+ITERO_SCANNERS = (
+    "backup-retention-review",
+    "billing-alerts-and-budgets-review",
+    "cloudfront-alb-origin-protection-review",
+    "cloudtrail-security-posture-review",
+    "cloudwatch-idle-log-review",
+    "cloudwatch-log-cost-and-relevance-review",
+    "cloudwatch-log-groups-without-retention",
+    "compute-optimizer-recommendation-review",
+    "cost-optimization-hub-recommendation-review",
+    "ecr-image-scan-posture-review",
+    "encryption-baseline-review",
+    "extended-support-and-eol-review",
+    "iam-account-security-review",
+    "idle-zombie-resource-detector",
+    "kms-key-posture-review",
+    "lambda-cost-cycle-risk-review",
+    "network-vpc-endpoint-opportunity-review",
+    "rds-snapshot-retention-review",
+    "s3-lifecycle-cost-review",
+    "s3-versioning-and-replication-review",
+    "tagging-missing-cost-tags",
+)

@@ -1,0 +1,346 @@
+Tevari Cloud Unio Collector Source-Available License
+Version 1.0
+
+Copyright © 2026 Tevari Ltd. All rights reserved.
+
+This Licence applies to the Unio Collector software and associated source code,
+documentation, build files and other materials distributed with this Licence
+(the "Software").
+
+The Software is source-available software. It is not open-source software, and
+this Licence does not grant the redistribution rights normally associated with
+open-source licences.
+
+Definitions and Acceptance
+
+"Authorised Users" means you and, where you are an organisation, your employees
+and individual contractors who require access to the Software solely to perform
+services on your behalf and who are bound by confidentiality and use obligations
+no less protective than those applicable under this Licence.
+
+"Internal Use" means use by you and your Authorised Users solely for your own
+personal or organisational purposes, and not for the purpose of providing
+services to, or materially benefiting, a third party.
+
+By downloading, copying, installing, executing, modifying or otherwise exercising
+any right granted under this Licence, you acknowledge that your use of the
+Software is subject to this Licence.
+
+The rights granted under this Licence are expressly conditional upon compliance
+with its terms. Any exercise of Tevari's exclusive rights outside the permissions
+expressly granted by this Licence is unauthorised.
+
+Licence Grant
+
+Subject to this Licence, Tevari Ltd ("Tevari") grants you a non-exclusive,
+worldwide, non-transferable, non-sublicensable, royalty-free licence to:
+
+a. view and inspect the source code of the Software;
+
+b. download and make copies of the Software for Internal Use;
+
+c. execute and use the Software for Internal Use;
+
+d. modify the Software for Internal Use; and
+
+e. build executable or other derived forms of the Software for Internal Use.
+
+Internal Use may include commercial use within your own organisation, provided
+that neither the Software nor its functionality is supplied, operated or used
+for the benefit of third parties except as expressly permitted by this Licence
+or separately authorised by Tevari in writing.
+
+You may provide the Software to Authorised Users solely for Internal Use and
+remain responsible for their compliance with this Licence.
+
+Restrictions on Redistribution and Third-Party Use
+
+Except for the GitHub Platform Rights described in Section 4, you may not:
+
+a. publish, upload, mirror, distribute, share or otherwise make available the
+Software, its source code, compiled forms or modified versions to any person
+other than an Authorised User;
+
+b. package or repackage the Software for distribution;
+
+c. sell, resell, rent, lease, sublicense or otherwise commercially distribute
+the Software;
+
+d. distribute a modified or derivative version of the Software;
+
+e. rebrand, white-label or distribute the Software under another product,
+organisation or project name;
+
+f. publish the Software to any other repository, package registry, software
+marketplace, container registry or distribution service, except through
+GitHub's built-in forking functionality as permitted under Section 4;
+
+g. use the Software to provide to any third party a hosted, managed, bureau,
+consultancy, scanning, assessment, monitoring, software-as-a-service or
+other service in which the Software or its functionality is operated for,
+applied to, or materially used for the benefit of that third party;
+
+h. remove, obscure or alter any copyright notice, proprietary notice,
+attribution, licence notice or other legal notice contained in the Software;
+
+i. represent that you own, authored or originated the Software or any
+substantial portion of it; or
+
+j. enable or assist another person or organisation to do any of the above.
+
+Giving attribution to Tevari does not grant permission to redistribute,
+commercialise or provide the Software as a service.
+
+GitHub Platform Rights
+
+Where Tevari makes the Software available through a public GitHub repository,
+GitHub users may exercise the rights granted to them under the applicable
+GitHub Terms of Service in respect of that public repository, including viewing
+the Software and reproducing the repository through GitHub's built-in forking
+functionality.
+
+This Section recognises only those rights arising through GitHub's applicable
+Terms of Service and functionality. No additional redistribution rights are
+granted by this Licence.
+
+In particular, the GitHub platform rights do not grant permission to:
+
+a. redistribute the Software outside GitHub;
+
+b. publish or mirror the Software through another repository, source hosting
+service, registry or distribution platform;
+
+c. publish compiled releases, packages, installers or container images derived
+from the Software;
+
+d. rebrand, white-label, sublicense, sell or otherwise commercialise the
+Software;
+
+e. use a fork to provide services prohibited by Section 3(g); or
+
+f. otherwise exercise rights in the Software beyond those expressly granted by
+this Licence or arising under GitHub's applicable Terms of Service.
+
+Modifications
+
+You may modify the Software for Internal Use.
+
+You are not required to submit modifications, fixes or improvements to Tevari.
+
+You may not distribute a modification or derivative work except as expressly
+permitted by this Licence or with Tevari's prior written permission.
+
+All copyright, proprietary, attribution and licence notices must be preserved in
+modified copies.
+
+Outputs and User Data
+
+The restrictions in Section 3 apply to the Software and derivative works, not
+to legitimate outputs generated through authorised use of the Software.
+
+You may use, retain and transmit reports, logs, evidence bundles, configuration
+outputs and other data generated through authorised use of the Software,
+including transmission to Tevari for analysis or processing, provided that such
+output does not contain a substantial portion of the Software itself.
+
+Nothing in this Licence transfers ownership of your cloud data, configuration,
+evidence bundles, reports or other content merely because they are processed
+using the Software.
+
+Contributions
+
+Tevari may choose to accept suggestions, bug reports, pull requests, patches or
+other contributions ("Contributions").
+
+Tevari is under no obligation to review, accept, merge, maintain or incorporate
+any Contribution.
+
+Unless a separate written contribution agreement applies, by intentionally
+submitting a Contribution for inclusion in the Software, you grant Tevari Ltd a
+perpetual, irrevocable, worldwide, royalty-free, transferable and sublicensable
+licence to use, reproduce, modify, adapt, publish, distribute, commercialise,
+relicense and otherwise exploit that Contribution.
+
+To the extent any patent claim owned or controlled by you would necessarily be
+infringed by use of your Contribution, you grant Tevari and its licensees a
+perpetual, worldwide, royalty-free, transferable and sublicensable licence under
+that patent claim to make, use, sell, offer for sale, import and otherwise
+exploit the Contribution.
+
+You represent that you have the authority to submit the Contribution and grant
+the rights described above.
+
+Tevari may require a separate Contributor Licence Agreement for some
+Contributions. Tevari may decline any Contribution where it considers a
+separate Contributor Licence Agreement appropriate and one has not been
+completed.
+
+Ownership and Reservation of Rights
+
+The Software is licensed, not sold.
+
+Tevari and its licensors retain all right, title and interest in and to the
+Software, including all copyright and other intellectual property rights.
+
+No licence is granted to any patent, trade mark, design right, database right
+or other intellectual property right except to the extent expressly necessary
+to exercise the rights granted under this Licence.
+
+Except for the rights expressly granted, all rights are reserved.
+
+Trademarks
+
+This Licence does not grant permission to use the names, trade marks, service
+marks, logos or branding of Tevari Ltd, Tevari Cloud, Unio or related products
+or services, except where necessary to accurately identify the origin of an
+unmodified copy of the Software.
+
+Third-Party Components
+
+The Software may depend on or include third-party software subject to separate
+licence terms.
+
+Those third-party terms apply to the relevant third-party components and are
+not overridden by this Licence.
+
+Where required, Tevari will provide or preserve applicable third-party notices
+and licence information.
+
+Nothing in this Licence grants Tevari rights over third-party software beyond
+those available under the applicable third-party licence.
+
+Compliance with Law and Authorised Access
+
+You may use the Software only in accordance with applicable law.
+
+You are responsible for ensuring that you have appropriate authority to access,
+inspect or collect information from any account, system, service or environment
+with which you use the Software.
+
+Nothing in this Licence restricts any act which applicable law expressly permits
+and in relation to which applicable law prohibits contractual restriction.
+
+No Obligation to Support
+
+Tevari is not required to provide support, maintenance, updates, security fixes,
+compatibility fixes or future versions of the Software under this Licence.
+
+Any support or other services offered by Tevari are subject to separate terms.
+
+Disclaimer of Warranties
+
+THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE", WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, WHETHER EXPRESS, IMPLIED OR STATUTORY.
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, TEVARI DISCLAIMS ALL IMPLIED WARRANTIES
+AND CONDITIONS, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
+SATISFACTORY QUALITY, NON-INFRINGEMENT, ACCURACY, RELIABILITY AND AVAILABILITY.
+
+TEVARI DOES NOT WARRANT THAT THE SOFTWARE WILL BE ERROR-FREE, COMPLETE, SECURE,
+CONTINUOUSLY AVAILABLE OR SUITABLE FOR ANY PARTICULAR PURPOSE.
+
+Limitation of Liability
+
+Nothing in this Licence excludes or limits liability for:
+
+a. death or personal injury caused by negligence;
+
+b. fraud or fraudulent misrepresentation; or
+
+c. any liability which cannot lawfully be excluded or limited.
+
+Subject to the above, Tevari Ltd and its directors, employees, contractors and
+licensors will not be liable for any indirect, incidental, special,
+consequential or exemplary loss or damage arising from or related to the
+Software or this Licence, including loss of profits, revenue, business, data,
+goodwill or anticipated savings.
+
+Subject to the liabilities that cannot lawfully be excluded or limited,
+Tevari's total aggregate liability arising out of or in connection with the
+Software or this Licence, whether in contract, tort (including negligence),
+misrepresentation, restitution or otherwise, shall not exceed the greater of:
+
+a. the amounts paid by you to Tevari specifically for the Software during the
+twelve months preceding the event giving rise to liability; and
+
+b. one hundred pounds sterling (£100).
+
+Consumer and Mandatory Statutory Rights
+
+If you are a consumer, nothing in this Licence affects any statutory rights or
+remedies which cannot lawfully be excluded or restricted.
+
+Nothing in this Licence restricts rights that applicable law makes mandatory or
+incapable of contractual exclusion.
+
+Termination
+
+Your rights under this Licence terminate automatically if you:
+
+a. breach Section 3, 4, 5, 8, 9 or 11; or
+
+b. materially breach any other provision of this Licence.
+
+Upon termination, you must cease using the Software and delete copies in your
+possession or control, except to the extent retention is required by law.
+
+For a breach capable of remedy other than deliberate unauthorised
+redistribution, commercialisation or misuse, Tevari may, at its discretion,
+permit reinstatement after the breach has been remedied.
+
+Termination does not affect rights or obligations which by their nature should
+survive termination.
+
+Injunctive and Other Relief
+
+You acknowledge that unauthorised distribution, disclosure, rebranding or
+commercialisation of the Software may cause harm for which damages alone may
+not be an adequate remedy.
+
+Tevari may seek injunctive or other equitable relief in addition to any other
+remedies available to it.
+
+Separate Commercial Permissions
+
+If you require rights not granted by this Licence, including permission to
+redistribute, bundle, repackage, sublicense, resell, white-label, use the
+Software in connection with third-party consultancy or managed services, host
+for third parties or otherwise commercially distribute or exploit the Software,
+you must obtain separate written permission from Tevari Ltd.
+
+Governing Law and Jurisdiction
+
+This Licence and any non-contractual obligations arising from or connected with
+it are governed by the laws of England and Wales.
+
+The courts of England and Wales have exclusive jurisdiction over disputes
+arising from or connected with this Licence, except where applicable consumer
+or other mandatory law gives you the right to bring proceedings elsewhere.
+
+Licence Versions
+
+Each version of the Software is licensed under the version of this Licence
+distributed with that version.
+
+Tevari may publish revised versions of this Licence from time to time.
+
+A revised licence does not retrospectively alter the licence applicable to a
+copy of the Software already obtained unless you expressly agree otherwise.
+
+Entire Agreement, Severability and Waiver
+
+This Licence constitutes the terms under which Tevari makes the Software
+available unless Tevari and you have entered into a separate written agreement
+governing the Software.
+
+If any provision is held to be invalid or unenforceable, the remaining
+provisions remain in effect.
+
+No failure or delay by Tevari in enforcing a provision constitutes a waiver of
+that provision.
+
+Tevari Ltd
+Tevari Cloud
+Unio Collector
+
+Licence version: 1.0

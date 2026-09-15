@@ -1,0 +1,181 @@
+{
+  "columns": 80,
+  "routes": [
+    {
+      "argv": [],
+      "help_sha256": "e9bb141db1b098789c8d9fbce63a9085d82685fb907c1c8ab3cb7bd2f435363c",
+      "id": "root",
+      "parser_actions_sha256": "f10ed70cba0f5bd805f84e559b1ab06ee36209984e40f44578d4858a831c88a8"
+    },
+    {
+      "argv": [
+        "collect"
+      ],
+      "help_sha256": "d98c79d2c5cb4e27793b3e69d977b9c3f8336343ca7015357a3f65cfa6989d5e",
+      "id": "collect",
+      "parser_actions_sha256": "ed3771e3947a4172987fb3ff4d5f14530492ea753f06ae3e80d99a0deb195fbe"
+    },
+    {
+      "argv": [
+        "organization"
+      ],
+      "help_sha256": "6f486eade259ead43055fffd209cda17337ccc5b4188b4656630de0a594df377",
+      "id": "organization",
+      "parser_actions_sha256": "f96fbffcd8619b53f623b21979b99fcfd7c1f767abfb5a4f9257c8074d1996ae"
+    },
+    {
+      "argv": [
+        "organization",
+        "plan"
+      ],
+      "help_sha256": "0d1c54df66c7ba03926bf6353c3739b2cad86edb3c07eed42f285505982724fc",
+      "id": "organization plan",
+      "parser_actions_sha256": "44454f1da3cc3c9f3f592243bdb18c33d04e0bc0b833355b031dac9226e72503"
+    },
+    {
+      "argv": [
+        "organization",
+        "collect"
+      ],
+      "help_sha256": "ae07b72ebbdb9694b7b87d79db079e9e9b565fad9670929c17f4eda2ccab4628",
+      "id": "organization collect",
+      "parser_actions_sha256": "44454f1da3cc3c9f3f592243bdb18c33d04e0bc0b833355b031dac9226e72503"
+    },
+    {
+      "argv": [
+        "organization",
+        "validate"
+      ],
+      "help_sha256": "28f4882474980afadbec55d13484832d11ec11d45e90116ce32db8b40e920be1",
+      "id": "organization validate",
+      "parser_actions_sha256": "141a97c10c997a737710193b00663156fc199a04f3291e0300a34877beaa6050"
+    },
+    {
+      "argv": [
+        "validate-bundle"
+      ],
+      "help_sha256": "18b9c6d6ac3f204031068ad258d67f0fed7a91f9f0dd58b2a76c4e918f010d64",
+      "id": "validate-bundle",
+      "parser_actions_sha256": "c4643e7ae7740bf1c9656d546ca5ab097b0dbddcff9e983d4bae87626a02fe66"
+    },
+    {
+      "argv": [
+        "doctor"
+      ],
+      "help_sha256": "095d2192ec35f75a03207ef8305067592cbec70e67e204db1f77252e4daca9a7",
+      "id": "doctor",
+      "parser_actions_sha256": "493d36568a11c6b01b3b82698aa4b4a4e8ad9032c27c415e1b5bb686f37ad53f"
+    },
+    {
+      "argv": [
+        "policy"
+      ],
+      "help_sha256": "c2c97cac76300ef5b85ee7bb00308564d04564692f3dd8157ffecf43bc24be96",
+      "id": "policy",
+      "parser_actions_sha256": "6ec68859ccb26871723126a1a016d65ebc9ab699a6b97d02802e582d0dcced45"
+    },
+    {
+      "argv": [
+        "policy",
+        "aws"
+      ],
+      "help_sha256": "4a4fa76c750378ba7220a8a9d8e885e498a8b3cb66a4e150f992a2141d7b56a2",
+      "id": "policy aws",
+      "parser_actions_sha256": "8f4ff3ecd66cd147f6f32f7ba8394f7cb6d1cd96873ab19b143770c60139add8"
+    },
+    {
+      "argv": [
+        "permission-preview"
+      ],
+      "help_sha256": "73208af6b0cc88b839ded87682b64b0faa83d7c5b0df2bc4788a4e41279c6c88",
+      "id": "permission-preview",
+      "parser_actions_sha256": "14eee3232558c07d1209ca6cbf8f177d4746aa7ab6b672bb3e371d2ae9705858"
+    },
+    {
+      "argv": [
+        "privacy"
+      ],
+      "help_sha256": "b2627c460b782b8b7024a18cb592429ecf6bf3847d2b94eb6334b019a5ab8761",
+      "id": "privacy",
+      "parser_actions_sha256": "a64911ebce27e195bdff9d7d38e50d5d0ecca929c5617baf86fc5148a3577c32"
+    },
+    {
+      "argv": [
+        "privacy",
+        "protect"
+      ],
+      "help_sha256": "7f2d54551a7f8bf59a60a991b413f38f22f6668806b4f94a435ebd4f901711af",
+      "id": "privacy protect",
+      "parser_actions_sha256": "abdf4457dc821a952fdd678784ed3746b343f0bda8a07ade21d41c72c86b727f"
+    },
+    {
+      "argv": [
+        "privacy",
+        "preview"
+      ],
+      "help_sha256": "84e7de89ed9c0223452c297a7280c04e1d733bdbba6d6543b4e8f9c959e01ca7",
+      "id": "privacy preview",
+      "parser_actions_sha256": "9b429ddb5efdb61154f2acf8aa37793660cbce7751022795bbf251c1c6e76290"
+    },
+    {
+      "argv": [
+        "privacy",
+        "rekey-vault"
+      ],
+      "help_sha256": "3774dee2e49f72d9edd2a9d64ac47dc22170becbdf5f7b90c8799d9548f45c44",
+      "id": "privacy rekey-vault",
+      "parser_actions_sha256": "59a436f8a7801fe143e3fbbb889b736e71a2c5b950dcb16901837bcf0c26de32"
+    },
+    {
+      "argv": [
+        "privacy",
+        "inspect"
+      ],
+      "help_sha256": "2e1ec79bb03e4bb2d695664b966d7e9cf2ec94030b7ffb428d3c26b6e8fe3df2",
+      "id": "privacy inspect",
+      "parser_actions_sha256": "e6399fba146d4537745a32ab4f883e8ab2dba121a5f40b27a7311564343dcf45"
+    },
+    {
+      "argv": [
+        "privacy",
+        "restore-report"
+      ],
+      "help_sha256": "d92f928f5e321f081670a5a967692b33101569119f0974578e2ec350b11829d0",
+      "id": "privacy restore-report",
+      "parser_actions_sha256": "d64c273d90d0b90d95e5dd24efcafe805b3b0b360fbff6513bd10e272f9034e8"
+    },
+    {
+      "argv": [
+        "version"
+      ],
+      "help_sha256": "47e9c0dd01db0689a5d1c797bc2487aa869200de5ad3c6759e3656e4cd33148b",
+      "id": "version",
+      "parser_actions_sha256": "c94a07998777c639ce5cec36f391e6f8b0651afd57383d67733f04bdb97b0bf1"
+    },
+    {
+      "argv": [
+        "profiles"
+      ],
+      "help_sha256": "9a9433ed2255809e0a96ba5e74e41a5f05967432e1ec6f17a7ffcbc0f2d5a1a2",
+      "id": "profiles",
+      "parser_actions_sha256": "b4098e1328fd07141b7e7726923578d4aa7fa00c0b9fc17d6c4a187920726fc8"
+    },
+    {
+      "argv": [
+        "scanners"
+      ],
+      "help_sha256": "7aac82e1c217dbafe0ab3c31c79dbd3e64a0360864ae49f745abcb9e6af803ec",
+      "id": "scanners",
+      "parser_actions_sha256": "79107cd1e16e6a5b179386491c61289b37cd1d2908372cab33121376c4717783"
+    },
+    {
+      "argv": [
+        "package-plan"
+      ],
+      "help_sha256": "dc8e79e03cb42baa4fb1b6679a0d57634adf936cbfcf195cc3422c28d0896a49",
+      "id": "package-plan",
+      "parser_actions_sha256": "955a08cba307b1e6ea4266e5b50535261884d9d391eb488f980c0f8dbe768926"
+    }
+  ],
+  "schema_version": "2026-08-collector-cli-contract-v1"
+}

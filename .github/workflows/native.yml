@@ -1,0 +1,109 @@
+name: Standalone native validation
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: windows-2022
+            target: windows-x86_64
+          - runner: ubuntu-24.04
+            target: linux-x86_64
+          - runner: macos-15-intel
+            target: macos-x86_64
+          - runner: macos-15
+            target: macos-arm64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.10'
+      - name: Provision reviewed Gitleaks
+        shell: bash
+        run: |
+          python -B -m tools.collector_repository provision --root . --output "$RUNNER_TEMP/unio-ci-tools" --tools gitleaks
+          echo "$RUNNER_TEMP/unio-ci-tools" >> "$GITHUB_PATH"
+      - name: Install validation bootstrap dependency
+        run: python -B -m tools.collector_repository bootstrap --root .
+      - name: Prepare Windows packaging
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: dotnet tool install --global wix --version 5.0.2
+      - name: Prepare Linux native prerequisites
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-tk xvfb dpkg-dev clamav
+          CLAMAV_ROOT="/tmp/unio-collector-clamav-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          CLAMAV_DATABASE="$CLAMAV_ROOT/database"
+          sudo install -d -o clamav -g clamav -m 0755 "$CLAMAV_ROOT" "$CLAMAV_DATABASE"
+          sudo -u clamav freshclam --datadir="$CLAMAV_DATABASE" --log="$CLAMAV_ROOT/freshclam.log"
+          echo "UNIO_COLLECTOR_CLAMAV_DATABASE=$CLAMAV_DATABASE" >> "$GITHUB_ENV"
+      - name: Prepare macOS malware scanner
+        if: runner.os == 'macOS'
+        run: |
+          brew install clamav
+          mkdir -p "$RUNNER_TEMP/unio-collector-clamav"
+          printf 'DatabaseDirectory %s\nDatabaseMirror database.clamav.net\n' "$RUNNER_TEMP/unio-collector-clamav" > "$RUNNER_TEMP/unio-collector-freshclam.conf"
+          freshclam --config-file="$RUNNER_TEMP/unio-collector-freshclam.conf"
+          echo "UNIO_COLLECTOR_CLAMAV_DATABASE=$RUNNER_TEMP/unio-collector-clamav" >> "$GITHUB_ENV"
+      - name: Validate native collector
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == Linux ]]; then
+            xvfb-run -a python -B -m tools.collector_repository native --root . --output "$RUNNER_TEMP/unio-collector-native-${GITHUB_RUN_ATTEMPT}"
+          else
+            python -B -m tools.collector_repository native --root . --output "$RUNNER_TEMP/unio-collector-native-${GITHUB_RUN_ATTEMPT}"
+          fi
+      - name: Retain compact validation evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: native-evidence-${{ matrix.target }}
+          path: |
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/validation-summary.json
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/installed-wheel-summary.json
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native/*summary.json
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native/*manifest.json
+          retention-days: 3
+          if-no-files-found: warn
+      - name: Retain native failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: native-validation-diagnostics-${{ matrix.target }}
+          path: |
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native-build.log
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native-installer.log
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native-malware.log
+          retention-days: 3
+          if-no-files-found: warn
+      - name: Retain unsigned artifacts on explicit dispatch
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: native-artifacts-${{ matrix.target }}
+          path: |
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native/*.zip
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native/*.msi
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native/*.deb
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native/*.pkg
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native/*.json
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native/*.txt
+          retention-days: 7
+          if-no-files-found: error

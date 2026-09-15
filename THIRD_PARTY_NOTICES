@@ -1,0 +1,45 @@
+Third-party dependency evidence
+
+Tevari's own terms are in LICENSE. Third-party components remain subject to
+their separate licences; LICENSE does not override those terms.
+
+This source export declares dependencies in pyproject.toml and preserves the
+native build tooling and hash-locked dependency inputs. Native builds generate
+dependency-licences.json, sbom.cyclonedx.json and sbom.spdx.json alongside the
+release artifacts using the resolved build environment. These generated files
+are dependency evidence, not an approval of licence compatibility or a substitute
+for applicable upstream notices and licence texts.
+
+For each release, retain the resolved dependency versions and applicable upstream
+licence and notice files from the built artifacts separately from Tevari's LICENSE.
+The source export does not vendor dependency wheels or their licence texts.
+
+Gitleaks scanner rule configuration
+
+requirements/secret-scanning.toml derives from Gitleaks v8.30.1:
+https://github.com/gitleaks/gitleaks/tree/v8.30.1
+Upstream rules and value allowlists are retained. Global path exclusions are
+limited to Git metadata; a credential-bearing Authorization header rule is added.
+The upstream configuration carries the following MIT notice:
+
+MIT License
+
+Copyright (c) 2019 Zachary Rice
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

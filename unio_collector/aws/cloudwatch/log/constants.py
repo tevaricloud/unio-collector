@@ -1,0 +1,7 @@
+from __future__ import annotations  # noqa: D100
+
+CLOUDWATCH_LOG_METRIC_DETAIL_MODES = {"full", "prioritized"}
+CLOUDWATCH_LOG_METRIC_PRIORITIZATION_SCOPES = {"regional", "global"}
+CLOUDWATCH_LOG_METRIC_STATUS_COLLECTED = "collected"
+CLOUDWATCH_LOG_METRIC_STATUS_SKIPPED_BY_DETAIL_MODE = "skipped_by_metric_detail_mode"
+CLOUDWATCH_LOG_METRIC_DETAIL_DEFAULT_LIMIT = 125

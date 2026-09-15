@@ -1,0 +1,41 @@
+name: Unio Collector feature request
+description: Suggest a change to Unio Collector for maintainer review.
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Suggestions do not promise acceptance or implementation. See [SUPPORT.md](../blob/HEAD/SUPPORT.md) for project scope and commercial enquiries about Unio or Tevari Cloud.
+        Security vulnerabilities must never be opened as public issues. Use **Security → Report a vulnerability** as described in [SECURITY.md](../blob/HEAD/SECURITY.md).
+        Never include AWS credentials, access keys, session tokens, AWS account IDs, real customer evidence bundles, decrypted evidence, privacy vaults, passphrases, recovery material or other secrets.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem/use case
+      description: Explain the need using synthetic, non-sensitive examples.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives/workarounds considered
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Relevant platform/provider context
+      description: Include relevant OS or AWS service context, without account IDs or customer evidence.
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Public disclosure confirmation
+      options:
+        - label: I have included no AWS credentials, access keys, session tokens, customer evidence, decrypted evidence, privacy vaults, passphrases, recovery material or other secrets.
+          required: true

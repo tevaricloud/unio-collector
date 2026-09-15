@@ -1,0 +1,1 @@
+"""Protected report restoration contracts."""

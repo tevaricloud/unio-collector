@@ -1,0 +1,1 @@
+from unio_collector.scan_workflow.provider_execution.executor import ProviderScanExecutorProtocol as ProviderScanExecutorProtocol

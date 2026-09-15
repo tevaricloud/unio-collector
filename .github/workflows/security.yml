@@ -1,0 +1,33 @@
+name: Standalone security validation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.10'
+      - name: Provision reviewed security binaries
+        run: |
+          python -B -m tools.collector_repository provision --root . --output "$RUNNER_TEMP/unio-ci-tools" --tools gitleaks actionlint
+          echo "$RUNNER_TEMP/unio-ci-tools" >> "$GITHUB_PATH"
+      - name: Install validation bootstrap dependency
+        run: python -B -m tools.collector_repository bootstrap --root .
+      - name: Bandit, dependency audits, actionlint and zizmor
+        run: python -B -m tools.collector_repository security --root . --output "$RUNNER_TEMP/unio-security-${GITHUB_RUN_ATTEMPT}"

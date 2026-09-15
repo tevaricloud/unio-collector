@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "tools.collector_repository.backend"
+backend-path = ["."]
+
+[project]
+name = "unio-collector"
+version = "0.1.0"
+description = "Standalone read-only AWS evidence collector"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["argon2-cffi>=23.1", "boto3>=1.34", "cryptography>=42.0", "pydantic>=2.7", "PyYAML>=6.0"]
+license = {file = "LICENSE"}
+
+[project.scripts]
+unio-collector = "unio_collector.collector_cli.app:main"
+
+[tool.setuptools.packages.find]
+include = ["unio_collector*"]
+
+[project.optional-dependencies]
+"dev" = ["packaging>=24,<27", "pyright>=1.1.409", "pytest>=8.0", "ruff>=0.8.0", "setuptools>=68", "types-PyYAML>=6.0", "wheel>=0.44"]
+"native-build" = ["macholib==1.16.4; sys_platform == 'darwin'", "pefile==2024.8.26; sys_platform == 'win32'", "PyInstaller==6.22.2", "pywin32-ctypes==0.2.3; sys_platform == 'win32'"]
+
+[tool.ruff]
+"line-length" = 160
+"target-version" = "py312"
+
+[tool.ruff."lint"]
+"ignore" = ["COM812"]
+"select" = ["A", "ANN201", "ANN202", "ANN001", "ANN002", "ANN003", "ANN401", "ANN204", "ANN205", "ANN206", "ARG", "ASYNC", "C4", "C901", "BLE001", "COM", "DTZ", "D105", "D106", "D202", "D200", "D201", "D204", "D205", "D207", "D208", "D209", "D210", "D211", "D212", "D214", "D215", "D300", "D301", "D400", "D401", "D402", "D403", "D404", "D405", "D406", "D407", "D408", "D409", "D410", "D411", "D412", "D413", "D414", "D415", "D416", "D417", "D418", "D419", "D100", "D101", "D102", "D103", "D104", "D107", "E501", "E9", "EM", "ERA", "EXE", "FA", "FBT001", "FBT002", "FBT003", "FLY", "FIX", "F", "B", "FURB", "G", "I", "ICN", "INP001", "ISC", "LOG", "N", "PERF", "PGH", "PIE", "PLC", "PLE", "PLR2004", "PLR0402", "PLR1714", "PLR1716", "PLR1711", "PLW", "PT", "PTH", "PYI", "Q", "RET", "RSE", "SIM", "TID", "RUF001", "RUF002", "RUF003", "RUF005", "RUF006", "RUF007", "RUF008", "RUF009", "RUF010", "RUF012", "RUF013", "RUF015", "RUF018", "RUF019", "RUF021", "RUF022", "RUF023", "RUF024", "RUF026", "RUF028", "RUF030", "RUF032", "RUF033", "RUF034", "RUF037", "RUF100", "S", "SLF001", "SLOT", "T10", "T20", "TD", "TC", "TRY002", "TRY003", "TRY201", "TRY300", "TRY301", "TRY400", "TRY401", "UP", "W", "YTT"]
+
+[tool.ruff."lint"."per-file-ignores"]
+"tests/*" = ["E501", "S101"]
+
+[tool.pyright]
+"exclude" = ["unio_collector/aws/metric/__init__.py", "unio_collector/aws/network/__init__.py", "unio_collector/aws_native_recommendations/__init__.py", "unio_collector/billing/__init__.py", "unio_collector/config/__init__.py", "unio_collector/evidence/__init__.py", "unio_collector/pricing/__init__.py", "unio_collector/protected_reports/__init__.py", "unio_collector/providers/__init__.py", "unio_collector/scan_workflow/aws/scan/__init__.py", "unio_collector/scan_workflow/organization/__init__.py", "unio_collector/scan_workflow/organization/attempt/__init__.py", "unio_collector/scan_workflow/organization/model/__init__.py", "unio_collector/scan_workflow/organization/request/__init__.py", "unio_collector/scan_workflow/provider_execution/__init__.py", "unio_collector/scanners/account_risk/__init__.py", "unio_collector/scanners/account_risk/root/__init__.py", "unio_collector/scanners/analysis/__init__.py", "unio_collector/scanners/analytics_ai/__init__.py", "unio_collector/scanners/audit_cost/__init__.py", "unio_collector/scanners/aws_native/__init__.py", "unio_collector/scanners/billing/__init__.py", "unio_collector/scanners/cloudwatch/__init__.py", "unio_collector/scanners/cloudwatch/log_cost/__init__.py", "unio_collector/scanners/config/__init__.py", "unio_collector/scanners/cost_explorer/__init__.py", "unio_collector/scanners/cur_data_export/__init__.py", "unio_collector/scanners/dynamodb/__init__.py", "unio_collector/scanners/ec2/__init__.py", "unio_collector/scanners/ec2/elastic_ip/__init__.py", "unio_collector/scanners/ec2/idle_instance/__init__.py", "unio_collector/scanners/ec2/instance_storage/__init__.py", "unio_collector/scanners/lifecycle/__init__.py", "unio_collector/scanners/lightsail/__init__.py", "unio_collector/scanners/platform/__init__.py", "unio_collector/scanners/rds/__init__.py", "unio_collector/scanners/registry/__init__.py", "unio_collector/scanners/route53/__init__.py", "unio_collector/scanners/s3/incomplete_multipart/__init__.py", "unio_collector/scanners/s3/lifecycle/__init__.py", "unio_collector/scanners/s3/versioning_replication/__init__.py", "unio_collector/scanners/service/coverage/__init__.py", "unio_collector/scanners/service_quota/__init__.py", "unio_collector/scanners/sns/__init__.py", "unio_collector/scanners/step_functions/__init__.py", "unio_collector/scanners/tagging/__init__.py", "unio_collector/scanners/xray/__init__.py"]
+"include" = ["unio_collector", "tools", "tests/standalone"]
+"pythonVersion" = "3.12"
+"typeCheckingMode" = "basic"
+
+[tool.pytest.ini_options]
+"addopts" = "-p no:cacheprovider"
+"markers" = ["offline: deterministic tests without AWS calls", "unit: bounded unit tests", "repository_scan: source boundary inspection"]
+"pythonpath" = ["."]
+"testpaths" = ["tests/standalone"]

@@ -1,0 +1,86 @@
+{
+  "actions": {
+    "actions/checkout": "3d3c42e5aac5ba805825da76410c181273ba90b1",
+    "actions/setup-python": "5fda3b95a4ea91299a34e894583c3862153e4b97",
+    "actions/upload-artifact": "b7c566a772e6b6bfb58ed0dc250532a479d7789f"
+  },
+  "bandit": {
+    "exceptions": [
+      {
+        "line": 88,
+        "path": "unio_collector/collector_cli/services/versioning/checker.py",
+        "rationale": "URL scheme is explicitly restricted to HTTPS before this call; downloaded release metadata is signature-verified before use.",
+        "rule": "B310",
+        "source_sha256": "d9d45d5d6ea4e440f0b218fa5581247a5ac618ca90728ed2017a2744fa317ec4"
+      },
+      {
+        "line": 57,
+        "path": "unio_collector/privacy/metadata_validation.py",
+        "rationale": "This literal is a rejection marker for bundle metadata, not a temporary file allocation.",
+        "rule": "B108",
+        "source_sha256": "4e9b50df84ab7c5a89b9cf56e221d6b3ae2b2fba53c1ec11e39e11fd5464813f"
+      },
+      {
+        "line": 82,
+        "path": "tools/collector_repository/toolchain.py",
+        "rationale": "The URL is constructed from two fixed official GitHub origins and exact versions; reviewed SHA-256 authentication is required before any archive payload is extracted or executed.",
+        "rule": "B310",
+        "source_sha256": "4b78f72db2a5fa6d02e6d4f8127995dd8ad42e632ed2919c28836d4c048869e6"
+      }
+    ],
+    "minimum_confidence": "medium",
+    "minimum_severity": "medium"
+  },
+  "binaries": {
+    "actionlint": {
+      "platforms": {
+        "linux-x86_64": {
+          "asset": "actionlint_1.7.12_linux_amd64.tar.gz",
+          "sha256": "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8"
+        },
+        "macos-arm64": {
+          "asset": "actionlint_1.7.12_darwin_arm64.tar.gz",
+          "sha256": "aba9ced2dee8d27fecca3dc7feb1a7f9a52caefa1eb46f3271ea66b6e0e6953f"
+        },
+        "macos-x86_64": {
+          "asset": "actionlint_1.7.12_darwin_amd64.tar.gz",
+          "sha256": "5b44c3bc2255115c9b69e30efc0fecdf498fdb63c5d58e17084fd5f16324c644"
+        },
+        "windows-x86_64": {
+          "asset": "actionlint_1.7.12_windows_amd64.zip",
+          "sha256": "6e7241b51e6817ea6a047693d8e6fed13b31819c9a0dd6c5a726e1592d22f6e9"
+        }
+      },
+      "repository": "rhysd/actionlint",
+      "version": "1.7.12"
+    },
+    "gitleaks": {
+      "platforms": {
+        "linux-x86_64": {
+          "asset": "gitleaks_8.30.1_linux_x64.tar.gz",
+          "sha256": "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
+        },
+        "macos-arm64": {
+          "asset": "gitleaks_8.30.1_darwin_arm64.tar.gz",
+          "sha256": "b40ab0ae55c505963e365f271a8d3846efbc170aa17f2607f13df610a9aeb6a5"
+        },
+        "macos-x86_64": {
+          "asset": "gitleaks_8.30.1_darwin_x64.tar.gz",
+          "sha256": "dfe101a4db2255fc85120ac7f3d25e4342c3c20cf749f2c20a18081af1952709"
+        },
+        "windows-x86_64": {
+          "asset": "gitleaks_8.30.1_windows_x64.zip",
+          "sha256": "d29144deff3a68aa93ced33dddf84b7fdc26070add4aa0f4513094c8332afc4e"
+        }
+      },
+      "repository": "gitleaks/gitleaks",
+      "version": "8.30.1"
+    }
+  },
+  "python": {
+    "bandit": "1.9.4",
+    "pip-audit": "2.10.1",
+    "zizmor": "1.29.0"
+  },
+  "schema_version": "unio-public-ci-v1"
+}

@@ -1,0 +1,205 @@
+from __future__ import annotations  # noqa: D100
+
+from unio_collector.scanners.registry.source import ScannerDefinitionSource
+from unio_collector.scanners.scanner.definition import ScannerDefinition
+
+EC2_SCANNERS: dict[str, ScannerDefinition] = {
+    "ec2-unassociated-elastic-ips": ScannerDefinition(
+        scanner_id="ec2-unassociated-elastic-ips",
+        display_name="Unassociated Elastic IPs",
+        description="Finds allocated Elastic IP addresses without an active association.",
+        aws_services=("Amazon EC2",),
+        resource_types=("Elastic IP",),
+        default_enabled=True,
+        supports_regions=True,
+        required_iam_actions=("ec2:DescribeRegions", "ec2:DescribeAddresses"),
+        required_permission_level="read_only",
+        aws_api_calls=("ec2:DescribeRegions", "ec2:DescribeAddresses"),
+        risk_level="low",
+        output_finding_types=("unused_elastic_ip",),
+        maturity="basic",
+        limitations=(
+            "Does not inspect DNS, partner allow-lists, runbooks, or external dependencies.",
+            "Does not release addresses.",
+        ),
+        analysis_boundary="strict_evidence_only_ready",
+        analysis_boundary_reason=("Collects Elastic IP inventory records and analyzes only serialized inventory evidence without AWS clients."),
+    ),
+    "ec2-unattached-ebs-volumes": ScannerDefinition(
+        scanner_id="ec2-unattached-ebs-volumes",
+        display_name="Unattached EBS volumes",
+        description="Finds EBS volumes in the available state.",
+        aws_services=("Amazon EC2", "Amazon Elastic Block Store"),
+        resource_types=("EBS volume",),
+        default_enabled=True,
+        supports_regions=True,
+        required_iam_actions=("ec2:DescribeRegions", "ec2:DescribeVolumes"),
+        required_permission_level="read_only",
+        aws_api_calls=("ec2:DescribeRegions", "ec2:DescribeVolumes"),
+        risk_level="low",
+        output_finding_types=("unattached_ebs_volume",),
+        maturity="basic",
+        limitations=(
+            "Does not determine whether retained data is still required.",
+            "Does not delete volumes or create snapshots.",
+        ),
+        analysis_boundary="strict_evidence_only_ready",
+        analysis_boundary_reason=("Collects EBS volume inventory records and analyzes only serialized inventory evidence without AWS clients."),
+    ),
+    "ec2-stopped-instances-with-storage": ScannerDefinition(
+        scanner_id="ec2-stopped-instances-with-storage",
+        display_name="Stopped EC2 instances with storage",
+        description="Finds stopped EC2 instances that still have EBS volumes attached.",
+        aws_services=("Amazon EC2", "Amazon Elastic Block Store"),
+        resource_types=("EC2 instance", "EBS volume"),
+        default_enabled=True,
+        supports_regions=True,
+        required_iam_actions=("ec2:DescribeRegions", "ec2:DescribeInstances"),
+        required_permission_level="read_only",
+        aws_api_calls=("ec2:DescribeRegions", "ec2:DescribeInstances"),
+        risk_level="medium",
+        output_finding_types=("stopped_ec2_with_attached_ebs",),
+        maturity="basic",
+        limitations=(
+            "Does not infer whether stopped instances are intentionally retained.",
+            "Does not terminate instances or delete attached storage.",
+        ),
+        analysis_boundary="strict_evidence_only_ready",
+        analysis_boundary_reason=(
+            "Collects stopped instance storage records during collection and analyzes only serialized inventory evidence without AWS clients."
+        ),
+    ),
+    "nat-gateway-inventory": ScannerDefinition(
+        scanner_id="nat-gateway-inventory",
+        display_name="NAT Gateway inventory context",
+        description="Lists NAT Gateways as context for NAT-related cost investigation.",
+        aws_services=("Amazon VPC", "NAT Gateway"),
+        resource_types=("NAT Gateway",),
+        default_enabled=True,
+        supports_regions=True,
+        required_iam_actions=("ec2:DescribeRegions", "ec2:DescribeNatGateways"),
+        required_permission_level="read_only",
+        aws_api_calls=("ec2:DescribeRegions", "ec2:DescribeNatGateways"),
+        risk_level="medium",
+        output_finding_types=("nat_gateway_context",),
+        maturity="experimental",
+        limitations=(
+            "Presence alone is not waste evidence.",
+            "Does not inspect routes, traffic destinations, or VPC Flow Logs.",
+        ),
+        analysis_boundary="strict_evidence_only_ready",
+        analysis_boundary_reason=("Collects NAT Gateway inventory records and analyzes only serialized inventory evidence without AWS clients."),
+    ),
+    "idle-zombie-resource-detector": ScannerDefinition(
+        scanner_id="idle-zombie-resource-detector",
+        display_name="Idle/zombie resource detector",
+        description=("Combines read-only EC2 inventory signals to identify advisory cleanup candidates."),
+        aws_services=("Amazon EC2", "Amazon Elastic Block Store", "Amazon VPC"),
+        resource_types=("Elastic IP", "EBS volume", "EC2 instance", "NAT Gateway"),
+        default_enabled=True,
+        supports_regions=True,
+        required_iam_actions=(
+            "ec2:DescribeRegions",
+            "ec2:DescribeAddresses",
+            "ec2:DescribeVolumes",
+            "ec2:DescribeInstances",
+            "ec2:DescribeNatGateways",
+        ),
+        required_permission_level="read_only",
+        aws_api_calls=(
+            "ec2:DescribeRegions",
+            "ec2:DescribeAddresses",
+            "ec2:DescribeVolumes",
+            "ec2:DescribeInstances",
+            "ec2:DescribeNatGateways",
+        ),
+        risk_level="medium",
+        output_finding_types=("idle_zombie_cleanup_candidate",),
+        maturity="experimental",
+        limitations=(
+            "Does not inspect DNS, external references, tickets, or runbooks.",
+            "Does not inspect RDS, load balancers, old snapshots, or NAT traffic metrics yet.",
+            "Produces advisory cleanup candidates only and performs no AWS changes.",
+        ),
+        analysis_boundary="strict_evidence_only_ready",
+        analysis_boundary_reason=(
+            "Collects EC2, EBS, Elastic IP, and NAT Gateway cleanup evidence "
+            "during collection and analyzes only serialized evidence bundles "
+            "without AWS clients."
+        ),
+    ),
+    "ec2-idle-instance-review": ScannerDefinition(
+        scanner_id="ec2-idle-instance-review",
+        display_name="EC2 idle instance review",
+        description="Reviews running EC2 instances with available CloudWatch utilization metrics.",
+        aws_services=("Amazon EC2", "Amazon CloudWatch"),
+        resource_types=("EC2 instance",),
+        default_enabled=True,
+        supports_regions=True,
+        required_iam_actions=(
+            "ec2:DescribeRegions",
+            "ec2:DescribeInstances",
+            "cloudwatch:GetMetricData",
+            "cloudwatch:GetMetricStatistics",
+        ),
+        required_permission_level="read_only",
+        aws_api_calls=(
+            "ec2:DescribeRegions",
+            "ec2:DescribeInstances",
+            "cloudwatch:GetMetricData",
+            "cloudwatch:GetMetricStatistics",
+        ),
+        risk_level="medium",
+        output_finding_types=(
+            "ec2_idle_instance_review",
+            "nonprod_scheduled_shutdown",
+        ),
+        maturity="experimental",
+        limitations=(
+            "Low utilization does not prove an instance can be stopped or terminated.",
+            "Memory is not available unless CloudWatch Agent or another source publishes it.",
+            "max_instances_per_region can bound running-instance metric coverage for faster development scans.",
+            (
+                "Scheduled shutdown is opt-in and fails closed when its catalog, tag, owner, environment, topology, health, "
+                "or hourly utilization evidence is absent or conflicting."
+            ),
+            "Scheduled shutdown recommendations never stop or start EC2 instances and do not guarantee savings.",
+        ),
+        cloudwatch_namespaces_used=("AWS/EC2",),
+        metrics_used=(
+            "CPUUtilization",
+            "NetworkIn",
+            "NetworkOut",
+            "DiskReadOps",
+            "DiskWriteOps",
+            "StatusCheckFailed",
+        ),
+        analysis_boundary="strict_evidence_only_ready",
+        analysis_boundary_reason=(
+            "Collects running instance utilization records during collection and analyzes only serialized inventory evidence without AWS clients."
+        ),
+    ),
+    "provisioned-iops-review": ScannerDefinition(
+        scanner_id="provisioned-iops-review",
+        display_name="Provisioned IOPS review",
+        description="Finds EBS io1/io2 volumes for provisioned IOPS cost review.",
+        aws_services=("Amazon EC2", "Amazon Elastic Block Store"),
+        resource_types=("EBS volume",),
+        default_enabled=True,
+        supports_regions=True,
+        required_iam_actions=("ec2:DescribeRegions", "ec2:DescribeVolumes"),
+        required_permission_level="read_only",
+        aws_api_calls=("ec2:DescribeRegions", "ec2:DescribeVolumes"),
+        risk_level="medium",
+        output_finding_types=("provisioned_iops_review",),
+        maturity="experimental",
+        limitations=("Does not change storage type or provisioned IOPS.",),
+        analysis_boundary="strict_evidence_only_ready",
+        analysis_boundary_reason=("Collects provisioned IOPS volume records and analyzes only serialized inventory evidence without AWS clients."),
+    ),
+}
+
+EC2_SCANNER_DEFINITION_SOURCE = ScannerDefinitionSource(
+    "ec2",
+    EC2_SCANNERS,
+)

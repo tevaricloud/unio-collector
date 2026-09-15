@@ -1,0 +1,61 @@
+name: Standalone Python validation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: python-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.10'
+      - name: Provision reviewed Gitleaks
+        shell: bash
+        run: |
+          python -B -m tools.collector_repository provision --root . --output "$RUNNER_TEMP/unio-ci-tools" --tools gitleaks
+          echo "$RUNNER_TEMP/unio-ci-tools" >> "$GITHUB_PATH"
+      - name: Install validation bootstrap dependency
+        run: python -B -m tools.collector_repository bootstrap --root .
+      - name: Validate independently
+        run: python -B -m tools.collector_repository validate --root . --output "$RUNNER_TEMP/unio-collector-python-${GITHUB_RUN_ATTEMPT}"
+      - name: Retain compact evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: python-validation
+          path: |
+            ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/validation-summary.json
+            ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/installed-wheel-summary.json
+          retention-days: 3
+          if-no-files-found: warn
+      - name: Retain failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: python-validation-diagnostics
+          path: |
+            ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/pyright.log
+            ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/ruff.log
+            ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/format.log
+            ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/compile.log
+            ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/tests.log
+            ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/dependency-check.log
+            ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/dependencies.log
+            ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/wheel-build.log
+            ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/installed-wheel.log
+          retention-days: 3
+          if-no-files-found: warn

@@ -1,0 +1,9 @@
+from unio_collector.scanners.aws_native.collection.normalization import MAX_NATIVE_RECOMMENDATION_RECORDS as MAX_NATIVE_RECOMMENDATION_RECORDS
+from unio_collector.scanners.aws_native.collection.normalization import compact_dict as compact_dict
+from unio_collector.scanners.aws_native.collection.normalization import deduplicate_strings as deduplicate_strings
+from unio_collector.scanners.aws_native.collection.normalization import extract_estimated_savings as extract_estimated_savings
+from unio_collector.scanners.aws_native.collection.normalization import first_dict as first_dict
+from unio_collector.scanners.aws_native.collection.normalization import first_text as first_text
+from unio_collector.scanners.aws_native.collection.normalization import get_dict as get_dict
+from unio_collector.scanners.aws_native.collection.normalization import get_first_list as get_first_list
+from unio_collector.scanners.aws_native.status_policy import AwsNativeRecommendationStatusPolicy as AwsNativeRecommendationStatusPolicy

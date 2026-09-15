@@ -1,0 +1,7 @@
+{
+  "account_context": {"account_label": "fictional-fixture", "account_id": "000000000000"},
+  "currency": "USD",
+  "previous_period": {"start_date": "2026-04-16", "end_date": "2026-04-29", "total_cost": "10.00", "currency": "USD"},
+  "current_period": {"start_date": "2026-04-30", "end_date": "2026-05-13", "total_cost": "15.00", "currency": "USD"},
+  "service_costs": [{"service_name": "Amazon Simple Storage Service", "region": "us-east-1", "previous_cost": "10.00", "current_cost": "15.00"}]
+}

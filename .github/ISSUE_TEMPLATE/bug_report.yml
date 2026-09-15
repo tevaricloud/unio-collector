@@ -1,0 +1,71 @@
+name: Unio Collector bug report
+description: Report a reproducible defect in the public Unio Collector code.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Security vulnerabilities must never be opened as public issues. Use **Security → Report a vulnerability** as described in [SECURITY.md](../blob/HEAD/SECURITY.md).
+        Never include AWS credentials, access keys, session tokens, AWS account IDs, real customer evidence bundles, decrypted evidence, privacy vaults, passphrases, recovery material or other secrets. Use synthetic, non-sensitive data and sanitise all output/logs.
+        See [SUPPORT.md](../blob/HEAD/SUPPORT.md) for project scope and commercial enquiries.
+  - type: input
+    id: version
+    attributes:
+      label: Affected Unio Collector version
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Operating system/platform
+      description: Include OS version and architecture; omit identifying host details.
+    validations:
+      required: true
+  - type: input
+    id: installation
+    attributes:
+      label: Installation method
+      description: For example, wheel, source checkout or native installer.
+    validations:
+      required: true
+  - type: input
+    id: command
+    attributes:
+      label: Command/subcommand involved
+      description: Omit sensitive arguments and local paths.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Provide minimal steps using synthetic, non-sensitive data where possible. Do not attach real evidence bundles.
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Relevant sanitised output/logs
+      description: Review and remove identifying information and secrets before sharing.
+      render: text
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Public disclosure confirmation
+      options:
+        - label: I have included no AWS credentials, access keys, session tokens, real customer evidence, decrypted evidence, privacy vaults, passphrases, recovery material or other secrets.
+          required: true
+        - label: This is a normal code defect; security vulnerabilities will be reported privately through the process in SECURITY.md.
+          required: true
