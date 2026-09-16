@@ -1101,8 +1101,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/aws/cloudfront/metrics.py",
-      "sha256": "57fcecfed38f95cf3424481c49702fc0ebef798dfdc88d54b15f18253b142858",
-      "size": 17296
+      "sha256": "a27e098259a4613d97ceb73c470a07d7a9cffd9f4739eb7e5067aadd5cf938fd",
+      "size": 17689
     },
     {
       "category": "collector_source",
@@ -9530,5 +9530,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "9ac8fc7e734cf7943e1009ba3e4e5dc05790c2323b36c7280fd2c61c8d0a1b11"
+  "tree_digest": "e6d5cfb8fe66ef648280361bc432fba200c92c87bfbac80e30263dd9aadeddfc"
 }
