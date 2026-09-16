@@ -20,6 +20,7 @@ CLOUDFRONT_METRIC_REGION_DIMENSION = "Global"
 CLOUDFRONT_METRIC_PERIOD_SECONDS = 86400
 MAX_CLOUDWATCH_METRIC_QUERIES = 500
 MAX_INVALIDATION_DISTRIBUTIONS = 50
+MIN_ELB_HOSTNAME_LABELS_BEFORE_AWS_SUFFIX = 3
 
 
 class CloudFrontMetricMixin:  # noqa: D101
@@ -364,8 +365,14 @@ class CloudFrontMetricMixin:  # noqa: D101
             return "unknown"
         if ".execute-api." in normalized:
             return "api_gateway"
-        if ".elb.amazonaws.com" in normalized or ".elb." in normalized:
-            return "load_balancer"
+        aws_suffix = next(
+            (suffix for suffix in ("amazonaws.com.cn", "amazonaws.com") if normalized.endswith(f".{suffix}")),
+            None,
+        )
+        if aws_suffix is not None:
+            aws_labels = normalized[: -(len(aws_suffix) + 1)].split(".")
+            if len(aws_labels) >= MIN_ELB_HOSTNAME_LABELS_BEFORE_AWS_SUFFIX and (aws_labels[-1] == "elb" or aws_labels[-2] == "elb"):
+                return "load_balancer"
         if ".s3-website" in normalized:
             return "s3_website"
         if ".s3." in normalized or normalized.endswith(".s3.amazonaws.com"):
