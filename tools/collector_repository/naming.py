@@ -9,7 +9,7 @@ from tools.collector_repository.paths import regular_file, repository_files, req
 if TYPE_CHECKING:
     from pathlib import Path
 
-TRANSFORMATION_VERSION = "2026-09-unio-publication-v2"
+TRANSFORMATION_VERSION = "2026-09-unio-publication-v3"
 
 LEGACY_NAME = bytes.fromhex("636c6f7564636f7374").decode("ascii")
 _BINARY_SIGNATURES = (b"\x89PNG", b"\xff\xd8\xff", b"GIF87a", b"GIF89a", b"%PDF-", b"PK\x03\x04", b"MZ", b"\x7fELF", b"wOFF", b"wOF2")
