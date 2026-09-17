@@ -11,14 +11,14 @@
         "path": "unio_collector/collector_cli/services/versioning/checker.py",
         "rationale": "URL scheme is explicitly restricted to HTTPS before this call; downloaded release metadata is signature-verified before use.",
         "rule": "B310",
-        "source_sha256": "d9d45d5d6ea4e440f0b218fa5581247a5ac618ca90728ed2017a2744fa317ec4"
+        "source_sha256": "1e236338cf3e991155fe0247c8fe1f85021a338c07fdb95eaf76716d06e93996"
       },
       {
         "line": 57,
         "path": "unio_collector/privacy/metadata_validation.py",
         "rationale": "This literal is a rejection marker for bundle metadata, not a temporary file allocation.",
         "rule": "B108",
-        "source_sha256": "4e9b50df84ab7c5a89b9cf56e221d6b3ae2b2fba53c1ec11e39e11fd5464813f"
+        "source_sha256": "de67d9929f83ceb5df02ec2f11996fd7c3b2ef2be97b4ba5f9f56a333c3d8f06"
       },
       {
         "line": 82,
