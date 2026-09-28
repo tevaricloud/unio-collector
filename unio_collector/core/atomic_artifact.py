@@ -4,12 +4,16 @@ from __future__ import annotations
 
 import os
 import tempfile
+import time
 from contextlib import suppress
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+_REPLACE_ATTEMPTS = 4
+_REPLACE_RETRY_DELAY_SECONDS = 0.05
 
 
 def replace_artifact_atomically(
@@ -30,11 +34,24 @@ def replace_artifact_atomically(
         with temporary_path.open("rb+") as handle:
             handle.flush()
             os.fsync(handle.fileno())
-        os.replace(temporary_path, path)  # noqa: PTH105
+        _replace_with_retry(temporary_path, path)
     except BaseException:
         with suppress(OSError):
             temporary_path.unlink(missing_ok=True)
         raise
+
+
+def _replace_with_retry(source: Path, target: Path) -> None:
+    """Retry only transient permission failures around the atomic replace."""
+    for attempt in range(_REPLACE_ATTEMPTS):
+        try:
+            os.replace(source, target)  # noqa: PTH105
+        except PermissionError:
+            if attempt == _REPLACE_ATTEMPTS - 1:
+                raise
+            time.sleep(_REPLACE_RETRY_DELAY_SECONDS * (attempt + 1))
+        else:
+            return
 
 
 def write_text_atomically(path: Path, content: str) -> None:

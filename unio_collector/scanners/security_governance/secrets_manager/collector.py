@@ -10,7 +10,7 @@ from unio_collector.scanners.audit_cost.helpers import (
     build_audit_cost_collector,
     record_audit_cost_execution_detail,
 )
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.scanner.implementation import ScannerImplementation
 from unio_collector.scanners.security_governance.secrets_manager.evidence import (
     SecretsManagerCostGovernanceEvidence,

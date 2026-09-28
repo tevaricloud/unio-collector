@@ -51,6 +51,8 @@ def build_privacy_preview(
         "prohibited_paths": list(state.classification.prohibited_paths),
         "cost_data_remains_visible": state.profile.cost_data_included,
         "topology_may_remain_visible": state.profile.topology_detail != "reduced",
+        "environment_semantics": state.environment_semantics,
+        "environment_analysis_limited": state.environment_semantics == "omit",
         "actual_applied_transformations": state.classification.applied_transformations(),
         "resolver_decisions": state.classification.resolver_decisions(),
         "vault_loss_risk_acknowledged": options.acknowledge_vault_loss_risk,
@@ -62,7 +64,11 @@ def build_privacy_preview(
         "vault_included": False,
         "recovery_material_included": False,
         "leak_scan": leak_scan,
-        "warnings": [*state.classification.warnings, *warnings],
+        "warnings": [
+            *state.classification.warnings,
+            *warnings,
+            *(["Environment semantics were omitted; environment-dependent analysis may be reduced."] if state.environment_semantics == "omit" else []),
+        ],
         "warning_details": [warning.convert_to_dict() for warning in warning_details],
         "notice": (
             "This is pseudonymisation, not anonymisation. Residual cost, utilisation, topology, region, service usage, and timing data may remain sensitive."

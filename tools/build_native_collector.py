@@ -15,6 +15,9 @@ from pathlib import Path
 from time import monotonic
 from zipfile import ZIP_DEFLATED, ZipFile
 
+from packaging.requirements import Requirement
+from packaging.utils import canonicalize_name
+
 try:
     from tools.native_locks import lock_sha256, validate_lock
 except ModuleNotFoundError:
@@ -74,7 +77,7 @@ class NativeCollectorBuilder:
         plan = package_module.build_collector_package_file_plan(root=self.root)
         wheel_builder_type().validate_existing_wheel(
             wheel_path=wheel,
-            planned_source_files=plan.source_files,
+            planned_source_files=plan.package_files,
             manifest=plan.manifest,
         )
         native_manifest = native_module.build_native_collector_manifest(plan.manifest)
@@ -392,8 +395,16 @@ def _normalized_record(record: dict[str, object] | None) -> dict[str, object] | 
 
 
 def _write_sboms(output: Path, python: Path, native_manifest: dict[str, object]) -> tuple[Path, Path]:
-    completed = subprocess.run([str(python), "-m", "pip", "list", "--format", "json"], check=True, capture_output=True, text=True)  # noqa: S603
-    packages = json.loads(completed.stdout)
+    completed = subprocess.run(  # noqa: S603
+        [str(python), "-m", "pip", "inspect", "--local"],
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+    )
+    inspection = json.loads(completed.stdout)
+    packages = _runtime_packages(inspection, native_manifest["runtime_dependencies"])
     cyclone_components = [
         {"name": item["name"], "type": "library", "version": item["version"]} for item in sorted(packages, key=lambda value: value["name"].casefold())
     ]
@@ -420,6 +431,46 @@ def _write_sboms(output: Path, python: Path, native_manifest: dict[str, object])
     cyclone_path.write_text(json.dumps(cyclone, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     spdx_path.write_text(json.dumps(spdx, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return cyclone_path, spdx_path
+
+
+def _runtime_packages(inspection: dict[str, object], roots: object) -> list[dict[str, str]]:  # noqa: C901
+    """Select the installed runtime dependency closure, excluding build tools."""
+    installed = inspection.get("installed")
+    environment = inspection.get("environment")
+    if not isinstance(installed, list) or not isinstance(environment, dict) or not isinstance(roots, (list, tuple)):
+        message = "Installed native dependency metadata is incomplete."
+        raise ValueError(message)
+    by_name = {}
+    for item in installed:
+        if not isinstance(item, dict) or not isinstance(item.get("metadata"), dict):
+            message = "Installed native dependency metadata is malformed."
+            raise ValueError(message)
+        metadata = item["metadata"]
+        name = metadata.get("name")
+        if not isinstance(name, str) or canonicalize_name(name) in by_name:
+            message = "Installed native dependency names are ambiguous."
+            raise ValueError(message)
+        by_name[canonicalize_name(name)] = metadata
+    pending = [Requirement(str(value)) for value in roots]
+    selected: set[str] = set()
+    while pending:
+        requirement = pending.pop()
+        if requirement.marker is not None and not requirement.marker.evaluate({**environment, "extra": ""}):
+            continue
+        name = canonicalize_name(requirement.name)
+        metadata = by_name.get(name)
+        if metadata is None or not isinstance(metadata.get("version"), str) or metadata["version"] not in requirement.specifier:
+            message = f"Native runtime dependency is missing or mismatched: {name}"
+            raise ValueError(message)
+        if name in selected:
+            continue
+        selected.add(name)
+        for raw in metadata.get("requires_dist") or []:
+            dependency = Requirement(str(raw))
+            extras = requirement.extras or {""}
+            if dependency.marker is None or any(dependency.marker.evaluate({**environment, "extra": extra}) for extra in extras):
+                pending.append(dependency)
+    return [{"name": str(by_name[name]["name"]), "version": str(by_name[name]["version"])} for name in sorted(selected)]
 
 
 def _write_licence_notices(output: Path, python: Path) -> Path:

@@ -3,7 +3,7 @@ from __future__ import annotations  # noqa: D100
 from typing import TYPE_CHECKING, Any
 
 from unio_collector.aws.response_admission import iter_response_rows, require_response_mapping, require_response_string
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.config.compliance.evidence import ConfigComplianceEvidence
 from unio_collector.scanners.config.compliance.rule_record import ConfigComplianceRuleRecord
 from unio_collector.scanners.security_governance.collection.regions import get_selected_or_available_regions

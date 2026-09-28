@@ -4,7 +4,7 @@ from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from unio_collector.aws import errors as aws_errors
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.cost_context import get_regional_cost_context
 from unio_collector.scanners.platform.ecs.evidence import (
     EcsCostGovernanceReviewEvidence,

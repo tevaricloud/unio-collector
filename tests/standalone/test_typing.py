@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
     from unio_collector.scan_workflow.organization.attempt.request import OrganizationAttemptRequest
     from unio_collector.scan_workflow.scanner.runtime.dependencies import ScannerRuntimeDependencies
-    from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+    from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
     from unio_collector.scanners.network.vpc_endpoint.evidence import VpcEndpointOpportunityEvidence
     from unio_collector.scanners.scanner.context import ScannerContext
     from unio_collector.scanners.scanner.definition import ScannerDefinition

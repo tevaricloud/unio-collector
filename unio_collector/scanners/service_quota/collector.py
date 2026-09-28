@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 from unio_collector.aws import errors as aws_errors
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.options import parse_scanner_option_int
 from unio_collector.scanners.service_quota.collection_payload import build_quota_collection_payload
 from unio_collector.scanners.service_quota.matcher import ServiceQuotaMatcher

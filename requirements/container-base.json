@@ -1,0 +1,10 @@
+{
+  "schema_version": "2026-09-container-base-v1",
+  "image": "docker.io/library/python",
+  "tag": "3.12-slim-bookworm",
+  "index_digest": "sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e",
+  "platforms": {
+    "linux/amd64": "sha256:1aaa65a85fda306ffb8b910824d4e93bdce61e212c7e87168123ea3073b41a1a",
+    "linux/arm64": "sha256:eb5be8e5b4d0a159c237946bbdd06356dda5d19c30fc4f7843e8046d3a590333"
+  }
+}

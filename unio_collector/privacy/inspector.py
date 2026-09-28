@@ -9,6 +9,7 @@ from unio_collector.privacy.constants import (
     PRIVACY_LEAK_SCAN_FILE,
     PRIVACY_POLICY_FILE,
     PRIVACY_PREVIEW_FILE,
+    PRIVACY_TOKEN_METADATA_FILE,
 )
 from unio_collector.privacy.inspect_result import PrivacyInspectResult
 from unio_collector.privacy.receipt import default_receipt_path, validate_export_receipt
@@ -20,7 +21,7 @@ if TYPE_CHECKING:
 class ProtectedBundleInspector:
     """Inspect protected evidence bundles without vault access."""
 
-    def inspect(
+    def inspect(  # noqa: C901
         self,
         path: Path,
         *,
@@ -59,6 +60,10 @@ class ProtectedBundleInspector:
                 if PRIVACY_LEAK_SCAN_FILE in names:
                     summary["leak_scan"] = json.loads(
                         archive.read(PRIVACY_LEAK_SCAN_FILE).decode("utf-8"),
+                    )
+                if PRIVACY_TOKEN_METADATA_FILE in names:
+                    summary["token_metadata"] = json.loads(
+                        archive.read(PRIVACY_TOKEN_METADATA_FILE).decode("utf-8"),
                     )
                 explicit_receipt = receipt_path is not None
                 candidate_receipt = receipt_path or default_receipt_path(path)

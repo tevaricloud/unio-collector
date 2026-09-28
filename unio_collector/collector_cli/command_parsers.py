@@ -6,6 +6,7 @@ from unio_collector.collector_cli.parser_arguments import (
     add_bundle_minimisation_arguments,
     add_collection_scope_arguments,
     add_debug_argument,
+    add_environment_classification_argument,
     add_region_arguments,
     add_runtime_arguments,
     add_scanner_arguments,
@@ -26,6 +27,7 @@ def add_collect_command(
     )
     add_debug_argument(collect)
     add_collection_scope_arguments(collect)
+    add_environment_classification_argument(collect)
     add_region_arguments(collect)
     add_scanner_arguments(collect)
     add_runtime_arguments(collect)
@@ -192,6 +194,13 @@ def add_privacy_command(
         default="standard",
         help="Privacy profile to apply.",
     )
+    protect.add_argument("--environment-alias-file", default=None, help="Optional local additive YAML environment alias file.")
+    protect.add_argument(
+        "--environment-semantics",
+        choices=("detailed", "coarse", "omit"),
+        default=None,
+        help="Transfer detailed, coarse, or no derived environment semantics.",
+    )
     protect.add_argument(
         "--token-scope",
         choices=("bundle", "engagement", "client"),
@@ -254,6 +263,8 @@ def add_privacy_command(
     add_debug_argument(preview)
     preview.add_argument("--bundle", required=True, help="Input evidence bundle ZIP.")
     preview.add_argument("--profile", choices=("standard", "strict", "custom"), default="standard")
+    preview.add_argument("--environment-alias-file", default=None)
+    preview.add_argument("--environment-semantics", choices=("detailed", "coarse", "omit"), default=None)
     preview.add_argument("--token-scope", choices=("bundle", "engagement", "client"), default="engagement")
     preview.add_argument("--engagement-id", default="default-engagement")
     preview.add_argument("--client-id", default=None)

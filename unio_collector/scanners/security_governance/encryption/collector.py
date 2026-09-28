@@ -11,7 +11,7 @@ from unio_collector.aws.response_admission import (
     require_response_rows,
     require_response_string,
 )
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.ec2.ebs.encryption_region import EbsEncryptionRegionRecord
 from unio_collector.scanners.ec2.ebs.snapshot_encryption import (
     EbsSnapshotEncryptionRecord,

@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from unio_collector.aws.cur.collection.projection import project_billing_evidence
 from unio_collector.aws.cur.collection.reader import CurBillingReader
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.cur_data_export.evidence import CurDataExportEvidence
 from unio_collector.scanners.cur_data_export.source import build_cur_s3_object_fetcher
 from unio_collector.scanners.scanner.implementation import ScannerImplementation

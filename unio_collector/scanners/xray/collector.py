@@ -6,7 +6,7 @@ from unio_collector.aws.xray import (
     XRayInventoryCollector,
     extract_xray_cost_signal,
 )
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.scanner.implementation import ScannerImplementation
 from unio_collector.scanners.xray.cost_evidence import (
     XRayCostGovernanceEvidence,

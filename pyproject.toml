@@ -18,6 +18,9 @@ unio-collector = "unio_collector.collector_cli.app:main"
 [tool.setuptools.packages.find]
 include = ["unio_collector*"]
 
+[tool.setuptools.package-data]
+unio_collector = ["data/environment-classification.yaml"]
+
 [project.optional-dependencies]
 "dev" = ["packaging>=24,<27", "pyright>=1.1.409", "pytest>=8.0", "ruff>=0.8.0", "setuptools>=68", "types-PyYAML>=6.0", "wheel>=0.44"]
 "native-build" = ["macholib==1.16.4; sys_platform == 'darwin'", "pefile==2024.8.26; sys_platform == 'win32'", "PyInstaller==6.22.2", "pywin32-ctypes==0.2.3; sys_platform == 'win32'"]

@@ -18,6 +18,8 @@ from unio_collector.collector_cli.command_parsers import (
 )
 from unio_collector.collector_cli.doctor_parser import add_doctor_command
 from unio_collector.collector_cli.organization_parser import add_organization_command
+from unio_collector.collector_cli.protected_parser import add_collect_protected_command
+from unio_collector.collector_cli.transport_parser import add_encrypt_bundle_command
 
 ParserBuilder = Callable[[argparse._SubParsersAction, str], None]  # noqa: SLF001
 ServiceBuilder = Callable[[Any], Any]
@@ -39,10 +41,24 @@ def _build_collect_service(console: Any) -> Any:  # noqa: ANN401
     return CollectorCollectService(console)
 
 
+def _build_collect_protected_service(console: Any) -> Any:  # noqa: ANN401
+    from unio_collector.collector_cli.services.collect_protected import (  # noqa: PLC0415
+        CollectorProtectedService,
+    )
+
+    return CollectorProtectedService(console)
+
+
 def _build_validate_bundle_service(console: Any) -> Any:  # noqa: ANN401
     from unio_collector.collector_cli.services.validate_bundle import CollectorValidateBundleService  # noqa: PLC0415
 
     return CollectorValidateBundleService(console)
+
+
+def _build_transport_service(console: Any) -> Any:  # noqa: ANN401
+    from unio_collector.collector_cli.services.transport import CollectorTransportService  # noqa: PLC0415
+
+    return CollectorTransportService(console)
 
 
 def _build_doctor_service(console: Any) -> Any:  # noqa: ANN401
@@ -102,6 +118,11 @@ def _build_organization_service(console: Any) -> Any:  # noqa: ANN401
 COLLECTOR_COMMAND_CATALOGUE = (
     CollectorCommandSpec("collect", add_collect_command, _build_collect_service),
     CollectorCommandSpec(
+        "collect-protected",
+        add_collect_protected_command,
+        _build_collect_protected_service,
+    ),
+    CollectorCommandSpec(
         "organization",
         add_organization_command,
         _build_organization_service,
@@ -111,6 +132,11 @@ COLLECTOR_COMMAND_CATALOGUE = (
         "validate-bundle",
         add_validate_bundle_command,
         _build_validate_bundle_service,
+    ),
+    CollectorCommandSpec(
+        "encrypt-bundle",
+        add_encrypt_bundle_command,
+        _build_transport_service,
     ),
     CollectorCommandSpec("doctor", add_doctor_command, _build_doctor_service),
     CollectorCommandSpec(

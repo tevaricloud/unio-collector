@@ -11,7 +11,7 @@ from unio_collector.aws.response_admission import (
     require_response_string,
     require_response_strings,
 )
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.iam.security_helpers import normalize_datetime
 from unio_collector.scanners.identity_center.evidence import IdentityCenterEvidence
 from unio_collector.scanners.identity_center.instance_record import (

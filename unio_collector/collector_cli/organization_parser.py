@@ -6,6 +6,7 @@ from unio_collector.collector_cli.parser_arguments import (
     add_bundle_minimisation_arguments,
     add_collection_scope_arguments,
     add_debug_argument,
+    add_environment_classification_argument,
     add_region_arguments,
     add_runtime_arguments,
     add_scanner_arguments,
@@ -29,6 +30,8 @@ def add_organization_command(
         command = commands.add_parser(name)
         add_debug_argument(command)
         add_collection_scope_arguments(command)
+        if name == "collect":
+            add_environment_classification_argument(command)
         add_region_arguments(command)
         add_scanner_arguments(command)
         add_runtime_arguments(command)

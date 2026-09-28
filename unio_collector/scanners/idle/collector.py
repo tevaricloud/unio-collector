@@ -2,7 +2,7 @@ from __future__ import annotations  # noqa: D100
 
 from typing import TYPE_CHECKING
 
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.ec2.instance_inventory.collector import (
     collect_ec2_instance_inventory_context,
 )

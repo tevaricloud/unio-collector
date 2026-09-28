@@ -20,3 +20,5 @@ class PrivacyPreviewOptions:
     existing_vault_path: Path | None = None
     existing_recovery_key_path: Path | None = None
     passphrase: str | None = None
+    environment_alias_file: Path | None = None
+    environment_semantics: str | None = None

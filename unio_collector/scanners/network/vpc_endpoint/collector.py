@@ -3,7 +3,7 @@ from __future__ import annotations  # noqa: D100
 from typing import TYPE_CHECKING
 
 from unio_collector.aws.network.projection import build_network_topology
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.network.vpc_endpoint.evidence import (
     VpcEndpointOpportunityEvidence,
 )

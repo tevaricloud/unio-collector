@@ -94,10 +94,20 @@ def add_debug_argument(parser: argparse.ArgumentParser) -> None:
     )
 
 
+def add_environment_classification_argument(parser: argparse.ArgumentParser) -> None:
+    """Add the local additive environment vocabulary option."""
+    parser.add_argument(
+        "--environment-alias-file",
+        default=None,
+        help="Optional local additive YAML environment alias file.",
+    )
+
+
 __all__ = [
     "add_bundle_minimisation_arguments",
     "add_collection_scope_arguments",
     "add_debug_argument",
+    "add_environment_classification_argument",
     "add_region_arguments",
     "add_runtime_arguments",
     "add_scanner_arguments",

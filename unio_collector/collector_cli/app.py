@@ -8,6 +8,7 @@ from botocore.exceptions import ProfileNotFound
 from unio_collector.collector_cli.catalogue import find_collector_command
 from unio_collector.collector_cli.console import build_console, print_error
 from unio_collector.collector_cli.parser import build_parser
+from unio_collector.environment import configure_environment_alias_file, load_environment_vocabulary
 from unio_collector.runtime_diagnostics.exception_record import sanitize_diagnostic_text
 
 console: Any = build_console()
@@ -18,6 +19,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
+        alias_file = getattr(args, "environment_alias_file", None)
+        configure_environment_alias_file(alias_file)
+        if alias_file:
+            load_environment_vocabulary(alias_file)
         return _dispatch(args)
     except Exception as exc:
         if _debug_enabled(args) and not isinstance(exc, ProfileNotFound):

@@ -4,7 +4,13 @@ from __future__ import annotations  # noqa: D100
 import ipaddress
 from typing import TYPE_CHECKING, Any, cast
 
+from unio_collector.environment import EnvironmentClassifier
 from unio_collector.privacy.canonicalization import canonicalize_value
+from unio_collector.privacy.environment.record import (
+    apply_environment_context,
+    remove_internal_ledger_diagnostics,
+)
+from unio_collector.privacy.environment.record import display_path as render_display_path
 from unio_collector.privacy.patterns import (
     ACCOUNT_RE,
     ARN_PART_COUNT,
@@ -49,6 +55,8 @@ class PrivacyTransformer:
         allow_unknown_fields: bool,
         summary: ClassificationSummary | None = None,
         registry_resolver: PrivacyRegistryResolver | None = None,
+        environment_classifier: EnvironmentClassifier | None = None,
+        environment_semantics: str = "detailed",
     ) -> None:
         """Create a transformer with one token service and registry policy."""
         self._token_service = token_service
@@ -56,6 +64,8 @@ class PrivacyTransformer:
         self._allow_unknown_fields = allow_unknown_fields
         self.summary = summary or ClassificationSummary()
         self._registry_resolver = registry_resolver or PrivacyRegistryResolver()
+        self._environment_classifier = environment_classifier or EnvironmentClassifier()
+        self._environment_semantics = environment_semantics
 
     def transform(self, value: Any, *, file_name: str) -> Any:  # noqa: ANN401
         """Transform one JSON-compatible value."""
@@ -130,7 +140,7 @@ class PrivacyTransformer:
             )
             blocked = self._blocked_or_unknown(
                 decision,
-                display_path=self._display_path(member_path, json_path),
+                display_path=render_display_path(member_path, json_path),
                 value=value,
             )
             if blocked is not None:
@@ -140,7 +150,7 @@ class PrivacyTransformer:
                 self.summary.removed += 1
                 return None
             if is_strict_timestamp_key(self._profile, key) and value is not None:
-                self.summary.unclassified.append(self._display_path(member_path, json_path))
+                self.summary.unclassified.append(render_display_path(member_path, json_path))
                 return value
         self.summary.preserved += 1
         return value
@@ -175,12 +185,12 @@ class PrivacyTransformer:
                 for key, child in value.items()
             }
         if member_path == "collection-log.jsonl":
-            value = self._remove_internal_ledger_diagnostics(value)
+            value = remove_internal_ledger_diagnostics(value)
         if member_path == "permissions/degradation-records.json":
             value = dict(value)
             value.pop("technical_detail", None)
         scanner_reference = value.get("source_scanner_id") or value.get("scanner_id")
-        return {
+        transformed = {
             key: (
                 self._preserve_string(child)
                 if key == "raw_reference_id" and scanner_reference is not None and child == scanner_reference
@@ -193,21 +203,15 @@ class PrivacyTransformer:
                 )
             )
             for key, child in value.items()
+            if key != "environment_context"
         }
-
-    def _remove_internal_ledger_diagnostics(
-        self,
-        value: dict[str, Any],
-    ) -> dict[str, Any]:
-        sanitized = dict(value)
-        sanitized.pop("errorMessage", None)
-        sanitized.pop("requestParameters", None)
-        response = sanitized.get("responseElements")
-        if isinstance(response, dict) and "awsRequestId" in response:
-            sanitized_response = dict(response)
-            sanitized_response.pop("awsRequestId", None)
-            sanitized["responseElements"] = sanitized_response
-        return sanitized
+        return apply_environment_context(
+            value,
+            transformed,
+            classifier=self._environment_classifier,
+            semantics=self._environment_semantics,
+            summary=self.summary,
+        )
 
     def _is_tag_record(self, json_path: str, value: dict[str, Any]) -> bool:
         return json_path.endswith((".tags[]", ".target_tags[]", ".current_tags[]")) and (
@@ -270,7 +274,7 @@ class PrivacyTransformer:
             json_path=json_path,
             key=key,
         )
-        display_path = self._display_path(member_path, json_path)
+        display_path = render_display_path(member_path, json_path)
         key_lower = (key or "").lower()
         blocked = self._blocked_or_unknown(
             decision,
@@ -419,11 +423,6 @@ class PrivacyTransformer:
             return value
         self.summary.unclassified.append(display_path)
         return value
-
-    def _display_path(self, member_path: str, json_path: str) -> str:
-        if json_path == "$":
-            return member_path
-        return f"{member_path}{json_path[1:]}"
 
     def _generalise(self, value: str, category: str | None) -> str:
         if category == "region":

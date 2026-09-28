@@ -4,18 +4,25 @@ import argparse
 import hashlib
 import json
 import os
+import platform
 import subprocess
+import sys
 import tempfile
 import tomllib
 import venv
 from importlib import import_module
+from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 from zipfile import ZipFile
 
 from packaging.markers import Marker
 from packaging.requirements import Requirement
 
-VALIDATION_SCHEMA_VERSION = "2026-08-collector-wheel-installed-validation-v1"
+_contract = import_module("tools.collector_wheel_contract" if __package__ else "collector_wheel_contract")
+SUPPORTED_VALIDATION_TARGETS = _contract.SUPPORTED_VALIDATION_TARGETS
+VALIDATION_SCHEMA_VERSION = _contract.VALIDATION_SCHEMA_VERSION
+
+FULL_COMMIT_SHA_LENGTH = 40
 OPTIONAL_NON_AWS_SDK_IMPORTS = (
     "azure.identity",
     "azure.mgmt.storage",
@@ -52,15 +59,40 @@ def main() -> int:
     payload: dict[str, object] = {
         "schema_version": VALIDATION_SCHEMA_VERSION,
         "status": "failed",
+        "python_version": platform.python_version(),
         "wheel": {
             "path": str(wheel),
             "filename": wheel.name,
-            "sha256": _sha256(wheel),
         },
         "repository_root": str(root),
+        "pseudonymous_round_trip_required": _private_round_trip_required(root),
     }
+    try:
+        source_sha = _source_sha(root)
+        target, target_platform, architecture = _validation_target()
+        payload.update(
+            {
+                "source_sha": source_sha,
+                "version": _project_version(root),
+                "target": target,
+                "target_platform": target_platform,
+                "architecture": architecture,
+                "wheel": {
+                    "path": str(wheel),
+                    "filename": wheel.name,
+                    "sha256": _sha256(wheel),
+                    "logical_content_sha256": _wheel_logical_sha256(wheel),
+                },
+            },
+        )
+        external_temp_root = _external_temp_root(root)
+    except Exception as exc:  # noqa: BLE001
+        payload["error"] = f"{type(exc).__name__}: {exc}"
+        payload["validation"] = _validation_summary(payload)
+        _write_summary(payload, summary_output)
+        print(json.dumps(payload, indent=2, sort_keys=True))  # noqa: T201
+        return 1
     exit_code = 1
-    external_temp_root = _external_temp_root(root)
     with tempfile.TemporaryDirectory(
         prefix="unio-collector-smoke-",
         dir=external_temp_root,
@@ -171,6 +203,16 @@ def main() -> int:
                 environment=environment,
                 root=root,
             )
+            pseudonymous_round_trip = None
+            if payload["pseudonymous_round_trip_required"] is True:
+                assurance_type = _load_private_round_trip(root)
+                pseudonymous_round_trip = assurance_type().run(
+                    root=root,
+                    collector=collector,
+                    environment=environment,
+                    fixture=root / "tests" / "fixtures" / "privacy" / "pseudonymous_roundtrip.json",
+                    wheel=wheel,
+                )
             payload.update(
                 {
                     "install": _command_summary(install_result),
@@ -195,6 +237,7 @@ def main() -> int:
                         "fixture_bundle_created": (environment / "fixture-bundle.zip").is_file(),
                         "live_scan_period_bundle_created": (environment / "live-shaped-bundle.zip").is_file(),
                         "protected_bundle_created": (environment / "protected-fixture-bundle.zip").is_file(),
+                        "encrypted_transport_created": (environment / "fixture-bundle.uet").is_file(),
                         "protected_receipt_created": (environment / "protected-fixture-bundle.zip.receipt.json").is_file(),
                         "vault_created": (environment / "private" / "identity-vault.json").is_file(),
                         "extended_vault_created": (environment / "private" / "identity-vault-v2.json").is_file(),
@@ -210,6 +253,8 @@ def main() -> int:
                     },
                 },
             )
+            if pseudonymous_round_trip is not None:
+                payload["pseudonymous_round_trip"] = pseudonymous_round_trip
             valid = _payload_passed(payload)
             payload["status"] = "passed" if valid else "failed"
             exit_code = 0 if valid else 1
@@ -218,9 +263,87 @@ def main() -> int:
             payload["error"] = f"{type(exc).__name__}: {exc}"
             exit_code = 1
         finally:
+            payload["validation"] = _validation_summary(payload)
             _write_summary(payload, summary_output)
+            _write_round_trip_summary(payload, summary_output)
             print(json.dumps(payload, indent=2, sort_keys=True))  # noqa: T201
     return exit_code
+
+
+def _source_sha(root: Path) -> str:
+    """Resolve and verify the source commit represented by this validation."""
+    expected_value = os.environ.get("UNIO_COLLECTOR_VALIDATION_SOURCE_SHA")
+    expected = _validated_source_sha(expected_value) if expected_value is not None else None
+    if not (root / ".git").exists():
+        if expected is None:
+            message = "Collector validation outside a Git checkout requires an explicit full source SHA."
+            raise ValueError(message)
+        return expected
+    completed = subprocess.run(
+        ["git", "rev-parse", "HEAD"],  # noqa: S607
+        cwd=root,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if completed.returncode:
+        message = "Collector validation found Git metadata but could not resolve the source HEAD."
+        raise ValueError(message)
+    actual = _validated_source_sha(completed.stdout)
+    if expected is not None and actual != expected:
+        message = f"Collector validation source SHA mismatch: expected {expected}, checked out {actual}."
+        raise ValueError(message)
+    return actual
+
+
+def _validated_source_sha(value: str) -> str:
+    """Return one normalized full source SHA or fail closed."""
+    normalized = value.strip()
+    if len(normalized) != FULL_COMMIT_SHA_LENGTH or any(character not in "0123456789abcdefABCDEF" for character in normalized):
+        message = "Collector validation source SHA must be a full 40-character hexadecimal commit."
+        raise ValueError(message)
+    return normalized.casefold()
+
+
+def _project_version(root: Path) -> str:
+    """Return the collector project version from authoritative metadata."""
+    return str(tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"])
+
+
+def _validation_target() -> tuple[str, str, str]:
+    """Resolve a supported target and fail closed on host/target mismatch."""
+    system = platform.system().casefold()
+    platform_name = {"darwin": "macos", "linux": "linux", "windows": "windows"}.get(system)
+    machine = platform.machine().casefold()
+    architecture = {"amd64": "x86_64", "x64": "x86_64", "aarch64": "arm64"}.get(machine, machine)
+    detected = next(
+        (target for target, identity in SUPPORTED_VALIDATION_TARGETS.items() if identity == (platform_name, architecture)),
+        None,
+    )
+    requested = os.environ.get("UNIO_COLLECTOR_VALIDATION_TARGET", detected or "")
+    expected = SUPPORTED_VALIDATION_TARGETS.get(requested)
+    if expected is None:
+        message = f"Unsupported collector wheel validation target: {requested or '<undetected>'}."
+        raise ValueError(message)
+    if expected != (platform_name, architecture):
+        message = f"Collector validation target {requested} requires {expected[0]}/{expected[1]}, but the host is {platform_name or system}/{architecture}."
+        raise ValueError(message)
+    return requested, expected[0], expected[1]
+
+
+def _wheel_logical_sha256(path: Path) -> str:
+    """Hash wheel member names and bytes without ZIP metadata or RECORD self-hashes."""
+    digest = hashlib.sha256()
+    with ZipFile(path) as archive:
+        members = sorted(name for name in archive.namelist() if not name.endswith(".dist-info/RECORD"))
+        for name in members:
+            encoded_name = name.encode("utf-8")
+            content = archive.read(name)
+            digest.update(len(encoded_name).to_bytes(8, "big"))
+            digest.update(encoded_name)
+            digest.update(len(content).to_bytes(8, "big"))
+            digest.update(content)
+    return digest.hexdigest()
 
 
 def _external_temp_root(repository_root: Path) -> Path:
@@ -232,6 +355,34 @@ def _external_temp_root(repository_root: Path) -> Path:
         raise RuntimeError(message)
     candidate.mkdir(parents=True, exist_ok=True)
     return candidate
+
+
+def _write_round_trip_summary(payload: dict[str, object], summary_output: Path | None) -> None:
+    """Retain only the sanitized round-trip result as a CI-uploadable artifact."""
+    result = payload.get("pseudonymous_round_trip")
+    if summary_output is None or not isinstance(result, dict):
+        return
+    path = summary_output.with_name("pseudonymous-round-trip-assurance.json")
+    path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _private_round_trip_required(root: Path) -> bool:
+    """Keep private-core assurance out of the standalone public projection."""
+    project = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))["project"]
+    return project.get("name") != "unio-collector"
+
+
+def _load_private_round_trip(root: Path) -> type:
+    """Load private assurance tooling without adding it to the public envelope."""
+    path = root / "tools" / "privacy_roundtrip" / "orchestrator.py"
+    spec = spec_from_file_location("private_privacy_roundtrip", path)
+    if spec is None or spec.loader is None:
+        message = "Private pseudonymous round-trip tooling is unavailable."
+        raise RuntimeError(message)
+    module = module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module.PrivacyRoundTripAssurance
 
 
 def _collector_command_matrix(
@@ -320,10 +471,54 @@ def _collector_command_matrix(
             str(environment / "fixture-bundle.zip"),
             "--quiet",
         ],
+        "collect_protected": [
+            str(collector),
+            "collect-protected",
+            "--fixture",
+            str(fixture),
+            "--output",
+            str(environment / "fixture-protected.zip"),
+            "--recovery-mode",
+            "recovery-key",
+            "--recovery-key",
+            str(environment / "fixture-recovery.key"),
+            "--acknowledge-vault-loss-risk",
+            "--quiet",
+            "--json",
+        ],
         "validate_bundle": [
             str(collector),
             "validate-bundle",
             str(environment / "fixture-bundle.zip"),
+        ],
+        "transport_keypair": [
+            str(python),
+            "-c",
+            (
+                "from pathlib import Path; "
+                "from cryptography.hazmat.primitives import serialization; "
+                "from cryptography.hazmat.primitives.asymmetric import rsa; "
+                f"root=Path({str(environment)!r}); "
+                "key=rsa.generate_private_key(public_exponent=65537,key_size=2048); "
+                "(root/'transport-private.pem').write_bytes(key.private_bytes("
+                "serialization.Encoding.PEM,serialization.PrivateFormat.PKCS8,"
+                "serialization.NoEncryption())); "
+                "(root/'transport-public.pem').write_bytes(key.public_key().public_bytes("
+                "serialization.Encoding.PEM,serialization.PublicFormat.SubjectPublicKeyInfo))"
+            ),
+        ],
+        "encrypt_bundle": [
+            str(collector),
+            "encrypt-bundle",
+            "--bundle",
+            str(environment / "fixture-bundle.zip"),
+            "--recipient-public-key",
+            str(environment / "transport-public.pem"),
+            "--recipient-key-id",
+            "synthetic-installed-wheel-key",
+            "--output",
+            str(environment / "fixture-bundle.uet"),
+            "--json",
         ],
         "privacy_preview": [
             str(collector),
@@ -494,7 +689,7 @@ def _inspect_wheel(*, root: Path, wheel: Path) -> dict[str, object]:
     plan = manifest_module.build_collector_package_file_plan(root=root)
     inspection = builder_module.CollectorWheelBuilder().inspect_existing_wheel(
         wheel_path=wheel,
-        planned_source_files=plan.source_files,
+        planned_source_files=plan.package_files,
         manifest=plan.manifest,
         scanner_class_paths=scanner_class_paths,
     )
@@ -597,7 +792,7 @@ if version_command.stdout.strip() != expected_output:
     errors.append("version command output mismatch")
 if console_scripts.get("unio-collector") != "unio_collector.collector_cli.app:main":
     errors.append("collector console script mismatch")
-if "unio" in console_scripts:
+if "unio_collector" in console_scripts:
     errors.append("full Unio console script present")
 if required != declared_with_markers:
     errors.append("dependency metadata mismatch")
@@ -612,7 +807,7 @@ payload = {{
     "version_flag_output": version_flag.stdout.strip(),
     "version_command_output": version_command.stdout.strip(),
     "collector_console_script": console_scripts.get("unio-collector"),
-    "full_console_script_present": "unio" in console_scripts,
+    "full_console_script_present": "unio_collector" in console_scripts,
     "requires_dist": declared,
     "unexpected_optional_dependencies": unexpected_optional_dependencies,
 }}
@@ -788,6 +983,7 @@ def _payload_passed(payload: dict[str, object]) -> bool:
     source_isolation = payload.get("source_isolation", {})
     provider_boundary = payload.get("provider_boundary", {})
     cli_contract = payload.get("cli_contract", {})
+    pseudonymous_round_trip = payload.get("pseudonymous_round_trip", {})
     return (
         _section_status(payload.get("install")) == "passed"
         and all(_section_status(result) == "passed" for result in command_results)
@@ -804,6 +1000,9 @@ def _payload_passed(payload: dict[str, object]) -> bool:
         and scanner_registry.get("unexpected_installed_registry_ids") == []
         and scanner_registry.get("missing_scanner_definitions") == []
         and scanner_registry.get("forbidden_module_count") == 0
+        and isinstance(scanner_registry.get("capability_model"), dict)
+        and scanner_registry["capability_model"].get("status") == "passed"
+        and scanner_registry["capability_model"].get("scanner_count") == scanner_registry.get("expected_count")
         and isinstance(metadata, dict)
         and metadata.get("status") == "ok"
         and isinstance(source_isolation, dict)
@@ -812,6 +1011,10 @@ def _payload_passed(payload: dict[str, object]) -> bool:
         and provider_boundary.get("status") == "ok"
         and isinstance(cli_contract, dict)
         and cli_contract.get("status") == "ok"
+        and (
+            payload.get("pseudonymous_round_trip_required") is False
+            or (isinstance(pseudonymous_round_trip, dict) and pseudonymous_round_trip.get("status") == "passed")
+        )
         and isinstance(wheel_members, dict)
         and wheel_members.get("status") == "valid"
         and isinstance(entrypoints, dict)
@@ -821,6 +1024,7 @@ def _payload_passed(payload: dict[str, object]) -> bool:
         and artifacts.get("fixture_bundle_created") is True
         and artifacts.get("live_scan_period_bundle_created") is True
         and artifacts.get("protected_bundle_created") is True
+        and artifacts.get("encrypted_transport_created") is True
         and artifacts.get("protected_receipt_created") is True
         and artifacts.get("vault_created") is True
         and artifacts.get("extended_vault_created") is True
@@ -831,6 +1035,39 @@ def _payload_passed(payload: dict[str, object]) -> bool:
         and privacy.get("restored_account_reference") == "123456789012"
         and privacy.get("restoration_audit_omits_restored_values") is True
     )
+
+
+def _commands_passed(payload: dict[str, object]) -> bool:
+    """Return whether every installed CLI/runtime command completed successfully."""
+    commands = payload.get("commands")
+    return isinstance(commands, dict) and bool(commands) and all(_section_status(result) == "passed" for result in commands.values())
+
+
+def _privacy_passed(payload: dict[str, object]) -> bool:
+    """Return whether privacy protection and local restoration passed safely."""
+    privacy = payload.get("privacy")
+    commands = payload.get("commands")
+    privacy_commands = (
+        (result for name, result in commands.items() if isinstance(commands, dict) and str(name).startswith("privacy_")) if isinstance(commands, dict) else ()
+    )
+    return (
+        _section_status(payload.get("restore_report")) == "passed"
+        and all(_section_status(result) == "passed" for result in privacy_commands)
+        and isinstance(privacy, dict)
+        and privacy.get("restored_account_reference") == "123456789012"
+        and privacy.get("restoration_audit_omits_restored_values") is True
+    )
+
+
+def _validation_summary(payload: dict[str, object]) -> dict[str, str | None]:
+    """Return stable top-level assurance statuses for automation evidence."""
+    source_isolation = payload.get("source_isolation")
+    return {
+        "clean_install": _section_status(payload.get("install")),
+        "cli_runtime": "passed" if _commands_passed(payload) else "failed",
+        "privacy_restoration": "passed" if _privacy_passed(payload) else "failed",
+        "source_isolation": ("passed" if isinstance(source_isolation, dict) and source_isolation.get("status") == "ok" else "failed"),
+    }
 
 
 def _section_status(value: object) -> str | None:
@@ -914,6 +1151,10 @@ def _run_scanner_construction_check(
 ) -> dict[str, object]:
     scanner_path_module = import_module("unio_collector.scanners.collection.class_paths")
     scanner_class_paths = scanner_path_module.COLLECTOR_SCANNER_CLASS_PATHS
+    capability_builder = import_module(
+        "unio_collector.collector.parity.builder",
+    ).AwsCollectionCapabilityModelBuilder
+    expected_capability_model = capability_builder().build("collector")
     script = environment / "scanner-construction-smoke.py"
     script_template = """
 from __future__ import annotations
@@ -926,6 +1167,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from unio_collector.collector.package.manifest import COLLECTOR_FORBIDDEN_PREFIXES
+from unio_collector.collector.parity import AwsCollectionCapabilityModelBuilder
 from unio_collector.core.scan.period_resolver import ScanPeriodResolver
 from unio_collector.scanners.collection.class_paths import COLLECTOR_SCANNER_CLASS_PATHS
 from unio_collector.scanners.collection.path_factory import build_scanner_from_collector_factory_path
@@ -933,6 +1175,7 @@ from unio_collector.scanners.registry import list_scanners
 from unio_collector.scanners.scanner.evidence_serializer import build_scanner_evidence_payload
 
 EXPECTED_COLLECTOR_SCANNER_CLASS_PATHS = __EXPECTED_COLLECTOR_SCANNER_CLASS_PATHS__
+EXPECTED_CAPABILITY_MODEL = __EXPECTED_CAPABILITY_MODEL__
 
 errors: list[str] = []
 if COLLECTOR_SCANNER_CLASS_PATHS != EXPECTED_COLLECTOR_SCANNER_CLASS_PATHS:
@@ -1003,6 +1246,11 @@ forbidden_modules = sorted(
         for prefix in COLLECTOR_FORBIDDEN_PREFIXES
     )
 )
+capability_model = AwsCollectionCapabilityModelBuilder().build("collector")
+capability_payload = capability_model.convert_to_dict()
+capability_status = "passed" if capability_payload == EXPECTED_CAPABILITY_MODEL else "failed"
+if capability_status != "passed":
+    errors.append("installed collector capability model differs from source projection")
 payload = {
             "status": "ok" if not errors and not forbidden_modules else "failed",
     "constructed_count": len(constructed),
@@ -1015,6 +1263,12 @@ payload = {
     "errors": errors,
     "forbidden_module_count": len(forbidden_modules),
     "forbidden_modules": forbidden_modules,
+    "capability_model": {
+        "status": capability_status,
+        "schema_version": capability_model.schema_version,
+        "scanner_count": len(capability_model.scanners),
+        "semantic_sha256": capability_model.semantic_sha256(),
+    },
 }
 if missing_installed_registry_ids or unexpected_installed_registry_ids or missing_scanner_definitions:
     payload["status"] = "failed"
@@ -1025,6 +1279,9 @@ raise SystemExit(0 if payload["status"] == "ok" else 1)
         script_template.replace(
             "__EXPECTED_COLLECTOR_SCANNER_CLASS_PATHS__",
             repr(scanner_class_paths),
+        ).replace(
+            "__EXPECTED_CAPABILITY_MODEL__",
+            repr(expected_capability_model.convert_to_dict()),
         ),
         encoding="utf-8",
     )

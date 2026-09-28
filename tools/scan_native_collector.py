@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 import platform
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -30,7 +31,7 @@ def main() -> int:
             "evidence_status": "unavailable",
             "scanner": None,
             "status": "unavailable",
-            "targets": [str(path.resolve()) for path in args.target],
+            "targets": [path.name for path in args.target],
         }
         summary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         return 1 if args.require_scanner else 0
@@ -45,7 +46,7 @@ def main() -> int:
             {
                 "exit_code": completed.returncode,
                 "status": "clean" if completed.returncode == 0 else "quarantined_for_review",
-                "target": str(resolved),
+                "target": resolved.name,
             }
         )
     status = "clean" if all(item["exit_code"] == 0 for item in results) else "quarantined_for_review"
@@ -64,7 +65,8 @@ def main() -> int:
         "artifact_hashes": artifact_hashes,
         "evidence_status": "passed" if status == "clean" else "failed",
         "results": results,
-        "scanner": scanner[0],
+        "scanner": Path(scanner[0]).name,
+        "scanner_version": _scanner_version(scanner),
         "source_commit": args.source_commit,
         "status": status,
         "target": args.native_target,
@@ -94,6 +96,30 @@ def _scanner_command() -> tuple[str, ...] | None:
     database = os.getenv("UNIO_COLLECTOR_CLAMAV_DATABASE", "")
     database_args = ("--database", database) if database else ()
     return (clamscan, *database_args, "--infected", "--recursive", "--no-summary")
+
+
+def _scanner_version(scanner: tuple[str, ...]) -> str:
+    """Record a bounded tool/definitions identifier without host paths."""
+    if Path(scanner[0]).name.casefold() == "mpcmdrun.exe":
+        script = (
+            "$s=Get-MpComputerStatus; "
+            "$s.AMEngineVersion + '/' + $s.AntivirusSignatureVersion + '/' + "
+            "$s.AntivirusSignatureLastUpdated.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')"
+        )
+        command = (
+            "powershell",
+            "-NoProfile",
+            "-Command",
+            script,
+        )
+    else:
+        command = (scanner[0], "--version")
+    completed = subprocess.run(command, check=False, capture_output=True, text=True)  # noqa: S603
+    value = completed.stdout.strip()
+    if completed.returncode or not re.fullmatch(r"[A-Za-z0-9 ./()+,:_-]{1,160}", value):
+        message = "Malware scanner version or definitions identity is unavailable."
+        raise RuntimeError(message)
+    return value
 
 
 def _sha256(path: Path) -> str:

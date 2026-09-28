@@ -20,6 +20,11 @@ class CollectorPackageFilePlan:
     excluded_source_files: tuple[str, ...]
     import_closure: CollectorImportClosureResult
 
+    @property
+    def package_files(self) -> tuple[str, ...]:
+        """Return reviewed Python and runtime-data files staged into the artifact."""
+        return tuple(sorted({*self.source_files, *self.manifest.included_data_files}))
+
     def convert_to_dict(self) -> dict[str, Any]:  # noqa: D102
         manifest_payload = self.manifest.convert_to_dict()
         validation_errors = self.validate()
@@ -104,6 +109,11 @@ class CollectorPackageFilePlan:
         errors.extend(
             f"Collector package file plan is missing typing contract: {path}."
             for path in sorted(set(self.manifest.typing_source_files) - set(self.source_files))
+        )
+        errors.extend(
+            f"Collector package data path must be a package-relative JSON or YAML file: {path}."
+            for path in self.manifest.included_data_files
+            if not path.startswith("unio_collector/") or not path.endswith((".json", ".yaml", ".yml"))
         )
         return errors
 

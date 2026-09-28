@@ -1,8 +1,9 @@
-annotated-types==0.7.0
+annotated-types==0.8.0
+anyio==4.14.2
 bandit==1.9.4
 boolean.py==5.0
-boto3==1.43.78
-botocore==1.43.78
+boto3==1.43.99
+botocore==1.43.99
 CacheControl==0.14.4
 certifi==2026.6.17
 cfgv==3.5.0
@@ -15,7 +16,7 @@ distlib==0.4.3
 execnet==2.1.2
 filelock==3.32.3
 identify==2.6.19
-idna==3.18
+idna==3.20
 iniconfig==2.3.0
 jmespath==1.1.0
 license-expression==30.4.4
@@ -56,8 +57,8 @@ stevedore==5.9.0
 tomli==2.4.1
 tomli_w==1.2.0
 types-PyYAML==6.0.12.20260518
-typing-inspection==0.4.2
+typing-inspection==0.4.4
 typing_extensions==4.15.0
 urllib3==2.7.0
 virtualenv==21.7.4
-wheel==0.47.0
+wheel==0.48.0

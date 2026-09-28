@@ -19,7 +19,7 @@ from unio_collector.scanners.aws_native.collection.reader import AwsNativeOperat
 from unio_collector.scanners.aws_native.status_policy import (
     AwsNativeRecommendationStatusPolicy,
 )
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.scanner.implementation import ScannerImplementation
 
 if TYPE_CHECKING:

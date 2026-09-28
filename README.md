@@ -26,7 +26,7 @@ external environment and choose an output directory outside the source:
 
 ```console
 python -m pip install ".[dev]" -c requirements/dev-constraints.txt
-python -B -m tools.build_collector_wheel --output ../Unio-collector-wheel
+python -B -m tools.build_collector_wheel --output ../unio-collector-wheel
 ```
 
 The wheel is built from the collector package plan. Its only console entrypoint
@@ -40,6 +40,47 @@ Standalone package-facade interfaces expose only supported collector aliases.
 Pyright checks those interfaces and all implementation modules. Its exclusions
 apply only to the corresponding forwarding facades, whose unchanged runtime
 files retain supported shared interfaces for the separate Unio application.
+
+## Linux container
+
+The reviewed public source also builds a CLI-only image for Linux amd64 and
+arm64. Its Dockerfile uses a digest-pinned Python 3.12 Bookworm base, the
+standalone collector wheel, and the hash-locked runtime dependencies in
+`requirements/container-runtime.lock`. Build from an exact reviewed public
+`v<version>` tag; set `COLLECTOR_VERSION`, `PUBLIC_SOURCE_SHA`, and
+`PUBLIC_SOURCE_TAG` to that checkout's identity. A source clone can build
+without private repository access. The Docker Hub release name is
+`tevaricloud/unio-collector:v<version>`; published digest verification is
+required before treating a tag as a release.
+
+The image runs `unio-collector` as UID/GID `10001:10001`, with `/home/unio`
+as home and `/work` as the working directory. Mount a host directory writable
+by that UID for output. A read-only root filesystem is supported with a bounded
+writable `/tmp` mount. For example, after verifying the image digest:
+
+```console
+docker run --rm --read-only --tmpfs /tmp:rw,nosuid,nodev,size=256m -v /example/output:/work:rw tevaricloud/unio-collector:v0.1.0 --version
+```
+
+For AWS collection, bind-mount `/example/aws` to the image user's `.aws` directory read-only
+and select an existing profile with `--profile`. Standard boto3 environment,
+temporary-session, web-identity, and container credential providers retain
+their normal behavior. Environment credentials can be inspected by local
+container/process administrators; they are not inherently more private than
+mounted files. Offline fixture, bundle, privacy, version, and package-plan
+commands need no AWS credentials.
+
+Pass explicit mounted paths for `--config`, `--fixture`,
+`--environment-alias-file`, and `--passphrase-file`. Keep protected bundles
+and receipts in a transferable output mount; keep vault and recovery material
+in a separate client-held private mount. Raw bundles are sensitive and should
+be retained only through an explicit mounted output path. Temporary protected
+collection state belongs on a bounded writable `/tmp` or an explicit
+`--temporary-directory` mount. The existing privacy warnings and file
+permission requirements also apply to mounted filesystems. Docker Desktop can
+run the Linux CLI image on Windows or macOS; it is separate from the native
+applications and has no GUI. SBOM and provenance attestations are release
+evidence for the exact image digest, alongside container vulnerability scans.
 
 ## Collect evidence
 
@@ -75,8 +116,8 @@ Tevari Cloud. Loss of required recovery material can make restoration impossible
 
 ```console
 python -B -m tools.collector_repository verify --root .
-python -B -m tools.collector_repository validate --root . --output ../Unio-collector-validation
-python -B -m tools.collector_repository native --root . --output ../Unio-collector-native
+python -B -m tools.collector_repository validate --root . --output ../unio-collector-validation
+python -B -m tools.collector_repository native --root . --output ../unio-collector-native
 ```
 
 Each validation output must be a fresh external directory. Validation creates
@@ -100,6 +141,20 @@ public contents; different source line endings can change the public digest.
 metadata. Edited development checkouts can still run `validate`, but cannot
 claim pristine export identity. The manifest and provenance establish content
 identity, not a digital signature or a licence grant.
+
+This repository is a generated projection of Tevari Cloud's authoritative private
+source, not an independently maintained source tree. Every publication candidate
+must first pass Tevari's separate disclosure policy over the exact generated tree.
+That gate blocks customer, organisation, AWS-resource, internal-network and local
+workstation identifiers even when they are not credentials; its diagnostics retain
+only a rule, relative location, redacted type and fingerprint. Public CI and every
+publication candidate also pass Gitleaks over the complete current tree, including
+generated metadata and transformed source. Historical-secret scanning is owned by
+the authoritative source repository while all public source changes use the
+controlled publication pipeline. If this repository later accepts direct human
+commits, external pull requests, or any source change that bypasses that pipeline,
+public Git-history scanning must be enabled before the first such change is
+accepted.
 
 ## Licence and contributions
 

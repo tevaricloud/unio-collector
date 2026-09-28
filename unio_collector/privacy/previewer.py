@@ -37,6 +37,8 @@ class PrivacyPreviewer:
             existing_vault_path=options.existing_vault_path,
             existing_recovery_key_path=options.existing_recovery_key_path,
             passphrase=options.passphrase,
+            environment_alias_file=options.environment_alias_file,
+            environment_semantics=options.environment_semantics,
         )
         profile = load_privacy_profile(
             options.profile_id,
@@ -72,10 +74,13 @@ class PrivacyPreviewer:
             "prohibited_paths": list(state.classification.prohibited_paths),
             "actual_applied_transformations": state.classification.applied_transformations(),
             "resolver_decisions": state.classification.resolver_decisions(),
+            "environment_semantics": state.environment_semantics,
+            "environment_analysis_limited": state.environment_semantics == "omit",
             "leak_risk": leak_scan,
             "limitations": [
                 "Preview uses an in-memory transformation and does not create a protected export.",
                 "Pattern-based leak analysis cannot prove that all contextual sensitivity is removed.",
+                *(["Environment semantics were omitted; environment-dependent analysis may be reduced."] if state.environment_semantics == "omit" else []),
             ],
             "artifacts_written": [],
         }

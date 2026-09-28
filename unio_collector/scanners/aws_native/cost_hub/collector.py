@@ -15,7 +15,7 @@ from unio_collector.scanners.aws_native.collection.normalization import (
     get_dict,
 )
 from unio_collector.scanners.aws_native.collection.reader import AwsNativeOperationReader
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.scanner.implementation import ScannerImplementation
 
 if TYPE_CHECKING:

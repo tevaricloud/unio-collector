@@ -30,7 +30,12 @@ class CollectorLauncherApp:
         self.allow_chargeable = BooleanVar(value=False)
         self.preset = StringVar(value="")
         self.detail_profile = StringVar(value="")
+        self.environment_alias_file = StringVar(value="")
         self.privacy_profile = StringVar(value="standard")
+        self.environment_semantics = StringVar(value="")
+        self.token_scope = StringVar(value="engagement")
+        self.engagement_id = StringVar(value="default-engagement")
+        self.client_id = StringVar(value="")
         self.protected_bundle = StringVar(value=str(client_documents / "protected-evidence-bundle.zip"))
         self.vault = StringVar(value=str(client_documents / "identity-vault.json"))
         self.passphrase = StringVar(value="")
@@ -107,17 +112,19 @@ class CollectorLauncherApp:
         self.pillars.grid(row=7, column=1, columnspan=2, sticky="ew")
         for pillar in SCAN_PILLAR_IDS:
             self.pillars.insert(END, pillar)
-        ttk.Label(frame, text="Scanners (no selection preserves collector defaults)").grid(row=8, column=0, columnspan=2, sticky="w", pady=(8, 0))
+        self._path_row(frame, 8, "Environment aliases (optional)", self.environment_alias_file, save=False)
+        ttk.Label(frame, text="Scanners (no selection preserves collector defaults)").grid(row=9, column=0, columnspan=2, sticky="w", pady=(8, 0))
         self.scanners = __import__("tkinter").Listbox(frame, selectmode=MULTIPLE, height=12)
-        self.scanners.grid(row=9, column=0, columnspan=3, sticky="nsew")
+        self.scanners.grid(row=10, column=0, columnspan=3, sticky="nsew")
         buttons = ttk.Frame(frame)
-        buttons.grid(row=10, column=0, columnspan=3, sticky="w", pady=8)
+        buttons.grid(row=11, column=0, columnspan=3, sticky="w", pady=8)
         ttk.Button(buttons, text="1. Run doctor", command=self._doctor).pack(side="left", padx=3)
         ttk.Button(buttons, text="2. View permissions", command=self._permissions).pack(side="left", padx=3)
         ttk.Button(buttons, text="3. Collect", command=self._collect).pack(side="left", padx=3)
+        ttk.Button(buttons, text="3a. Collect protected", command=self._collect_protected).pack(side="left", padx=3)
         ttk.Button(buttons, text="4. Validate bundle", command=self._validate).pack(side="left", padx=3)
         frame.columnconfigure(1, weight=1)
-        frame.rowconfigure(9, weight=1)
+        frame.rowconfigure(10, weight=1)
 
     def _build_privacy(self, frame: ttk.Frame) -> None:
         self._path_row(frame, 0, "Input evidence bundle", self.bundle, save=False)
@@ -125,14 +132,27 @@ class CollectorLauncherApp:
         self._path_row(frame, 2, "Private vault (keep with client)", self.vault, save=True)
         ttk.Label(frame, text="Privacy profile").grid(row=3, column=0, sticky="w")
         ttk.Combobox(frame, textvariable=self.privacy_profile, values=("standard", "strict"), state="readonly").grid(row=3, column=1, sticky="ew")
-        ttk.Label(frame, text="Passphrase (not stored or placed on the command line)").grid(row=4, column=0, sticky="w")
-        ttk.Entry(frame, textvariable=self.passphrase, show="*").grid(row=4, column=1, sticky="ew")
-        ttk.Button(frame, text="Protect and inspect", command=self._protect).grid(row=5, column=0, pady=8)
+        ttk.Label(frame, text="Environment semantics").grid(row=4, column=0, sticky="w")
+        ttk.Combobox(
+            frame,
+            textvariable=self.environment_semantics,
+            values=("", "detailed", "coarse", "omit"),
+            state="readonly",
+        ).grid(row=4, column=1, sticky="ew")
+        ttk.Label(frame, text="Token scope").grid(row=5, column=0, sticky="w")
+        ttk.Combobox(frame, textvariable=self.token_scope, values=("bundle", "engagement", "client"), state="readonly").grid(row=5, column=1, sticky="ew")
+        ttk.Label(frame, text="Engagement ID").grid(row=6, column=0, sticky="w")
+        ttk.Entry(frame, textvariable=self.engagement_id).grid(row=6, column=1, sticky="ew")
+        ttk.Label(frame, text="Client ID (client token scope only)").grid(row=7, column=0, sticky="w")
+        ttk.Entry(frame, textvariable=self.client_id).grid(row=7, column=1, sticky="ew")
+        ttk.Label(frame, text="Passphrase (not stored or placed on the command line)").grid(row=8, column=0, sticky="w")
+        ttk.Entry(frame, textvariable=self.passphrase, show="*").grid(row=8, column=1, sticky="ew")
+        ttk.Button(frame, text="Protect existing bundle", command=self._protect).grid(row=9, column=0, pady=8)
         ttk.Label(
             frame,
             text="Transfer only the protected bundle. Never transfer the vault, passphrase, recovery material, or restored output.",
             wraplength=700,
-        ).grid(row=6, column=0, columnspan=3, sticky="w")
+        ).grid(row=10, column=0, columnspan=3, sticky="w")
         frame.columnconfigure(1, weight=1)
 
     def _build_restore(self, frame: ttk.Frame) -> None:
@@ -193,6 +213,7 @@ class CollectorLauncherApp:
             allow_chargeable_scanners=self.allow_chargeable.get(),
             include_cost_data=self.include_cost.get(),
             check_identity=self.check_identity.get(),
+            environment_alias_file=(Path(self.environment_alias_file.get()) if self.environment_alias_file.get().strip() else None),
         )
 
     def _doctor(self) -> None:
@@ -241,6 +262,41 @@ class CollectorLauncherApp:
 
         self._run_task(task)
 
+    def _collect_protected(self) -> None:
+        passphrase = self.passphrase.get()
+        if not passphrase:
+            self._append("A non-empty client-held passphrase is required.")
+            return
+        temporary, path = self.controller.temporary_path("protected-progress.jsonl")
+        try:
+            argv = self.controller.collect_protected_argv(
+                self._selection(),
+                path,
+                protected_bundle=Path(self.protected_bundle.get()),
+                vault=Path(self.vault.get()),
+                privacy_profile=self.privacy_profile.get(),
+                token_scope=self.token_scope.get(),
+                engagement_id=self.engagement_id.get(),
+                client_id=self.client_id.get().strip() or None,
+                environment_semantics=self.environment_semantics.get() or None,
+            )
+        except RuntimeError as exc:
+            temporary.cleanup()
+            self._append(str(exc))
+            return
+        self.passphrase.set("")
+
+        def task() -> CommandResult:
+            return self.controller.run_streaming(
+                argv,
+                progress_path=path,
+                on_output=self._append,
+                on_progress=lambda payload: self._append(_progress_text(payload)),
+                stdin_text=passphrase + "\n",
+            )
+
+        self._run_task(task, cleanup=temporary.cleanup)
+
     def _validate(self) -> None:
         self._run_async(("validate-bundle", self.bundle.get()))
 
@@ -254,6 +310,8 @@ class CollectorLauncherApp:
             output=Path(self.protected_bundle.get()),
             vault=Path(self.vault.get()),
             profile=self.privacy_profile.get(),
+            environment_alias_file=(Path(self.environment_alias_file.get()) if self.environment_alias_file.get().strip() else None),
+            environment_semantics=self.environment_semantics.get() or None,
         )
         self.passphrase.set("")
         self._run_async(argv, stdin_text=passphrase + "\n", then=("privacy", "inspect", "--bundle", self.protected_bundle.get()))

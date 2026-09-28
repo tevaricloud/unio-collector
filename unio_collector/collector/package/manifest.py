@@ -77,6 +77,7 @@ class CollectorPackageManifest:
         "unio_collector.commitments",
         "unio_collector.core",
         "unio_collector.evidence",
+        "unio_collector.environment",
         "unio_collector.findings",
         "unio_collector.pricing",
         "unio_collector.providers",
@@ -85,6 +86,7 @@ class CollectorPackageManifest:
         "unio_collector.scan_workflow",
         "unio_collector.scanners",
         "unio_collector.topology",
+        "unio_collector.transport",
     )
     exclude_package_prefixes: tuple[str, ...] = REQUIRED_COLLECTOR_EXCLUDE_PREFIXES
     planned_artifacts: tuple[str, ...] = ("unio_collector-{version}-py3-none-any.whl",)
@@ -92,6 +94,7 @@ class CollectorPackageManifest:
         "README.md",
         "docs/collector-workflow.md",
         "docs/evidence-bundles.md",
+        "docs/environment-classification.md",
         "docs/offline-aws-development.md",
         "docs/package-layout.md",
         "pyproject.toml",
@@ -116,8 +119,11 @@ class CollectorPackageManifest:
         "unio_collector.scanners.collection.path_factory:build_scanner_from_collector_factory_path",
         "unio_collector.scanners.collection.factory:build_collector_scanner",
         "unio_collector.collector.config.factory:CollectorConfigFactory",
+        "unio_collector.collector.parity.builder:AwsCollectionCapabilityModelBuilder",
         "unio_collector.evidence.permission.planning.builder:PermissionPlanBuilder",
         "unio_collector.collector_cli.services.privacy:CollectorPrivacyService",
+        "unio_collector.collector_cli.services.collect_protected:CollectorProtectedService",
+        "unio_collector.collector_cli.services.transport:CollectorTransportService",
         "unio_collector.collector_launcher.app:main",
         "unio_collector.collector.package.native.manifest:build_native_collector_manifest",
     )
@@ -241,8 +247,12 @@ class CollectorPackageManifest:
             errors.append("Collector artifact version is required.")
         if "collect" not in self.supported_commands:
             errors.append("Collector artifact must support evidence collection.")
+        if "collect-protected" not in self.supported_commands:
+            errors.append("Collector artifact must support integrated protected collection.")
         if "validate-bundle" not in self.supported_commands:
             errors.append("Collector artifact must support bundle validation.")
+        if "encrypt-bundle" not in self.supported_commands:
+            errors.append("Collector artifact must support recipient-encrypted transport.")
         if "doctor" not in self.supported_commands:
             errors.append("Collector artifact must support collector preflight checks.")
         if "privacy" not in self.supported_commands:
@@ -274,6 +284,7 @@ def build_collector_package_manifest(
     )
     return CollectorPackageManifest(
         required_dependencies=dependencies,
+        included_data_files=("unio_collector/data/environment-classification.yaml",),
         platform_considerations=(
             f"The initial collector artifact uses the repository Python contract ({requires_python}).",
             "The AWS SDK is installed as a required dependency.",

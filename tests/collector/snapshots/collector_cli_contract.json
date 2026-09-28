@@ -3,17 +3,25 @@
   "routes": [
     {
       "argv": [],
-      "help_sha256": "e9bb141db1b098789c8d9fbce63a9085d82685fb907c1c8ab3cb7bd2f435363c",
+      "help_sha256": "e9c95a7fb4367f0f080687b1a923a3ac81902877aa9ab234095fb63de9e418a4",
       "id": "root",
-      "parser_actions_sha256": "f10ed70cba0f5bd805f84e559b1ab06ee36209984e40f44578d4858a831c88a8"
+      "parser_actions_sha256": "7ef0411e52d6ef1620fdaa8268d2cccbbb09372053605c636b42a1bf07347b7d"
     },
     {
       "argv": [
         "collect"
       ],
-      "help_sha256": "d98c79d2c5cb4e27793b3e69d977b9c3f8336343ca7015357a3f65cfa6989d5e",
+      "help_sha256": "c46f5b788eb2fb6cd45b9dc57b0ff3f24ae1856887faefef4a432b295f1f623f",
       "id": "collect",
-      "parser_actions_sha256": "ed3771e3947a4172987fb3ff4d5f14530492ea753f06ae3e80d99a0deb195fbe"
+      "parser_actions_sha256": "101f4a55ba6896c32befbf733efb40a8b5b85ae599e5cb1acb71b18adced774b"
+    },
+    {
+      "argv": [
+        "collect-protected"
+      ],
+      "help_sha256": "c8f9fd5e8606b921503ed02762ba907dc01b145493dfe33fc5d1c5811bda6338",
+      "id": "collect-protected",
+      "parser_actions_sha256": "d566cf07955a37e23444e6056c473005a78a1df97e4c57834b3fe4722b3deaca"
     },
     {
       "argv": [
@@ -37,9 +45,9 @@
         "organization",
         "collect"
       ],
-      "help_sha256": "ae07b72ebbdb9694b7b87d79db079e9e9b565fad9670929c17f4eda2ccab4628",
+      "help_sha256": "6a95fd9a41604c02dfb37868e60d8da57e397819f3bf4f67e1a293d5d8ec8a6a",
       "id": "organization collect",
-      "parser_actions_sha256": "44454f1da3cc3c9f3f592243bdb18c33d04e0bc0b833355b031dac9226e72503"
+      "parser_actions_sha256": "fe25ba0f306ed9926159c08b74202aea267cdb341a598cb1f6b9d92a32a07957"
     },
     {
       "argv": [
@@ -57,6 +65,14 @@
       "help_sha256": "18b9c6d6ac3f204031068ad258d67f0fed7a91f9f0dd58b2a76c4e918f010d64",
       "id": "validate-bundle",
       "parser_actions_sha256": "c4643e7ae7740bf1c9656d546ca5ab097b0dbddcff9e983d4bae87626a02fe66"
+    },
+    {
+      "argv": [
+        "encrypt-bundle"
+      ],
+      "help_sha256": "0fb2663edd29d2f6e4bc4ae965d7a7fc23520540b86ec6bc2214f0160b42218a",
+      "id": "encrypt-bundle",
+      "parser_actions_sha256": "7d32291a6833d48cd84bea6b91b7c1d88acf160bd99340d00b1a584f94c4377d"
     },
     {
       "argv": [
@@ -104,18 +120,18 @@
         "privacy",
         "protect"
       ],
-      "help_sha256": "7f2d54551a7f8bf59a60a991b413f38f22f6668806b4f94a435ebd4f901711af",
+      "help_sha256": "df904e3d75ab3a8e6827ee9f61aabd32d9b2112284d3a353c4ec6e38510a733d",
       "id": "privacy protect",
-      "parser_actions_sha256": "abdf4457dc821a952fdd678784ed3746b343f0bda8a07ade21d41c72c86b727f"
+      "parser_actions_sha256": "eb2545215b8841ca8455ae9fddac5876a059d5cf92893729a8d6eb886cec5701"
     },
     {
       "argv": [
         "privacy",
         "preview"
       ],
-      "help_sha256": "84e7de89ed9c0223452c297a7280c04e1d733bdbba6d6543b4e8f9c959e01ca7",
+      "help_sha256": "229bc1b51b65748ed31db070cae625df76292c41f92b4e31698d5390e7396d1e",
       "id": "privacy preview",
-      "parser_actions_sha256": "9b429ddb5efdb61154f2acf8aa37793660cbce7751022795bbf251c1c6e76290"
+      "parser_actions_sha256": "f66790535f052e58c1e6af5523c318088b114e9a47c92d337d229b785786b70d"
     },
     {
       "argv": [

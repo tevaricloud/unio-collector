@@ -1,0 +1,34 @@
+schema_version: 1
+classifier_version: 2026-09-gap-043-v1
+categories:
+  production:
+    - production
+    - prod
+    - prd
+    - live
+  development:
+    - development
+    - dev
+  staging:
+    - staging
+    - stage
+    - preprod
+    - pre-production
+    - uat
+  test:
+    - test
+    - testing
+    - qa
+    - quality-assurance
+  non-production:
+    - nonprod
+    - non-production
+    - sandbox
+    - demo
+    - sample
+explicit_environment_keys:
+  - environment
+  - env
+  - stage
+  - deployment-environment
+  - workload-environment

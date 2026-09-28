@@ -25,6 +25,7 @@ from unio_collector.privacy.constants import (
     PROTECTED_EXPORT_RECEIPT_SCHEMA_VERSION,
     TOKEN_FORMAT_VERSION,
 )
+from unio_collector.privacy.environment.transformer import build_environment_transformer
 from unio_collector.privacy.inspect_result import PrivacyInspectResult
 from unio_collector.privacy.inspector import ProtectedBundleInspector
 from unio_collector.privacy.known_originals import collect_known_original_values
@@ -47,7 +48,6 @@ from unio_collector.privacy.source_identity import derive_source_bundle_identity
 from unio_collector.privacy.state_factory import ProtectionStateFactory
 from unio_collector.privacy.strict_verifier import StrictTransformationVerifier
 from unio_collector.privacy.transaction_coordinator import ArtifactTransactionCoordinator
-from unio_collector.privacy.transform import PrivacyTransformer
 from unio_collector.privacy.vault_public_metadata import build_vault_public_metadata
 
 if TYPE_CHECKING:
@@ -282,12 +282,7 @@ class ProtectedBundleProtector:
     ) -> tuple[dict[str, bytes], dict[str, Any]]:
         files: dict[str, bytes] = {}
         source_manifest: dict[str, Any] = {}
-        transformer = PrivacyTransformer(
-            token_service=state.token_service,
-            profile=state.profile,
-            allow_unknown_fields=state.profile.preserve_unknown_fields,
-            summary=state.classification,
-        )
+        transformer = build_environment_transformer(state)
         with ZipFile(bundle_path, "r") as archive:
             for name in sorted(archive.namelist()):
                 data = archive.read(name)

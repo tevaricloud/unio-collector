@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Any
 
 from unio_collector.aws import errors as aws_errors
 from unio_collector.aws.response_admission import require_complete_response, require_response_mapping, require_response_rows, require_response_string
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.s3.public_access.bucket_record import S3PublicAccessBucketRecord
 from unio_collector.scanners.s3.public_access.evidence import S3PublicAccessEvidence
 from unio_collector.scanners.s3.public_access.response import (
