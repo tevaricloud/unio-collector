@@ -9,7 +9,7 @@ from unio_collector.aws.cloudwatch import (
     CloudWatchLogMetricCollectionOptions,
     LogGroupActivityRecord,
 )
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.cloudwatch.log_activity.evidence import (
     CloudWatchLogActivityEvidence,
 )

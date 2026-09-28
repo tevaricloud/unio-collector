@@ -20,7 +20,7 @@ from tools.collector_repository.secrets import GitleaksSecretScanner
 class RepositoryValidator:
     """Coordinate the bounded public checks and existing collector build tools."""
 
-    def validate(self, root: Path, output: Path, *, native: bool = False) -> dict[str, object]:
+    def validate(self, root: Path, output: Path, *, native: bool = False, source_sha: str | None = None) -> dict[str, object]:
         """Validate source or a pristine export, recording honest partial failures."""
         root = root.resolve()
         PublicAssistantArtifactPolicy().validate(root)
@@ -45,7 +45,7 @@ class RepositoryValidator:
                 payload["secret_scan"] = GitleaksSecretScanner().scan(root, output)
                 python = self._environment(root, workspace, process)
                 self._source(root, workspace, python, process)
-                wheel = self._wheel(root, output, python, process)
+                wheel = self._wheel(root, output, python, process, source_sha=source_sha)
                 if native:
                     self._native(root, output, python, wheel, process)
                 if before is not None:
@@ -75,14 +75,22 @@ class RepositoryValidator:
         executable = str(python)
         for name, arguments in (
             ("compile", ["-m", "compileall", "-q", "unio_collector", "tools", "tests/standalone"]),
-            ("ruff", ["-m", "ruff", "check", "--no-cache", "unio_collector", "tools", "tests/standalone"]),
+            ("ruff", ["-m", "ruff", "check", "--no-cache", "--output-format", "concise", "unio_collector", "tools", "tests/standalone"]),
             ("format", ["-m", "ruff", "format", "--check", "--no-cache", "unio_collector", "tools", "tests/standalone"]),
             ("pyright", ["-m", "pyright", "--pythonpath", executable]),
             ("tests", ["-m", "pytest", "-q", "-p", "no:cacheprovider", "--basetemp", str(workspace / "pytest"), "tests/standalone"]),
         ):
             process.run(name, [executable, *arguments], cwd=root)
 
-    def _wheel(self, root: Path, output: Path, python: Path, process: RepositoryProcess) -> Path:
+    def _wheel(
+        self,
+        root: Path,
+        output: Path,
+        python: Path,
+        process: RepositoryProcess,
+        *,
+        source_sha: str | None = None,
+    ) -> Path:
         wheel_dir = output / "wheel"
         process.run(
             "wheel-build", [str(python), "-B", "-m", "pip", "wheel", "--no-deps", "--no-build-isolation", "--wheel-dir", str(wheel_dir), str(root)], cwd=output
@@ -107,6 +115,7 @@ class RepositoryValidator:
                 str(output / "installed-wheel-summary.json"),
             ],
             cwd=root,
+            source_sha=source_sha,
         )
         return wheel
 

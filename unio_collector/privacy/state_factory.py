@@ -5,6 +5,7 @@ import uuid
 from dataclasses import replace
 from typing import TYPE_CHECKING
 
+from unio_collector.environment.projection import resolve_environment_semantics
 from unio_collector.privacy.crypto import derive_subkey, generate_root_key
 from unio_collector.privacy.protection_state import ProtectionState
 from unio_collector.privacy.reusable_vault.context import VaultContext
@@ -66,6 +67,11 @@ class ProtectionStateFactory:
                 vault_builder=vault_builder,
             ),
             vault_context=context,
+            environment_alias_file=options.environment_alias_file,
+            environment_semantics=resolve_environment_semantics(
+                profile.profile_id,
+                options.environment_semantics,
+            ),
         )
 
     def validate_paths(self, options: PrivacyProtectOptions) -> None:

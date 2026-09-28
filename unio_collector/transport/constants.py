@@ -1,0 +1,33 @@
+"""Stable transport-envelope protocol constants."""
+
+TRANSPORT_SCHEMA_VERSION = "unio-evidence-transport-v1"
+ENCRYPTION_ALGORITHM = "AES-256-GCM"
+KEY_WRAP_ALGORITHM = "RSA-OAEP-SHA256"
+PAYLOAD_TYPE = "application/vnd.unio_collector.evidence-bundle+zip"
+MANIFEST_MEMBER = "transport-envelope.json"
+CIPHERTEXT_MEMBER = "evidence-bundle.ciphertext"
+PACKAGE_MEMBERS = frozenset((MANIFEST_MEMBER, CIPHERTEXT_MEMBER))
+CONTENT_KEY_BYTES = 32
+NONCE_BYTES = 12
+TAG_BYTES = 16
+CHUNK_BYTES = 1024 * 1024
+MAX_PAYLOAD_BYTES = 300 * 1024 * 1024
+RSA_MINIMUM_BITS = 2048
+KEY_WRAP_LABEL = b"unio-evidence-transport-v1"
+
+__all__ = [
+    "CHUNK_BYTES",
+    "CIPHERTEXT_MEMBER",
+    "CONTENT_KEY_BYTES",
+    "ENCRYPTION_ALGORITHM",
+    "KEY_WRAP_ALGORITHM",
+    "KEY_WRAP_LABEL",
+    "MANIFEST_MEMBER",
+    "MAX_PAYLOAD_BYTES",
+    "NONCE_BYTES",
+    "PACKAGE_MEMBERS",
+    "PAYLOAD_TYPE",
+    "RSA_MINIMUM_BITS",
+    "TAG_BYTES",
+    "TRANSPORT_SCHEMA_VERSION",
+]

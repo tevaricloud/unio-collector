@@ -12,7 +12,7 @@ from unio_collector.aws.response_admission import (
     require_response_rows,
     require_response_string,
 )
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.iam.access_key_record import IamAccessKeyRecord
 from unio_collector.scanners.iam.account_security.evidence import IamAccountSecurityEvidence
 from unio_collector.scanners.iam.account_security.options import (

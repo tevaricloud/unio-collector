@@ -9,7 +9,7 @@ from unio_collector.aws.response_admission import (
     require_response_rows,
     require_response_string,
 )
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.kms.key_posture.evidence import KmsKeyPostureEvidence
 from unio_collector.scanners.kms.key_posture.record import KmsKeyPostureRecord
 from unio_collector.scanners.kms.key_posture.rotation import kms_rotation_status_is_applicable

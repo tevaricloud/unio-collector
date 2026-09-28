@@ -7,7 +7,7 @@ from unio_collector.aws.billing_guardrails import (
     normalize_billing_monitor_detail_mode,
     normalize_billing_subscriber_detail_mode,
 )
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.scanner.implementation import ScannerImplementation
 
 if TYPE_CHECKING:

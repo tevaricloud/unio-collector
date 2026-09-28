@@ -8,7 +8,7 @@ from unio_collector.aws.dynamodb import (
     DynamoDbRegionRecord,
     normalize_dynamodb_table_detail_regional_mode,
 )
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.dynamodb.cost_governance.evidence import (
     DynamoDbCostGovernanceEvidence,
 )

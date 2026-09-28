@@ -58,8 +58,53 @@ class LauncherController:
         ]
         self._add_profile(args, selection.profile)
         self._add_scan_scope(args, selection)
+        self._add_environment_alias(args, selection)
         if not selection.include_cost_data:
             args.append("--no-cost-data")
+        return tuple(args)
+
+    def collect_protected_argv(
+        self,
+        selection: LauncherSelection,
+        progress_path: Path,
+        *,
+        protected_bundle: Path,
+        vault: Path,
+        privacy_profile: str,
+        token_scope: str,
+        engagement_id: str,
+        client_id: str | None = None,
+        environment_semantics: str | None = None,
+    ) -> tuple[str, ...]:
+        """Build one-flow protected collection arguments for the shared service."""
+        args = [
+            "collect-protected",
+            "--provider",
+            "aws",
+            "--output",
+            str(protected_bundle),
+            "--vault",
+            str(vault),
+            "--privacy-profile",
+            privacy_profile,
+            "--token-scope",
+            token_scope,
+            "--engagement-id",
+            engagement_id,
+            "--passphrase-stdin",
+            "--acknowledge-vault-loss-risk",
+            "--progress-jsonl",
+            str(progress_path),
+        ]
+        if environment_semantics is not None:
+            args.extend(("--environment-semantics", environment_semantics))
+        self._add_profile(args, selection.profile)
+        self._add_scan_scope(args, selection)
+        self._add_environment_alias(args, selection)
+        if not selection.include_cost_data:
+            args.append("--no-cost-data")
+        if client_id:
+            args.extend(("--client-id", client_id))
         return tuple(args)
 
     def policy_argv(self, selection: LauncherSelection) -> tuple[str, ...]:
@@ -83,9 +128,11 @@ class LauncherController:
         output: Path,
         vault: Path,
         profile: str,
+        environment_alias_file: Path | None = None,
+        environment_semantics: str | None = None,
     ) -> tuple[str, ...]:
         """Build privacy-protection arguments with passphrase input on stdin."""
-        return (
+        args = [
             "privacy",
             "protect",
             "--bundle",
@@ -98,7 +145,12 @@ class LauncherController:
             profile,
             "--passphrase-stdin",
             "--acknowledge-vault-loss-risk",
-        )
+        ]
+        if environment_semantics is not None:
+            args.extend(("--environment-semantics", environment_semantics))
+        if environment_alias_file is not None:
+            args.extend(("--environment-alias-file", str(environment_alias_file)))
+        return tuple(args)
 
     def restore_argv(
         self,
@@ -149,16 +201,21 @@ class LauncherController:
         progress_path: Path,
         on_output: OutputCallback,
         on_progress: ProgressCallback,
+        stdin_text: str | None = None,
     ) -> CommandResult:
         """Run collection while forwarding console and structured progress events."""
         command = (*self.command_prefix, *argv)
         self._process = subprocess.Popen(  # noqa: S603
             command,
+            stdin=subprocess.PIPE if stdin_text is not None else None,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
             bufsize=1,
         )
+        if stdin_text is not None and self._process.stdin is not None:
+            self._process.stdin.write(stdin_text)
+            self._process.stdin.close()
         stop = threading.Event()
         progress_thread = threading.Thread(
             target=_follow_progress,
@@ -217,6 +274,10 @@ class LauncherController:
             args.extend(("--only-scanner", scanner_id))
         if selection.allow_chargeable_scanners:
             args.append("--allow-chargeable-scanners")
+
+    def _add_environment_alias(self, args: list[str], selection: LauncherSelection) -> None:
+        if selection.environment_alias_file is not None:
+            args.extend(("--environment-alias-file", str(selection.environment_alias_file)))
 
 
 def _collector_command_prefix() -> tuple[str, ...]:

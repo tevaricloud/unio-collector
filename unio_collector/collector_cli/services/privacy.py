@@ -95,6 +95,8 @@ class CollectorPrivacyService:
                 existing_recovery_key_path=(Path(args.existing_recovery_key) if args.existing_recovery_key else None),
                 client_id=args.client_id,
                 in_place_vault_update=bool(args.in_place_vault_update),
+                environment_alias_file=(Path(args.environment_alias_file) if args.environment_alias_file else None),
+                environment_semantics=args.environment_semantics,
             ),
         )
         if args.json:
@@ -141,6 +143,8 @@ class CollectorPrivacyService:
                 existing_vault_path=existing_vault,
                 existing_recovery_key_path=(Path(args.existing_recovery_key) if args.existing_recovery_key else None),
                 passphrase=passphrase.value,
+                environment_alias_file=(Path(args.environment_alias_file) if args.environment_alias_file else None),
+                environment_semantics=args.environment_semantics,
             ),
         )
         self.console.print(json.dumps(payload, indent=2, sort_keys=True))

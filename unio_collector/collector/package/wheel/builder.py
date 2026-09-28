@@ -100,7 +100,7 @@ class CollectorWheelBuilder:
         wheel_path = self._find_wheel(output_dir, plan.manifest.version)
         members = self.validate_existing_wheel(
             wheel_path=wheel_path,
-            planned_source_files=plan.source_files,
+            planned_source_files=plan.package_files,
             manifest=plan.manifest,
             scanner_class_paths=COLLECTOR_SCANNER_CLASS_PATHS,
         )
@@ -365,7 +365,7 @@ class CollectorWheelBuilder:
         for name, target in sorted(expected_entrypoints.items()):
             if f"{name} = {target}" not in entrypoint_text:
                 errors.append(f"missing {name} console script")
-        if "unio =" in entrypoint_text:
+        if "unio_collector =" in entrypoint_text:
             errors.append("full Unio console script is present")
         return errors
 

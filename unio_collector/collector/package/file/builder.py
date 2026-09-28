@@ -42,6 +42,7 @@ class CollectorPackageFilePlanBuilder:
             if not path.is_file() or path.is_symlink() or not path.resolve().is_relative_to(resolved_root.resolve()):
                 message = f"Collector typing contract is missing or unsafe: {name}"
                 raise ValueError(message)
+        self._validate_runtime_data(resolved_root, resolved_manifest)
         excluded_files: list[str] = []
         for path in sorted((resolved_root / "unio_collector").rglob("*.py")):
             relative_path = path.relative_to(resolved_root).as_posix()
@@ -63,6 +64,17 @@ class CollectorPackageFilePlanBuilder:
             excluded_source_files=tuple(excluded_files),
             import_closure=closure,
         )
+
+    def _validate_runtime_data(
+        self,
+        root: Path,
+        manifest: CollectorPackageManifest,
+    ) -> None:
+        for name in manifest.included_data_files:
+            path = root / name
+            if not path.is_file() or path.is_symlink() or not path.resolve().is_relative_to(root.resolve()):
+                message = f"Collector runtime data is missing or unsafe: {name}"
+                raise ValueError(message)
 
     def _module_name(self, path: Path) -> str:
         return path.with_suffix("").as_posix().replace("/", ".")

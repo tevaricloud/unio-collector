@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING
 from unio_collector.privacy.registry import ClassificationSummary
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     from unio_collector.privacy.profiles import PrivacyProfile
     from unio_collector.privacy.reusable_vault.context import VaultContext
     from unio_collector.privacy.tokens import TokenService
@@ -21,6 +23,8 @@ class ProtectionState:
     vault_context: VaultContext
     classification: ClassificationSummary = field(default_factory=ClassificationSummary)
     warnings: list[str] = field(default_factory=list)
+    environment_alias_file: Path | None = None
+    environment_semantics: str = "detailed"
 
     def vault_plaintext(self) -> dict[str, object]:
         """Return the complete sensitive vault snapshot for encryption."""

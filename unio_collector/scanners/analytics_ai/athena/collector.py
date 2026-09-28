@@ -12,7 +12,7 @@ from unio_collector.scanners.analytics_ai.helpers import (
     record_analytics_ai_execution_detail,
 )
 from unio_collector.scanners.analytics_ai.policy_input import read_analytics_policy_input
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.options import parse_scanner_option_int
 from unio_collector.scanners.scanner.implementation import ScannerImplementation
 

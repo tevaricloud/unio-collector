@@ -43,7 +43,7 @@ jobs:
           retention-days: 3
           if-no-files-found: warn
       - name: Retain failure diagnostics
-        if: failure()
+        if: ${{ failure() && vars.RETAIN_CI_DIAGNOSTIC_ARTIFACTS == 'true' }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: python-validation-diagnostics

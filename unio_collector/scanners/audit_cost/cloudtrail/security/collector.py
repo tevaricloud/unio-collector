@@ -17,7 +17,7 @@ from unio_collector.scanners.audit_cost.cloudtrail.security.evidence import (
 from unio_collector.scanners.audit_cost.cloudtrail.trail_record import (
     CloudTrailSecurityTrailRecord,
 )
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.security_governance.collection.regions import get_selected_or_available_regions
 from unio_collector.scanners.security_governance.collection.warnings import append_warning
 

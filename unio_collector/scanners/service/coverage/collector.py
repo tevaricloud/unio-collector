@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Any
 
 from unio_collector.aws import errors as aws_errors
 from unio_collector.aws.response_admission import iter_response_rows, require_complete_response, require_response_rows
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 
 if TYPE_CHECKING:
     from unio_collector.scanners.scanner.context import ScannerContext

@@ -2,7 +2,7 @@ from __future__ import annotations  # noqa: D100
 
 from typing import TYPE_CHECKING
 
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.security_governance.collection.regions import get_selected_or_available_regions
 from unio_collector.scanners.security_governance.collection.warnings import record_context_warning
 from unio_collector.scanners.security_governance.security_group.evidence import (

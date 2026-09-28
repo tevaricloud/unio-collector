@@ -4,7 +4,7 @@ import sys
 from typing import TYPE_CHECKING, Any, cast
 
 from unio_collector.aws.flow.collector import VpcFlowLogCollector
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.network.vpc_flow.attribution.evidence import (
     VpcFlowLogAttributionEvidence,
 )

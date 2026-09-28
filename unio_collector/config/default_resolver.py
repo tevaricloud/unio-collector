@@ -36,10 +36,11 @@ class DefaultConfigResolver:
 
     def build_missing_default_warning(self) -> str:  # noqa: D102
         path = self.get_default_config_path()
-        return (
-            f"No default {DEFAULT_CONFIG_FILE_NAME} was found at {path}. "
-            "Unio Collector will continue with built-in defaults unless --config points "
-            "to another YAML file."
+        return " ".join(
+            (
+                f"No default {DEFAULT_CONFIG_FILE_NAME} was found at {path}.",
+                "Unio Collector will continue with built-in defaults unless --config points to another YAML file.",
+            )
         )
 
     def detect_default_config_disabled(self) -> bool:  # noqa: D102

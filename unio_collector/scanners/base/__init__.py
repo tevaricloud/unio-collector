@@ -6,7 +6,7 @@ from typing import Any
 
 _EXPORTS = {
     "BaseUnioScanner": (
-        "unio_collector.scanners.base.cloud_cost_scanner",
+        "unio_collector.scanners.base.unio_scanner",
         "BaseUnioScanner",
     ),
     "BaseS3BucketCostScanner": (
@@ -14,7 +14,7 @@ _EXPORTS = {
         "BaseS3BucketCostScanner",
     ),
     "UnioScanner": (
-        "unio_collector.scanners.cloud_cost_scanner",
+        "unio_collector.scanners.unio_scanner",
         "UnioScanner",
     ),
     "ScannerCloudWatchGateway": (

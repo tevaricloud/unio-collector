@@ -12,7 +12,7 @@ from unio_collector.aws.response_admission import (
     require_response_strings,
 )
 from unio_collector.scanners.audit_cost.cloudtrail.facts import count_cloudtrail_multi_region_trails, count_cloudtrail_organization_trails
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.regional.security_service_record import (
     RegionalSecurityServiceRecord,
 )

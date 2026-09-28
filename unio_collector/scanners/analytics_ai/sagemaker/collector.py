@@ -10,7 +10,7 @@ from unio_collector.scanners.analytics_ai.helpers import (
 from unio_collector.scanners.analytics_ai.sagemaker.evidence import (
     SageMakerCostReviewEvidence,
 )
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.scanner.implementation import ScannerImplementation
 
 if TYPE_CHECKING:

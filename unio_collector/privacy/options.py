@@ -32,3 +32,5 @@ class PrivacyProtectOptions:
     existing_recovery_key_path: Path | None = None
     client_id: str | None = None
     in_place_vault_update: bool = False
+    environment_alias_file: Path | None = None
+    environment_semantics: str | None = None

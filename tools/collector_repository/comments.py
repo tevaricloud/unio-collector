@@ -57,6 +57,8 @@ class PublicCommentPolicy:
                 for index, line in enumerate(text.splitlines(keepends=True))
                 if (line.startswith("#") if name == ".gitignore" else line.lstrip().startswith("#"))
             ]
+        if name in {"Dockerfile", ".dockerignore"}:
+            return self._hashes(text, [])
         require(name.endswith(".json") or name in {"LICENSE", "THIRD_PARTY_NOTICES"}, f"Unsupported public comment format: {name}.")
         return []
 

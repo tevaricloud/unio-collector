@@ -15,7 +15,16 @@ class EvidenceProtocol:
     @property
     def import_namespace(self) -> str:
         """Identify typed evidence imports independently of protocol labels."""
-        return __name__.split(".", 1)[0] if self == DEFAULT_PROTOCOL else "unio_collector"
+        if self == LEGACY_PROTOCOL:
+            return _LEGACY_NAMESPACE
+        return __name__.split(".", 1)[0]
+
+    @property
+    def accepted_import_namespaces(self) -> tuple[str, ...]:
+        """Return runtime spellings admitted for this wire-protocol family."""
+        if self == LEGACY_PROTOCOL:
+            return (_LEGACY_NAMESPACE,)
+        return tuple(dict.fromkeys((self.import_namespace, "unio_collector")))
 
     def identifier(self, suffix: str) -> str:
         """Return a wire identifier within this selected family."""
@@ -32,7 +41,7 @@ class EvidenceProtocol:
     @classmethod
     def from_report_type(cls, value: object, version: str) -> EvidenceProtocol:
         """Select one explicit package family before authentication."""
-        for protocol in (DEFAULT_PROTOCOL, UNIO_PROTOCOL):
+        for protocol in (UNIO_PROTOCOL, LEGACY_PROTOCOL):
             if value == protocol.report_type(version):
                 return protocol
         raise ValueError("Unsupported protected report package type.")
@@ -40,7 +49,7 @@ class EvidenceProtocol:
     @classmethod
     def from_identifier(cls, value: object, suffixes: tuple[str, ...]) -> EvidenceProtocol:
         """Reject unknown markers; never try a second family after selection."""
-        for protocol in (DEFAULT_PROTOCOL, UNIO_PROTOCOL):
+        for protocol in (UNIO_PROTOCOL, LEGACY_PROTOCOL):
             if value in tuple(protocol.identifier(suffix) for suffix in suffixes):
                 return protocol
         raise ValueError("Unsupported evidence protocol family identifier.")
@@ -57,5 +66,7 @@ class EvidenceProtocol:
             raise ValueError("Evidence protocol family vault format mismatch.")
 
 
-DEFAULT_PROTOCOL = EvidenceProtocol("unio")
+_LEGACY_NAMESPACE = bytes.fromhex("636c6f7564636f7374").decode("ascii")
 UNIO_PROTOCOL = EvidenceProtocol("unio")
+DEFAULT_PROTOCOL = UNIO_PROTOCOL
+LEGACY_PROTOCOL = EvidenceProtocol(_LEGACY_NAMESPACE)

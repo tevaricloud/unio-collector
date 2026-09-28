@@ -46,7 +46,7 @@ class CollectorPackageSourceMaterializer:
             destination.mkdir(parents=True)
 
         copied: list[str] = []
-        for relative in plan.source_files:
+        for relative in plan.package_files:
             source = root / relative
             target = destination / relative
             target.parent.mkdir(parents=True, exist_ok=True)

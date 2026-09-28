@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pathlib import Path
+
+MAX_DIAGNOSTIC_LINE_LENGTH = 600
 
 
 class RepositoryProcess:
@@ -19,7 +22,7 @@ class RepositoryProcess:
         self.output = output
         self.steps: list[dict[str, object]] = []
 
-    def environment(self) -> dict[str, str]:
+    def environment(self, *, source_sha: str | None = None) -> dict[str, str]:
         """Remove source injection and disable live AWS access for validation."""
         environment = os.environ.copy()
         for key in (
@@ -59,14 +62,38 @@ class RepositoryProcess:
                 "AWS_CONFIG_FILE": str(self.workspace / "absent-config"),
             }
         )
+        if source_sha is not None:
+            environment["UNIO_COLLECTOR_VALIDATION_SOURCE_SHA"] = source_sha
         return environment
 
-    def run(self, name: str, command: list[str], *, cwd: Path) -> None:
+    def run(self, name: str, command: list[str], *, cwd: Path, source_sha: str | None = None) -> None:
         """Run one required check and retain its exit code and log."""
         log = self.output / f"{name}.log"
         with log.open("w", encoding="utf-8") as stream:
-            completed = subprocess.run(command, cwd=cwd, env=self.environment(), stdout=stream, stderr=subprocess.STDOUT, check=False)  # noqa: S603
-        self.steps.append({"name": name, "exit_code": completed.returncode, "log": log.name})
+            completed = subprocess.run(command, cwd=cwd, env=self.environment(source_sha=source_sha), stdout=stream, stderr=subprocess.STDOUT, check=False)  # noqa: S603
+        diagnostic = self._failure_diagnostic(name, log) if completed.returncode else None
+        self.steps.append({"name": name, "exit_code": completed.returncode, "log": log.name, "diagnostic": diagnostic})
         if completed.returncode:
             message = f"Standalone {name} failed ({completed.returncode}); see {log}."
+            if diagnostic:
+                message = f"{message} Diagnostic: {diagnostic}"
             raise RuntimeError(message)
+
+    @staticmethod
+    def _failure_diagnostic(name: str, log: Path) -> str | None:
+        """Return only bounded, source-text-free diagnostics for reviewed steps."""
+        try:
+            lines = log.read_text(encoding="utf-8", errors="replace").splitlines()
+        except OSError:
+            return None
+        if name == "ruff":
+            safe = [line.strip() for line in lines if re.fullmatch(r"[A-Za-z0-9_./\\-]+:\d+:\d+: [A-Z][A-Z0-9]+ .{1,240}", line.strip())]
+        elif name.endswith("-driver"):
+            safe = [
+                line.strip()
+                for line in lines
+                if line.startswith("Standalone repository operation failed: Standalone ruff failed (") and len(line) <= MAX_DIAGNOSTIC_LINE_LENGTH
+            ]
+        else:
+            safe = []
+        return " | ".join(safe[-5:]) or None

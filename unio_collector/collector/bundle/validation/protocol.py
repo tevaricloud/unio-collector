@@ -6,7 +6,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from unio_collector.collector.bundle.encoding import load_json_object
-from unio_collector.collector.protocol import DEFAULT_PROTOCOL, UNIO_PROTOCOL, EvidenceProtocol
+from unio_collector.collector.protocol import LEGACY_PROTOCOL, UNIO_PROTOCOL, EvidenceProtocol
 
 if TYPE_CHECKING:
     from zipfile import ZipFile
@@ -19,7 +19,7 @@ class BundleProtocolValidator:
         """Resolve the schema discriminator and cross-check all wire markers."""
         schema = self._read(archive, "bundle-schema.json", errors)
         try:
-            protocol = DEFAULT_PROTOCOL if "format" not in schema else EvidenceProtocol.from_identifier(schema["format"], ("result-evidence-bundle",))
+            protocol = LEGACY_PROTOCOL if "format" not in schema else EvidenceProtocol.from_identifier(schema["format"], ("result-evidence-bundle",))
             privacy = manifest.get("privacy_protection")
             if isinstance(privacy, dict):
                 protocol.validate_privacy(privacy)
@@ -45,9 +45,11 @@ class BundleProtocolValidator:
     def _validate_module(self, value: object, protocol: EvidenceProtocol) -> None:
         if not isinstance(value, str):
             return
-        for other in (DEFAULT_PROTOCOL, UNIO_PROTOCOL):
-            if other != protocol and (value == other.import_namespace or value.startswith(f"{other.import_namespace}.")):
-                raise ValueError("Evidence protocol family typed module mismatch.")
+        for other in (LEGACY_PROTOCOL, UNIO_PROTOCOL):
+            if other != protocol:
+                for namespace in other.accepted_import_namespaces:
+                    if value == namespace or value.startswith(f"{namespace}."):
+                        raise ValueError("Evidence protocol family typed module mismatch.")
 
     def _validate_ledger(self, archive: ZipFile, protocol: EvidenceProtocol) -> None:
         if "collection-log.jsonl" not in archive.namelist():
@@ -58,7 +60,7 @@ class BundleProtocolValidator:
             record = load_json_object(line)
             if "eventVersion" in record and record["eventVersion"] != protocol.identifier("1"):
                 raise ValueError("Evidence protocol family ledger event version mismatch.")
-            for other in (DEFAULT_PROTOCOL, UNIO_PROTOCOL):
+            for other in (LEGACY_PROTOCOL, UNIO_PROTOCOL):
                 if other != protocol and other.namespace in record:
                     raise ValueError("Evidence protocol family ledger metadata mismatch.")
 

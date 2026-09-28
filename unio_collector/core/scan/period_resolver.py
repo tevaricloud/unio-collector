@@ -6,6 +6,8 @@ from typing import Any
 from unio_collector.core.period_helpers import parse_iso_date, subtract_months
 from unio_collector.core.scan.period import PeriodKind, ScanPeriod
 
+DEFAULT_SCAN_PERIOD_DAYS = 14
+
 
 class ScanPeriodResolver:
     """Resolve CLI/config period options into current and previous windows."""
@@ -34,7 +36,7 @@ class ScanPeriodResolver:
             return self._resolve_relative_months(months, today)
         if years is not None:
             return self._resolve_relative_years(years, today)
-        return self._resolve_relative_days(days or 14, today)
+        return self._resolve_relative_days(days or DEFAULT_SCAN_PERIOD_DAYS, today)
 
     def _validate_period_options(
         self,

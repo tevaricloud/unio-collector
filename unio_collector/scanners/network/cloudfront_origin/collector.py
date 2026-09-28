@@ -6,7 +6,7 @@ from unio_collector.aws.cloudfront import CloudFrontInventoryCollector
 from unio_collector.aws.cloudfront.helpers import (
     normalize_cloudfront_invalidation_detail_mode,
 )
-from unio_collector.scanners.base.cloud_cost_scanner import BaseUnioScanner
+from unio_collector.scanners.base.unio_scanner import BaseUnioScanner
 from unio_collector.scanners.network.cloudfront_origin.evidence import (
     CloudFrontOriginCostReviewEvidence,
 )

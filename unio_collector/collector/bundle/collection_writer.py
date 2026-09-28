@@ -8,6 +8,7 @@ from unio_collector.collector.bundle.payload_writer import EvidencePayloadWriter
 from unio_collector.collector.bundle.service_filter import filter_evidence_records
 from unio_collector.collector.bundle.source import EvidenceBundleSource
 from unio_collector.collector.minimisation import EvidenceMinimisationOptions
+from unio_collector.environment.projection import annotate_environment_records
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -50,7 +51,9 @@ class CollectorEvidenceBundleWriter:
             summary=context.summary,
             compatibility_payload=context.model_dump(mode="json"),
             finding_count=0,
-            evidence_records=filter_evidence_records(cast("CollectionEvidenceStore", result.evidence_store).convert_to_json_records(), options),
+            evidence_records=annotate_environment_records(
+                filter_evidence_records(cast("CollectionEvidenceStore", result.evidence_store).convert_to_json_records(), options),
+            ),
         )
         return EvidencePayloadWriter().write(
             path=path,

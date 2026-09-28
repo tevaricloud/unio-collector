@@ -20,6 +20,7 @@ class LauncherSelection:
     allow_chargeable_scanners: bool = False
     include_cost_data: bool = True
     check_identity: bool = False
+    environment_alias_file: Path | None = None
 
 
 __all__ = ["LauncherSelection"]

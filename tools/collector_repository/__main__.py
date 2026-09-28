@@ -18,6 +18,8 @@ def main(argv: list[str] | None = None) -> int:
         command.add_argument("--root", type=Path, default=Path.cwd())
         if name in {"validate", "native", "security", "provision"}:
             command.add_argument("--output", type=Path, required=True)
+        if name in {"validate", "native"}:
+            command.add_argument("--source-sha")
         if name == "provision":
             command.add_argument("--tools", nargs="+", choices=("gitleaks", "actionlint"), default=["gitleaks"])
     args = parser.parse_args(argv)
@@ -43,7 +45,12 @@ def main(argv: list[str] | None = None) -> int:
         else:
             from tools.collector_repository.validation import RepositoryValidator  # noqa: PLC0415
 
-            result = RepositoryValidator().validate(args.root, args.output, native=args.command == "native")
+            result = RepositoryValidator().validate(
+                args.root,
+                args.output,
+                native=args.command == "native",
+                source_sha=args.source_sha,
+            )
     except (ValueError, OSError, RuntimeError) as exc:
         sys.stderr.write(f"Standalone repository operation failed: {exc}\n")
         return 2

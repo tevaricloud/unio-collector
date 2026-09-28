@@ -23,6 +23,7 @@ class CollectorProjectMetadata:
     ) -> str:
         """Render a buildable collector project without application entrypoints."""
         dependencies = json.dumps(list(manifest.required_dependencies))
+        package_data = json.dumps([path.removeprefix("unio_collector/") for path in manifest.included_data_files])
         licence = 'license = {file = "LICENSE"}\n' if licensed else ""
         extras = ""
         if optional_dependencies:
@@ -45,5 +46,7 @@ class CollectorProjectMetadata:
             'unio-collector = "unio_collector.collector_cli.app:main"\n\n'
             "[tool.setuptools.packages.find]\n"
             'include = ["unio_collector*"]\n'
+            "\n[tool.setuptools.package-data]\n"
+            f"unio_collector = {package_data}\n"
             f"{extras}"
         )

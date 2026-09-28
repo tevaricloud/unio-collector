@@ -133,7 +133,7 @@ class NativeInstallerBuilder:
             )
             component = stage / "component.pkg"
             subprocess.run(  # noqa: S603
-                [pkgbuild, "--root", str(stage / "root"), "--identifier", "uk.co.tevari.unio.collector", "--version", version, str(component)],
+                [pkgbuild, "--root", str(stage / "root"), "--identifier", "uk.co.tevari.unio_collector.collector", "--version", version, str(component)],
                 check=True,
             )
             artifact = output / f"unio-collector-{version}-macos-{architecture}.pkg"
@@ -202,7 +202,7 @@ def _info_plist(version: str) -> str:
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
 <key>CFBundleExecutable</key><string>Unio Collector</string>
-<key>CFBundleIdentifier</key><string>uk.co.tevari.unio.collector</string>
+<key>CFBundleIdentifier</key><string>uk.co.tevari.unio_collector.collector</string>
 <key>CFBundleName</key><string>Unio Collector</string>
 <key>CFBundleShortVersionString</key><string>{version}</string>
 <key>CFBundlePackageType</key><string>APPL</string>
