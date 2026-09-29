@@ -1,4 +1,4 @@
-FROM python:3.12-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e AS builder
+FROM python:3.12-slim-trixie@sha256:f77ac9e44ae96ef2c90b8053ea08c31f8be030f824196b0ae4db6d462c84e51f AS builder
 
 ENV PYTHONDONTWRITEBYTECODE=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 WORKDIR /src
@@ -9,7 +9,7 @@ RUN python -m pip install --no-cache-dir "setuptools==83.0.0" "wheel==0.48.0" \
     && python -m pip wheel --no-deps --no-build-isolation --wheel-dir /tmp/wheel . \
     && python -m pip install --no-cache-dir --no-deps --prefix /opt/runtime /tmp/wheel/unio_collector-*.whl
 
-FROM python:3.12-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+FROM python:3.12-slim-trixie@sha256:f77ac9e44ae96ef2c90b8053ea08c31f8be030f824196b0ae4db6d462c84e51f
 
 RUN python -m pip uninstall --yes pip
 
