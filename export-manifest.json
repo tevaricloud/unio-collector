@@ -117,7 +117,7 @@
     {
       "category": "repository_metadata",
       "path": "pyproject.toml",
-      "sha256": "c2505c6378ef8397355f914dbdd403de5b31b9f329653bc4226505135222e389",
+      "sha256": "90ed2a730ad5a4d485b3cc3c340df892f47aac16f2768b61b88698d58dd54247",
       "size": 5160
     },
     {
@@ -9788,5 +9788,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "4c96f58b6cd90ee719d8cd4e65ac6914174953ef0c1cce13e319ad79ed1af365"
+  "tree_digest": "6e7a3cf3f5a6aa6f05e42eca5810716680f87d6979c771fb031d73e5a7bf9300"
 }
