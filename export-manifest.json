@@ -81,8 +81,8 @@
     {
       "category": "repository_metadata",
       "path": "Dockerfile",
-      "sha256": "0deb2a19fe6964c70d350a972a9399324a6b352289fc5f315f75444492d8a566",
-      "size": 1819
+      "sha256": "cd632529f781e38a3258a3ed44624601d451109dbf88273cc1619634e6ed4db6",
+      "size": 1815
     },
     {
       "category": "repository_metadata",
@@ -93,8 +93,8 @@
     {
       "category": "repository_metadata",
       "path": "README.md",
-      "sha256": "ee380aa0c486a55f09b2f6709ab79202fa7921b86943cae1ee7ce1d45348ab44",
-      "size": 11982
+      "sha256": "569c7babff91a0432e43805c43d6f1e9ac564bd07e3fb0155c4863ab2cf128d5",
+      "size": 11980
     },
     {
       "category": "repository_metadata",
@@ -129,8 +129,8 @@
     {
       "category": "repository_metadata",
       "path": "requirements/container-base.json",
-      "sha256": "7895d6131107c2349ce545adac4a29e8f58eb942ed2dfe020640adc230cdc960",
-      "size": 424
+      "sha256": "f4953efb29c844882d3218f1adcef67bbaf95f91da397402ead084b0e462eb1f",
+      "size": 422
     },
     {
       "category": "repository_metadata",
@@ -9788,5 +9788,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "c3490a7a2babd258269a9f31a81cae63234911094fc88ae4eb35aaafb6980299"
+  "tree_digest": "4c96f58b6cd90ee719d8cd4e65ac6914174953ef0c1cce13e319ad79ed1af365"
 }

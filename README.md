@@ -44,7 +44,7 @@ files retain supported shared interfaces for the separate Unio application.
 ## Linux container
 
 The reviewed public source also builds a CLI-only image for Linux amd64 and
-arm64. Its Dockerfile uses a digest-pinned Python 3.12 Bookworm base, the
+arm64. Its Dockerfile uses a digest-pinned Python 3.12 Trixie base, the
 standalone collector wheel, and the hash-locked runtime dependencies in
 `requirements/container-runtime.lock`. Build from an exact reviewed public
 `v<version>` tag; set `COLLECTOR_VERSION`, `PUBLIC_SOURCE_SHA`, and
