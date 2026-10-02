@@ -117,7 +117,7 @@
     {
       "category": "repository_metadata",
       "path": "pyproject.toml",
-      "sha256": "90ed2a730ad5a4d485b3cc3c340df892f47aac16f2768b61b88698d58dd54247",
+      "sha256": "3d90b2a38bde08783cc30110928d39bcde66c0544cde2b1ad1be579470bd7ee3",
       "size": 5160
     },
     {
@@ -141,8 +141,8 @@
     {
       "category": "repository_metadata",
       "path": "requirements/dev-constraints.txt",
-      "sha256": "85065d7eab492c2626fbbf6f543ce03a3eb2ae30f5c193d2e0ae76a8c5c3e1bd",
-      "size": 1175
+      "sha256": "2c067746256b1857ba1d8181a0131c04c116736b0afdef620eff084a4bcd253c",
+      "size": 1176
     },
     {
       "category": "repository_metadata",
@@ -153,26 +153,26 @@
     {
       "category": "repository_metadata",
       "path": "requirements/native-linux-x86_64.lock",
-      "sha256": "9c30304035951149f08357b2a8079b595ba72541c83edfe9f8a85adace29f161",
-      "size": 37847
+      "sha256": "40a9bd3c61dc5c4dfec8f3a43ec69f282a51cad4a510ac08cb417d427bfcc2b9",
+      "size": 36576
     },
     {
       "category": "repository_metadata",
       "path": "requirements/native-macos-arm64.lock",
-      "sha256": "b8e155783926f936faa5a5e6d4f363e2ebc2828c5c3cf9e3e50efcfc74ea149c",
-      "size": 38038
+      "sha256": "7c2a10918fef1f9423774cdc5b8892a95c6d2a95df0e3936142168b52c5ab17c",
+      "size": 36682
     },
     {
       "category": "repository_metadata",
       "path": "requirements/native-macos-x86_64.lock",
-      "sha256": "57d5cba9313807ce2bf6d6bb645e46169852b405c00f6babd382a99a8f94683f",
-      "size": 36849
+      "sha256": "f1f31dc4f203b4aad2bcfb169e249ff9c3d70d65cfb79bff2249021471b37c5e",
+      "size": 34558
     },
     {
       "category": "repository_metadata",
       "path": "requirements/native-windows-x86_64.lock",
-      "sha256": "f83620f4a6d50177967ddcc46bb846e78454ef8d4aa71288e284c0fd77921d8e",
-      "size": 38235
+      "sha256": "a2ee9b90d3b55ddd78d168c5c77b37aadebdda289408c3e35a864fc261a470f5",
+      "size": 36794
     },
     {
       "category": "repository_metadata",
@@ -345,14 +345,14 @@
     {
       "category": "repository_metadata",
       "path": "tools/native_release/handoff.py",
-      "sha256": "bbbe7d0f2335f929f755b7c2abcd5f589664216dc512479c9452430db88d29c4",
-      "size": 6126
+      "sha256": "775f68635c95e6462a55df520736f2a44a2a638eedbbfbcd5731ee67ad496ea7",
+      "size": 9858
     },
     {
       "category": "repository_metadata",
       "path": "tools/package_native_collector.py",
-      "sha256": "040d3906290dc538e985155144a3ba783a8be841a396772fa22e88619d7b5b59",
-      "size": 12593
+      "sha256": "a0153e770442d6cf6f10fb23f2e30566bb1b304c63609d5d8908bc42fb88c641",
+      "size": 12810
     },
     {
       "category": "repository_metadata",
@@ -3411,8 +3411,14 @@
     {
       "category": "repository_metadata",
       "path": "unio_collector/collector/package/wheel/builder.py",
-      "sha256": "480df9b6c69be8ce78ac9ab1679a2385f4c3e4ac44c4d3420e12daf48f9db378",
-      "size": 16657
+      "sha256": "bcf512a71a9acda2c8b804cc4b6ef5b7d978e3c5ff71bd20836d499f1e468c80",
+      "size": 16813
+    },
+    {
+      "category": "repository_metadata",
+      "path": "unio_collector/collector/package/wheel/canonicalizer.py",
+      "sha256": "6e1e86ae9aa93046ef64ab703b26c1e6a39f876330c07b1d6b36d568b49c35a3",
+      "size": 2309
     },
     {
       "category": "repository_metadata",
@@ -9788,5 +9794,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "6e7a3cf3f5a6aa6f05e42eca5810716680f87d6979c771fb031d73e5a7bf9300"
+  "tree_digest": "621da9b64e17422a72853d7ed0823deaf8f23e4b84e9c9715cf4d4da4be25b94"
 }
