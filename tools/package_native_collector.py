@@ -38,7 +38,7 @@ def main() -> int:
 class NativeInstallerBuilder:
     """Create MSI, PKG, or DEB output without embedding signing credentials."""
 
-    def build(self, *, payload: Path, output: Path, require_installer: bool) -> dict[str, object]:
+    def build(self, *, payload: Path, output: Path, require_installer: bool, allow_platform_signing: bool = True) -> dict[str, object]:
         """Dispatch to the current native package builder."""
         if not payload.is_dir():
             message = f"Native payload does not exist: {payload}"
@@ -57,7 +57,7 @@ class NativeInstallerBuilder:
             if operating_system == "windows":
                 artifact = self._windows_msi(payload, output, manifest.version)
             elif operating_system == "macos":
-                artifact = self._macos_pkg(payload, output, manifest.version, architecture)
+                artifact = self._macos_pkg(payload, output, manifest.version, architecture, allow_platform_signing=allow_platform_signing)
             else:
                 artifact = self._linux_deb(payload, output, manifest.version, architecture)
         except FileNotFoundError as exc:
@@ -75,7 +75,9 @@ class NativeInstallerBuilder:
             "architecture": architecture,
             "artifact": str(artifact),
             "embedded_app_signing_status": (
-                "verified" if operating_system == "macos" and bool(os.getenv("UNIO_COLLECTOR_MACOS_SIGNING_IDENTITY")) else "not_applicable"
+                "verified"
+                if operating_system == "macos" and allow_platform_signing and bool(os.getenv("UNIO_COLLECTOR_MACOS_SIGNING_IDENTITY"))
+                else "not_applicable"
             ),
             "format": target.installer_format,
             "signing_status": "unsigned",
@@ -99,7 +101,7 @@ class NativeInstallerBuilder:
             shutil.copy2(staged_artifact, artifact)
         return artifact
 
-    def _macos_pkg(self, payload: Path, output: Path, version: str, architecture: str) -> Path:
+    def _macos_pkg(self, payload: Path, output: Path, version: str, architecture: str, *, allow_platform_signing: bool = True) -> Path:
         pkgbuild = shutil.which("pkgbuild")
         productbuild = shutil.which("productbuild")
         if pkgbuild is None or productbuild is None:
@@ -112,7 +114,7 @@ class NativeInstallerBuilder:
             shutil.copytree(payload, app_macos)
             info = app_macos.parent / "Info.plist"
             info.write_text(_info_plist(version), encoding="utf-8")
-            identity = os.getenv("UNIO_COLLECTOR_MACOS_SIGNING_IDENTITY", "")
+            identity = os.getenv("UNIO_COLLECTOR_MACOS_SIGNING_IDENTITY", "") if allow_platform_signing else ""
             if identity:
                 codesign = shutil.which("codesign")
                 spctl = shutil.which("spctl")
