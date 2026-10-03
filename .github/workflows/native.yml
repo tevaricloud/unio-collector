@@ -19,7 +19,7 @@ jobs:
         include:
           - runner: windows-2022
             target: windows-x86_64
-          - runner: ubuntu-24.04
+          - runner: ubuntu-22.04
             target: linux-x86_64
           - runner: macos-15-intel
             target: macos-x86_64
@@ -48,7 +48,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-tk xvfb dpkg-dev clamav
+          sudo apt-get install -y python3-tk xvfb dpkg-dev clamav binutils
           CLAMAV_ROOT="/tmp/unio-collector-clamav-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           CLAMAV_DATABASE="$CLAMAV_ROOT/database"
           sudo install -d -o clamav -g clamav -m 0755 "$CLAMAV_ROOT" "$CLAMAV_DATABASE"

@@ -45,8 +45,8 @@
     {
       "category": "repository_metadata",
       "path": ".github/workflows/native.yml",
-      "sha256": "172a880771df6073f62f9d04b392490e66ef4b6c4147b50e6dc80afc551c3568",
-      "size": 5225
+      "sha256": "7a7c7a41caf16b1d5393b6a5e5c6f701cf3c377c9c3384a1b71b355b1cf55a2f",
+      "size": 5234
     },
     {
       "category": "repository_metadata",
@@ -117,7 +117,7 @@
     {
       "category": "repository_metadata",
       "path": "pyproject.toml",
-      "sha256": "90ed2a730ad5a4d485b3cc3c340df892f47aac16f2768b61b88698d58dd54247",
+      "sha256": "b63db1ec570b088c99fb51c3119202ebb8eb2afe6cf7ebf2278cd678898cf8aa",
       "size": 5160
     },
     {
@@ -141,8 +141,8 @@
     {
       "category": "repository_metadata",
       "path": "requirements/dev-constraints.txt",
-      "sha256": "85065d7eab492c2626fbbf6f543ce03a3eb2ae30f5c193d2e0ae76a8c5c3e1bd",
-      "size": 1175
+      "sha256": "2c067746256b1857ba1d8181a0131c04c116736b0afdef620eff084a4bcd253c",
+      "size": 1176
     },
     {
       "category": "repository_metadata",
@@ -153,26 +153,26 @@
     {
       "category": "repository_metadata",
       "path": "requirements/native-linux-x86_64.lock",
-      "sha256": "9c30304035951149f08357b2a8079b595ba72541c83edfe9f8a85adace29f161",
-      "size": 37847
+      "sha256": "40a9bd3c61dc5c4dfec8f3a43ec69f282a51cad4a510ac08cb417d427bfcc2b9",
+      "size": 36576
     },
     {
       "category": "repository_metadata",
       "path": "requirements/native-macos-arm64.lock",
-      "sha256": "b8e155783926f936faa5a5e6d4f363e2ebc2828c5c3cf9e3e50efcfc74ea149c",
-      "size": 38038
+      "sha256": "7c2a10918fef1f9423774cdc5b8892a95c6d2a95df0e3936142168b52c5ab17c",
+      "size": 36682
     },
     {
       "category": "repository_metadata",
       "path": "requirements/native-macos-x86_64.lock",
-      "sha256": "57d5cba9313807ce2bf6d6bb645e46169852b405c00f6babd382a99a8f94683f",
-      "size": 36849
+      "sha256": "f1f31dc4f203b4aad2bcfb169e249ff9c3d70d65cfb79bff2249021471b37c5e",
+      "size": 34558
     },
     {
       "category": "repository_metadata",
       "path": "requirements/native-windows-x86_64.lock",
-      "sha256": "f83620f4a6d50177967ddcc46bb846e78454ef8d4aa71288e284c0fd77921d8e",
-      "size": 38235
+      "sha256": "a2ee9b90d3b55ddd78d168c5c77b37aadebdda289408c3e35a864fc261a470f5",
+      "size": 36794
     },
     {
       "category": "repository_metadata",
@@ -243,8 +243,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/build_native_collector.py",
-      "sha256": "cbc1307e5c6cff07d03d3fbd1a48448e6f9d2473f6d178e5ab1ff87e1c16598e",
-      "size": 26969
+      "sha256": "a30e651b6690842a7d7842c8937158f85f2bbc47ed731aea8a87a6f97a293d11",
+      "size": 27935
     },
     {
       "category": "repository_metadata",
@@ -344,15 +344,21 @@
     },
     {
       "category": "repository_metadata",
+      "path": "tools/native_release/abi.py",
+      "sha256": "fc6ceade63de199b35c6ca8436398446daf6eee9b9bf5c715ab6d595e15412a6",
+      "size": 2090
+    },
+    {
+      "category": "repository_metadata",
       "path": "tools/native_release/handoff.py",
-      "sha256": "bbbe7d0f2335f929f755b7c2abcd5f589664216dc512479c9452430db88d29c4",
-      "size": 6126
+      "sha256": "8f8541355319fa14724ed9117e363fb8b14e867a825a4abeecd253891b9919f4",
+      "size": 9836
     },
     {
       "category": "repository_metadata",
       "path": "tools/package_native_collector.py",
-      "sha256": "040d3906290dc538e985155144a3ba783a8be841a396772fa22e88619d7b5b59",
-      "size": 12593
+      "sha256": "fe7fc1b19b2f3771d813098c7bf59fae6983aeff0c12206cc207ed5b22cc8b33",
+      "size": 12913
     },
     {
       "category": "repository_metadata",
@@ -3213,8 +3219,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/collector/evidence/scanner/payload.py",
-      "sha256": "86320e8a7b7baf10e4999e9ce255b460518a04e55ac5f20e9f983c114a0eb726",
-      "size": 4296
+      "sha256": "aaaaf7e8dace1ab272bbfe8a7bed4998d6ef3c1869e16e9a02d21c1d525e1c6a",
+      "size": 4675
     },
     {
       "category": "collector_source",
@@ -3411,8 +3417,14 @@
     {
       "category": "repository_metadata",
       "path": "unio_collector/collector/package/wheel/builder.py",
-      "sha256": "480df9b6c69be8ce78ac9ab1679a2385f4c3e4ac44c4d3420e12daf48f9db378",
-      "size": 16657
+      "sha256": "bcf512a71a9acda2c8b804cc4b6ef5b7d978e3c5ff71bd20836d499f1e468c80",
+      "size": 16813
+    },
+    {
+      "category": "repository_metadata",
+      "path": "unio_collector/collector/package/wheel/canonicalizer.py",
+      "sha256": "6e1e86ae9aa93046ef64ab703b26c1e6a39f876330c07b1d6b36d568b49c35a3",
+      "size": 2309
     },
     {
       "category": "repository_metadata",
@@ -4821,8 +4833,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/registry.py",
-      "sha256": "051b1a296878a4ca2a46fff7f9f6b25f8b4bebe1b6fc6aea87b5683e9d281d19",
-      "size": 15689
+      "sha256": "8c3523badcbb0982cbc31d980132638065e2d38a2339ebdff585196aadda2aa1",
+      "size": 16664
     },
     {
       "category": "collector_source",
@@ -4833,8 +4845,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/resolver.py",
-      "sha256": "88edc96a58da4858baf8de7b491b9357ef6464d8b7939fd72275de30f77e3625",
-      "size": 5676
+      "sha256": "887f5384fbcd3a07e542e846bf9771e1f71246bdf5c320994cdba726eb5fde49",
+      "size": 5870
     },
     {
       "category": "collector_source",
@@ -9003,8 +9015,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/scanners/scanner/evidence_serializer.py",
-      "sha256": "f7ce96c6069cff09c33252874ca73ff3de012451cf39734883eac78e669338ce",
-      "size": 3738
+      "sha256": "c192e6fef821443a2b45ee7776998f1c2794c0f40a2863bed3fa21c8bb0a1a2b",
+      "size": 3921
     },
     {
       "category": "collector_source",
@@ -9251,6 +9263,12 @@
       "path": "unio_collector/scanners/scanner/schedule/stage_result.py",
       "sha256": "db637db4fca53e3d2d5130a71b88ecaf2e8eee57bd6674f6625d750c9609b278",
       "size": 2131
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/scanners/scanner/schema.py",
+      "sha256": "578c8946613298982a978a9102f6bef193035d6d08d2750e61922fa237bb97ab",
+      "size": 4661
     },
     {
       "category": "collector_source",
@@ -9788,5 +9806,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "6e7a3cf3f5a6aa6f05e42eca5810716680f87d6979c771fb031d73e5a7bf9300"
+  "tree_digest": "ce480774c467c64b57fa2e24f83c13ca588d266a502a5893f7fa70bd8f4d7149"
 }
