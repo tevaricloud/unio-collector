@@ -10,6 +10,8 @@ from math import isfinite
 from pathlib import Path
 from typing import Any
 
+from unio_collector.scanners.scanner.schema import evidence_schema_metadata
+
 SCANNER_EVIDENCE_PAYLOAD_SCHEMA_VERSION = "2026-01"
 SERIALIZATION_FAILURE = "Scanner evidence contains an unsupported or invalid value."
 
@@ -32,6 +34,8 @@ def build_scanner_evidence_payload(  # noqa: D103
         "payload": payload,
         "limitations": limitations,
     }
+    if status == "serialized":
+        result.update(evidence_schema_metadata(scanner_id, evidence_type))
     if provider_id:
         result["provider_id"] = provider_id
     return result

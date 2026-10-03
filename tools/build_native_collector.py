@@ -20,8 +20,10 @@ from packaging.utils import canonicalize_name
 
 try:
     from tools.native_locks import lock_sha256, validate_lock
+    from tools.native_release.abi import LinuxBaselineValidator
 except ModuleNotFoundError:
     from native_locks import lock_sha256, validate_lock
+    from native_release.abi import LinuxBaselineValidator
 
 NATIVE_SUMMARY_SCHEMA_VERSION = "2026-08-native-build-v1"
 TCL_TK_MARKERS = ("_tcl_data", "_tk_data", "tcl8", "tk8", "tcl86", "tk86", "_tkinter")
@@ -123,7 +125,9 @@ class NativeCollectorBuilder:
             shutil.copytree(first, payload)
             inventory_path = output / "native-payload-manifest.json"
             retained_inventory = inventory_module.write_native_payload_inventory(payload, inventory_path)
-            smoke = self._smoke(payload, workspace / "smoke")
+            if operating_system == "linux":
+                LinuxBaselineValidator().validate(payload, output / "native-abi-evidence.json")
+            smoke = self._smoke(payload, workspace / "smoke", version=native_manifest.version)
             tcl_tk = _tcl_tk_inventory(payload)
             if not tcl_tk:
                 message = "Frozen launcher payload does not contain Tcl/Tk runtime resources."
@@ -300,7 +304,7 @@ class NativeCollectorBuilder:
             raise RuntimeError(message)
         return payload
 
-    def _smoke(self, payload: Path, workspace: Path) -> dict[str, object]:
+    def _smoke(self, payload: Path, workspace: Path, *, version: str) -> dict[str, object]:
         workspace.mkdir()
         suffix = ".exe" if os.name == "nt" else ""
         cli = payload / f"unio-collector{suffix}"
@@ -311,6 +315,7 @@ class NativeCollectorBuilder:
         checks: dict[str, int] = {}
         for name, command in {
             "version": (str(cli), "version"),
+            "version_flag": (str(cli), "--version"),
             "profiles": (str(cli), "profiles", "--json"),
             "scanners": (str(cli), "scanners", "--json"),
             "launcher": (str(launcher),),
@@ -320,13 +325,22 @@ class NativeCollectorBuilder:
             if completed.returncode != 0:
                 message = f"Native {name} smoke failed: {completed.stdout} {completed.stderr}"
                 raise RuntimeError(message)
-        return {"checks": checks, "source_checkout": False, "system_python_required": False}
+            if name in {"version", "version_flag"} and completed.stdout.strip() != f"unio-collector {version}":
+                message = f"Native {name} reports {completed.stdout.strip()!r}, expected collector version {version}."
+                raise RuntimeError(message)
+        return {"checks": checks, "expected_version": version, "version_verified": True, "source_checkout": False, "system_python_required": False}
 
 
 def _spec_text(cli: Path, launcher: Path, modules: tuple[str, ...]) -> str:
     return f"""
-a_cli = Analysis([{str(cli)!r}], pathex=[], binaries=[], datas=[], hiddenimports={list(modules)!r}, noarchive=False)
-a_gui = Analysis([{str(launcher)!r}], pathex=[], binaries=[], datas=[], hiddenimports={list(modules)!r}, noarchive=False)
+from pathlib import Path
+from PyInstaller.utils.hooks import copy_metadata
+collector_metadata = [
+    (str(Path(source) / 'METADATA'), destination)
+    for source, destination in copy_metadata('unio-collector')
+]
+a_cli = Analysis([{str(cli)!r}], pathex=[], binaries=[], datas=collector_metadata, hiddenimports={list(modules)!r}, noarchive=False)
+a_gui = Analysis([{str(launcher)!r}], pathex=[], binaries=[], datas=collector_metadata, hiddenimports={list(modules)!r}, noarchive=False)
 pyz_cli = PYZ(a_cli.pure)
 pyz_gui = PYZ(a_gui.pure)
 exe_cli = EXE(
@@ -503,7 +517,8 @@ def _write_portable_archive(output: Path, payload: Path, version: str, operating
     name = f"unio-collector-{version}-{operating_system}-{architecture}"
     if operating_system == "windows":
         archive = output / f"{name}.zip"
-        with ZipFile(archive, "w", ZIP_DEFLATED) as target:
+
+        with ZipFile(archive, "w", ZIP_DEFLATED, strict_timestamps=False) as target:
             for path in sorted(payload.rglob("*")):
                 if path.is_file():
                     target.write(path, (Path(name) / path.relative_to(payload)).as_posix())
