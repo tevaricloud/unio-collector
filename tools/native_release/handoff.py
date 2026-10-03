@@ -7,8 +7,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
+import tarfile
+import tempfile
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 PROVENANCE_NAME = "unsigned-artifact-provenance.json"
 SHA256_HEX_LENGTH = 64
@@ -56,6 +59,40 @@ class UnsignedHandoff:
             raise ValueError("Unsigned native handoff files or hashes do not match.")
         return payload
 
+    def pack(self, root: Path, archive: Path) -> None:
+        """Seal exact validated bytes and executable metadata outside the payload."""
+        root, archive = root.resolve(), archive.resolve()
+        if archive.is_relative_to(root):
+            raise ValueError("Native handoff archive must be outside the validated root.")
+        self.validate(root)
+        with archive.open("xb") as output, tarfile.open(fileobj=output, mode="w") as packed:
+            packed.add(root, arcname=".", filter=lambda member: _pack_member(member, str(root)))
+        self.validate(root)
+        with tempfile.TemporaryDirectory(prefix="Unio-native-handoff-") as temporary:
+            restored = Path(temporary) / "verified"
+            self.unpack(archive, restored)
+            if os.name != "nt":
+                for source in root.rglob("*"):
+                    if source.is_file() and source.stat().st_mode & 0o111 != (restored / source.relative_to(root)).stat().st_mode & 0o111:
+                        raise ValueError("Native handoff executable permissions changed in transport.")
+
+    def unpack(self, archive: Path, root: Path) -> None:
+        """Extract into a fresh destination, reject unsafe members, then bind bytes."""
+        if root.exists() or root.is_symlink():
+            raise ValueError("Native handoff extraction destination already exists.")
+        archive, root = archive.resolve(), root.resolve()
+        with tarfile.open(archive, mode="r") as packed:
+            seen: set[PurePosixPath] = set()
+            for member in packed.getmembers():
+                _filter_member(member, str(root))
+                name = PurePosixPath(member.name)
+                if name in seen:
+                    raise ValueError("Duplicate native handoff archive member.")
+                seen.add(name)
+            root.mkdir(parents=True, exist_ok=False)
+            packed.extractall(root, filter="data")
+        self.validate(root)
+
     def _validate_identity(self, root: Path) -> dict[str, object]:
         manifest = _read_json(root / "native-release-manifest.json")
         lock = _read_json(root / "native-hash-lock-evidence.json")
@@ -93,8 +130,9 @@ class UnsignedHandoff:
 def main() -> int:
     """Create or validate one native unsigned handoff."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("create", "validate"))
+    parser.add_argument("command", choices=("create", "validate", "pack", "unpack"))
     parser.add_argument("--root", type=Path, required=True)
+    parser.add_argument("--archive", type=Path)
     parser.add_argument("--source-sha", required=True)
     parser.add_argument("--target", required=True)
     parser.add_argument("--version", required=True)
@@ -108,13 +146,46 @@ def main() -> int:
     )
     if args.command == "create":
         handoff.create(args.root.resolve())
-    else:
+    elif args.command == "validate":
         handoff.validate(args.root.resolve())
+    else:
+        if args.archive is None:
+            parser.error("--archive is required for pack and unpack")
+        if args.command == "pack":
+            handoff.pack(args.root, args.archive)
+        else:
+            handoff.unpack(args.archive, args.root)
     return 0
 
 
+def _pack_member(member: tarfile.TarInfo, destination: str) -> tarfile.TarInfo:
+    """Validate containment and retain modes without disclosing host ownership."""
+    _filter_member(member, destination)
+    return member.replace(uid=0, gid=0, uname="", gname="", mtime=0, deep=False)
+
+
+def _filter_member(member: tarfile.TarInfo, destination: str) -> tarfile.TarInfo:
+    """Admit only canonical contained files, directories and internal links."""
+    name = member.name.removeprefix("./")
+    if (name != "." or not member.isdir()) and (
+        not name or name.startswith("/") or "\\" in name or ":" in name or any(part in {"", ".", ".."} for part in name.split("/"))
+    ):
+        raise ValueError("Unsafe native handoff archive path.")
+    if not (member.isfile() or member.isdir() or member.issym() or member.islnk()):
+        raise ValueError("Unsupported native handoff archive member.")
+    if (member.issym() or member.islnk()) and ("\\" in member.linkname or ":" in member.linkname):
+        raise ValueError("Unsafe native handoff archive link.")
+    try:
+        filtered = tarfile.data_filter(member, destination)
+    except tarfile.FilterError:
+        raise ValueError("Unsafe native handoff archive member.") from None
+    if filtered is None:
+        raise ValueError("Rejected native handoff archive member.")
+    return filtered
+
+
 def _artifact_hashes(root: Path) -> dict[str, str]:
-    return {path.relative_to(root).as_posix(): _sha256(path) for path in sorted(root.rglob("*")) if path.is_file() and path.name != PROVENANCE_NAME}
+    return {path.relative_to(root).as_posix(): _sha256(path) for path in sorted(root.rglob("*")) if path.is_file() and path != root / PROVENANCE_NAME}
 
 
 def _read_json(path: Path) -> dict[str, object]:
