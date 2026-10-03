@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from unio_collector.collector.bundle.encoding import load_json_object
 from unio_collector.collector.protocol import DEFAULT_PROTOCOL, EvidenceProtocol
+from unio_collector.scanners.scanner.schema import admit_evidence_schema
 
 if TYPE_CHECKING:
     from zipfile import ZipFile
@@ -74,9 +75,17 @@ def _validate_record(
             f"scan-result/scanner-evidence.json scanner_evidence[{index}] must be an object.",
         )
         return
+    try:
+        schema = admit_evidence_schema(record)
+    except ValueError as exc:
+        errors.append(f"scan-result/scanner-evidence.json scanner_evidence[{index}] invalid schema: {exc}")
+        schema = None
+    identity_fields = ("scanner_id", "serialization_status")
+    if schema is None:
+        identity_fields += ("evidence_type",)
     errors.extend(
         f"scan-result/scanner-evidence.json scanner_evidence[{index}].{key} must be a non-empty string."
-        for key in ("scanner_id", "serialization_status", "evidence_type")
+        for key in identity_fields
         if not isinstance(record.get(key), str) or not record.get(key)
     )
     if record.get("bundle_schema_version") != expected_schema_version:
