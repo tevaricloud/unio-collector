@@ -95,6 +95,25 @@ LOCAL_RESTORED_OUTPUT_PATHS = (
 )
 
 _BASE_PATH_REGISTRY: tuple[PrivacyRegistryEntry, ...] = (
+    PrivacyRegistryEntry(
+        domain="protected_bundle_input",
+        member_pattern="scan-result/scanner-evidence.json",
+        json_path_pattern="$.scanner_evidence[*].payload.records[*].log_group_name",
+        value_category="resource_name",
+        treatment="tokenise",
+        limitations=("Direct collected log-group names are resource identifiers; schema metadata and unrelated fields remain separately classified.",),
+    ),
+    *(
+        PrivacyRegistryEntry(
+            domain="protected_bundle_input",
+            member_pattern="scan-result/scanner-evidence.json",
+            json_path_pattern=f"$.scanner_evidence[*].{key}",
+            value_category="evidence_schema_metadata",
+            treatment="preserve",
+            limitations=("Only direct indexed scanner-record identity fields are preserved; decoder validation and deep leak scanning still apply.",),
+        )
+        for key in ("evidence_schema_id", "evidence_schema_version")
+    ),
     *(
         PrivacyRegistryEntry(
             domain="protected_bundle_input",
