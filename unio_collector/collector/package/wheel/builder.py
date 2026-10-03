@@ -18,6 +18,7 @@ from unio_collector.collector.package.manifest import (
     build_collector_package_file_plan,
 )
 from unio_collector.collector.package.provider_boundary import CollectorProviderBoundary
+from unio_collector.collector.package.wheel.canonicalizer import CollectorWheelCanonicalizer
 from unio_collector.collector.package.wheel.inspection import CollectorWheelInspectionResult
 from unio_collector.collector.package.wheel.metadata import CollectorProjectMetadata
 from unio_collector.collector.package.wheel.result import CollectorWheelBuildResult
@@ -98,6 +99,7 @@ class CollectorWheelBuilder:
                 env=environment,
             )
         wheel_path = self._find_wheel(output_dir, plan.manifest.version)
+        CollectorWheelCanonicalizer().canonicalize(wheel_path)
         members = self.validate_existing_wheel(
             wheel_path=wheel_path,
             planned_source_files=plan.package_files,

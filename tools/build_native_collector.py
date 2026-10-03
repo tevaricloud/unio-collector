@@ -503,7 +503,8 @@ def _write_portable_archive(output: Path, payload: Path, version: str, operating
     name = f"unio-collector-{version}-{operating_system}-{architecture}"
     if operating_system == "windows":
         archive = output / f"{name}.zip"
-        with ZipFile(archive, "w", ZIP_DEFLATED) as target:
+
+        with ZipFile(archive, "w", ZIP_DEFLATED, strict_timestamps=False) as target:
             for path in sorted(payload.rglob("*")):
                 if path.is_file():
                     target.write(path, (Path(name) / path.relative_to(payload)).as_posix())
