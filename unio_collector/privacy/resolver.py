@@ -1,5 +1,6 @@
 from __future__ import annotations  # noqa: D100
 
+import re
 from fnmatch import fnmatchcase
 from typing import TYPE_CHECKING
 
@@ -137,6 +138,9 @@ class PrivacyRegistryResolver:
         json_path: str,
         key: str | None,
     ) -> bool:
+        if "[*]" in pattern:
+            indexed_pattern = re.escape(pattern).replace(r"\[\*\]", r"\[[0-9]*\]")
+            return re.fullmatch(indexed_pattern, json_path) is not None
         if not pattern.startswith("$..") or pattern == "$..*":
             return False
         suffix = pattern[3:]
