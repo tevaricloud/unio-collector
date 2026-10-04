@@ -23,6 +23,7 @@ class LauncherController:
         """Resolve the installed or development collector command."""
         self.command_prefix = tuple(command_prefix or _collector_command_prefix())
         self._process: subprocess.Popen[str] | None = None
+        self._execution_lock = threading.Lock()
 
     def profiles(self) -> tuple[str, ...]:
         """Return local AWS profile names from the authoritative CLI service."""
@@ -128,6 +129,9 @@ class LauncherController:
         output: Path,
         vault: Path,
         profile: str,
+        token_scope: str = "engagement",  # noqa: S107
+        engagement_id: str = "default-engagement",
+        client_id: str | None = None,
         environment_alias_file: Path | None = None,
         environment_semantics: str | None = None,
     ) -> tuple[str, ...]:
@@ -146,6 +150,9 @@ class LauncherController:
             "--passphrase-stdin",
             "--acknowledge-vault-loss-risk",
         ]
+        args.extend(("--token-scope", token_scope, "--engagement-id", engagement_id))
+        if client_id:
+            args.extend(("--client-id", client_id))
         if environment_semantics is not None:
             args.extend(("--environment-semantics", environment_semantics))
         if environment_alias_file is not None:
@@ -184,15 +191,22 @@ class LauncherController:
     ) -> CommandResult:
         """Run one collector command and capture its sanitized user-facing output."""
         command = (*self.command_prefix, *argv)
-        completed = subprocess.run(  # noqa: S603
-            command,
-            check=False,
-            capture_output=True,
-            input=stdin_text,
-            text=True,
-        )
-        output = "\n".join(value for value in (completed.stdout.strip(), completed.stderr.strip()) if value)
-        return CommandResult(tuple(argv), completed.returncode, output)
+        with self._execution_lock:
+            process = subprocess.Popen(  # noqa: S603
+                command,
+                stdin=subprocess.PIPE if stdin_text is not None else None,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                creationflags=_creation_flags(),
+            )
+            self._process = process
+            try:
+                stdout, stderr = process.communicate(input=stdin_text)
+                output = "\n".join(value for value in (stdout.strip(), stderr.strip()) if value)
+                return CommandResult(tuple(argv), process.returncode, output)
+            finally:
+                self._process = None
 
     def run_streaming(
         self,
@@ -204,44 +218,55 @@ class LauncherController:
         stdin_text: str | None = None,
     ) -> CommandResult:
         """Run collection while forwarding console and structured progress events."""
-        command = (*self.command_prefix, *argv)
-        self._process = subprocess.Popen(  # noqa: S603
-            command,
-            stdin=subprocess.PIPE if stdin_text is not None else None,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            bufsize=1,
-        )
-        if stdin_text is not None and self._process.stdin is not None:
-            self._process.stdin.write(stdin_text)
-            self._process.stdin.close()
-        stop = threading.Event()
-        progress_thread = threading.Thread(
-            target=_follow_progress,
-            args=(progress_path, stop, on_progress),
-            daemon=True,
-        )
-        progress_thread.start()
-        lines: list[str] = []
-        stream = self._process.stdout
-        if stream is None:
-            message = "Collector subprocess output stream is unavailable."
-            raise RuntimeError(message)
-        for line in stream:
-            text = line.rstrip("\r\n")
-            lines.append(text)
-            on_output(text)
-        exit_code = self._process.wait()
-        stop.set()
-        progress_thread.join(timeout=2)
-        self._process = None
-        return CommandResult(tuple(argv), exit_code, "\n".join(lines))
+        with self._execution_lock:
+            command = (*self.command_prefix, *argv)
+            self._process = subprocess.Popen(  # noqa: S603
+                command,
+                stdin=subprocess.PIPE if stdin_text is not None else None,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,
+                creationflags=_creation_flags(),
+            )
+            stop = threading.Event()
+            progress_thread = threading.Thread(
+                target=_follow_progress,
+                args=(progress_path, stop, on_progress),
+                daemon=True,
+            )
+            progress_thread.start()
+            process = self._process
+            try:
+                if stdin_text is not None and self._process.stdin is not None:
+                    self._process.stdin.write(stdin_text)
+                    self._process.stdin.close()
+                lines: list[str] = []
+                stream = self._process.stdout
+                if stream is None:
+                    message = "Collector subprocess output stream is unavailable."
+                    raise RuntimeError(message)
+                for line in stream:
+                    text = line.rstrip("\r\n")
+                    lines.append(text)
+                    on_output(text)
+                exit_code = self._process.wait()
+                return CommandResult(tuple(argv), exit_code, "\n".join(lines))
+            finally:
+                stop.set()
+                progress_thread.join(timeout=2)
+                if process.poll() is None:
+                    process.terminate()
+                    process.wait()
+                self._process = None
 
-    def cancel(self) -> None:
+    def cancel(self) -> bool:
         """Terminate only the active local collector child process."""
-        if self._process is not None and self._process.poll() is None:
-            self._process.terminate()
+        process = self._process
+        if process is not None and process.poll() is None:
+            process.terminate()
+            return True
+        return False
 
     def temporary_path(self, name: str) -> tuple[tempfile.TemporaryDirectory[str], Path]:
         """Create labelled disposable launcher state outside user destinations."""
@@ -278,6 +303,11 @@ class LauncherController:
     def _add_environment_alias(self, args: list[str], selection: LauncherSelection) -> None:
         if selection.environment_alias_file is not None:
             args.extend(("--environment-alias-file", str(selection.environment_alias_file)))
+
+
+def _creation_flags() -> int:
+    """Suppress companion console windows only on Windows native launchers."""
+    return subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
 
 
 def _collector_command_prefix() -> tuple[str, ...]:

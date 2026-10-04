@@ -4,6 +4,7 @@ import re
 from fnmatch import fnmatchcase
 from typing import TYPE_CHECKING
 
+from unio_collector.privacy.region_scope import REGION_SCOPE_MEMBERS
 from unio_collector.privacy.registry import PATH_REGISTRY
 from unio_collector.privacy.treatment_decision import PrivacyTreatmentDecision
 
@@ -32,6 +33,31 @@ class PrivacyRegistryResolver:
         if path_entry is None:
             return self._unsupported(
                 reason=f"No registry entry covers {domain}:{member_path}.",
+            )
+
+        if member_path in REGION_SCOPE_MEMBERS and (json_path == "$.region_scope" or json_path.startswith("$.region_scope.")):
+            scoped = next(
+                (
+                    entry
+                    for entry in PATH_REGISTRY
+                    if entry.domain == domain
+                    and entry.member_pattern == member_path
+                    and profile_id in entry.allowed_profiles
+                    and entry.json_path_pattern.startswith("$.region_scope")
+                    and self._json_suffix_matches(pattern=entry.json_path_pattern, json_path=json_path, key=key)
+                ),
+                None,
+            )
+            if scoped is None:
+                return self._unsupported(reason=f"No explicit region-scope treatment covers {member_path}:{json_path}.")
+            return PrivacyTreatmentDecision(
+                treatment=scoped.treatment,
+                category=scoped.value_category,
+                canonicaliser_id=None,
+                canonicaliser_version=None,
+                fallback_allowed=False,
+                decision_source="exact_json_path",
+                reason="Matched an explicit region-scope producer field.",
             )
 
         suffix_entry = self._resolve_json_suffix_entry(
@@ -141,6 +167,8 @@ class PrivacyRegistryResolver:
         if "[*]" in pattern:
             indexed_pattern = re.escape(pattern).replace(r"\[\*\]", r"\[[0-9]*\]")
             return re.fullmatch(indexed_pattern, json_path) is not None
+        if pattern.startswith("$.") and not pattern.startswith("$.."):
+            return pattern == json_path
         if not pattern.startswith("$..") or pattern == "$..*":
             return False
         suffix = pattern[3:]

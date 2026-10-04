@@ -78,9 +78,9 @@
       "argv": [
         "doctor"
       ],
-      "help_sha256": "095d2192ec35f75a03207ef8305067592cbec70e67e204db1f77252e4daca9a7",
+      "help_sha256": "96ffd341cd04500e0e3996593956361a5066d9f7a372a73892d546c1e796ce8d",
       "id": "doctor",
-      "parser_actions_sha256": "493d36568a11c6b01b3b82698aa4b4a4e8ad9032c27c415e1b5bb686f37ad53f"
+      "parser_actions_sha256": "2335001a73fdc8abf4773e1fb52f9f97a5cb66362ec47167cd31ccd409281351"
     },
     {
       "argv": [

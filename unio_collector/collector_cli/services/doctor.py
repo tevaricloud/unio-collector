@@ -151,7 +151,7 @@ class CollectorDoctorService:
             return CollectorDoctorCheck(
                 name="identity",
                 status="skipped",
-                message="Read-only identity check is currently implemented for AWS.",
+                message="Account identity lookup is currently implemented for AWS; it does not verify read-only permissions.",
             )
         try:
             session = create_boto3_session(
@@ -171,12 +171,12 @@ class CollectorDoctorService:
             return CollectorDoctorCheck(
                 name="identity",
                 status="failed",
-                message=f"Read-only identity check failed: {exc}",
+                message=f"AWS account identity lookup failed: {exc}",
             )
         return CollectorDoctorCheck(
             name="identity",
             status="ok",
-            message=f"Read-only identity resolved for account {identity.get('Account', 'unknown-account')}.",
+            message=f"AWS account identity resolved for account {identity.get('Account', 'unknown-account')}; read-only permissions have not been verified.",
         )
 
     def _print_checks(self, checks: list[CollectorDoctorCheck]) -> None:

@@ -23,6 +23,7 @@ from unio_collector.privacy.patterns import (
     RESOURCE_RE,
     TIMESTAMP_RE,
 )
+from unio_collector.privacy.region_scope import REGION_SCOPE_MEMBERS, region_scope_category
 from unio_collector.privacy.registry import (
     FALLBACK_SAFE_STRING_KEYS,
     FALLBACK_SENSITIVE_KEY_CATEGORIES,
@@ -86,7 +87,15 @@ class PrivacyTransformer:
         key: str | None,
         in_tags: bool,
     ) -> Any:  # noqa: ANN401
-        if is_strict_cost_key(self._profile, key) and isinstance(value, dict | list):
+        scope_category = region_scope_category(json_path) if member_path in REGION_SCOPE_MEMBERS else None
+        if member_path in REGION_SCOPE_MEMBERS and json_path.startswith("$.region_scope") and scope_category is None:
+            self._blocked_or_unknown(
+                self._resolve_decision(member_path=member_path, json_path=json_path, key=key),
+                display_path=render_display_path(member_path, json_path),
+                value=value,
+            )
+            return value
+        if scope_category is None and is_strict_cost_key(self._profile, key) and isinstance(value, dict | list):
             self.summary.cost_values_removed += 1
             self.summary.removed += 1
             return None
@@ -145,7 +154,7 @@ class PrivacyTransformer:
             )
             if blocked is not None:
                 return blocked
-            if is_strict_cost_key(self._profile, key) and isinstance(value, int | float):
+            if scope_category is None and is_strict_cost_key(self._profile, key) and isinstance(value, int | float):
                 self.summary.cost_values_removed += 1
                 self.summary.removed += 1
                 return None
@@ -286,7 +295,7 @@ class PrivacyTransformer:
         if is_protected_token(value):
             self.summary.preserved += 1
             return value
-        if is_strict_cost_key(self._profile, key):
+        if not (member_path in REGION_SCOPE_MEMBERS and region_scope_category(json_path) is not None) and is_strict_cost_key(self._profile, key):
             self.summary.cost_values_removed += 1
             self.summary.removed += 1
             return ""
@@ -383,13 +392,7 @@ class PrivacyTransformer:
         self.summary.unclassified.append(display_path)
         return value
 
-    def _resolve_decision(
-        self,
-        *,
-        member_path: str,
-        json_path: str,
-        key: str | None,
-    ) -> PrivacyTreatmentDecision:
+    def _resolve_decision(self, *, member_path: str, json_path: str, key: str | None) -> PrivacyTreatmentDecision:
         decision = self._registry_resolver.resolve(
             domain="protected_bundle_input",
             member_path=member_path,
@@ -403,13 +406,7 @@ class PrivacyTransformer:
             self.summary.record_resolver_decision(decision.decision_source)
         return decision
 
-    def _blocked_or_unknown(
-        self,
-        decision: PrivacyTreatmentDecision,
-        *,
-        display_path: str,
-        value: object,
-    ) -> object | None:
+    def _blocked_or_unknown(self, decision: PrivacyTreatmentDecision, *, display_path: str, value: object) -> object | None:
         if decision.treatment == "prohibited":
             self.summary.record_prohibited_path(display_path)
             return value

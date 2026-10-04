@@ -312,6 +312,15 @@ class NativeCollectorBuilder:
         environment = os.environ.copy()
         environment.pop("PYTHONPATH", None)
         environment["UNIO_COLLECTOR_LAUNCHER_SMOKE_TEST"] = "1"
+        for key in tuple(environment):
+            if key.startswith("AWS_"):
+                environment.pop(key)
+        environment["AWS_EC2_METADATA_DISABLED"] = "true"
+        environment["AWS_CONFIG_FILE"] = str(workspace / "unused-config")
+        environment["AWS_SHARED_CREDENTIALS_FILE"] = str(workspace / "unused-credentials")
+        fixture = workspace / "cost.json"
+        shutil.copyfile(self.root / "tests/standalone/fixtures/cost.json", fixture)
+        bundle = workspace / "evidence.zip"
         checks: dict[str, int] = {}
         for name, command in {
             "version": (str(cli), "version"),
@@ -319,8 +328,45 @@ class NativeCollectorBuilder:
             "profiles": (str(cli), "profiles", "--json"),
             "scanners": (str(cli), "scanners", "--json"),
             "launcher": (str(launcher),),
+            "collect_fixture": (str(cli), "collect", "--fixture", str(fixture), "--output", str(bundle), "--quiet"),
+            "validate_bundle": (str(cli), "validate-bundle", str(bundle)),
+            **{
+                name: command
+                for profile in ("standard", "strict")
+                for name, command in (
+                    (
+                        f"protect_{profile}",
+                        (
+                            str(cli),
+                            "privacy",
+                            "protect",
+                            "--bundle",
+                            str(bundle),
+                            "--output",
+                            str(workspace / f"protected-{profile}.zip"),
+                            "--vault",
+                            str(workspace / f"private-{profile}" / "vault.json"),
+                            "--profile",
+                            profile,
+                            "--passphrase-stdin",
+                            "--acknowledge-vault-loss-risk",
+                        ),
+                    ),
+                    (f"validate_protected_{profile}", (str(cli), "validate-bundle", str(workspace / f"protected-{profile}.zip"))),
+                )
+            },
         }.items():
-            completed = subprocess.run(command, check=False, cwd=workspace, env=environment, capture_output=True, text=True)  # noqa: S603
+            completed = subprocess.run(  # noqa: S603
+                command,
+                check=False,
+                cwd=workspace,
+                env=environment,
+                capture_output=True,
+                text=True,
+                input="synthetic-native-smoke-only\n" if name.startswith("protect_") else None,
+            )
+            if name == "collect_fixture" and completed.returncode == 0:
+                _add_synthetic_region_scope(bundle, self.root / "tests/standalone/fixtures/region-scope.json")
             checks[name] = completed.returncode
             if completed.returncode != 0:
                 message = f"Native {name} smoke failed: {completed.stdout} {completed.stderr}"
@@ -331,16 +377,36 @@ class NativeCollectorBuilder:
         return {"checks": checks, "expected_version": version, "version_verified": True, "source_checkout": False, "system_python_required": False}
 
 
+def _add_synthetic_region_scope(bundle: Path, fixture: Path) -> None:
+    """Enrich only the smoke-created fixture ZIP with producer-shaped metadata."""
+    scope = json.loads(fixture.read_text(encoding="utf-8"))
+    with ZipFile(bundle) as archive:
+        files = {name: archive.read(name) for name in archive.namelist()}
+    for member in ("account-scope.json", "collection-summary.json", "manifest.json"):
+        payload = json.loads(files[member])
+        payload["region_scope"] = scope
+        files[member] = json.dumps(payload, indent=2, sort_keys=True).encode("utf-8")
+    checksums = {name: hashlib.sha256(data).hexdigest() for name, data in sorted(files.items()) if name not in {"manifest.json", "checksums.json"}}
+    manifest = json.loads(files["manifest.json"])
+    manifest["checksums"] = checksums
+    files["manifest.json"] = json.dumps(manifest, indent=2, sort_keys=True).encode("utf-8")
+    files["checksums.json"] = json.dumps({"algorithm": "sha256", "checksums": checksums}, indent=2, sort_keys=True).encode("utf-8")
+    with ZipFile(bundle, "w", compression=ZIP_DEFLATED) as archive:
+        for name, data in sorted(files.items()):
+            archive.writestr(name, data)
+
+
 def _spec_text(cli: Path, launcher: Path, modules: tuple[str, ...]) -> str:
     return f"""
 from pathlib import Path
-from PyInstaller.utils.hooks import copy_metadata
+from PyInstaller.utils.hooks import collect_data_files, copy_metadata
 collector_metadata = [
     (str(Path(source) / 'METADATA'), destination)
     for source, destination in copy_metadata('unio-collector')
 ]
-a_cli = Analysis([{str(cli)!r}], pathex=[], binaries=[], datas=collector_metadata, hiddenimports={list(modules)!r}, noarchive=False)
-a_gui = Analysis([{str(launcher)!r}], pathex=[], binaries=[], datas=collector_metadata, hiddenimports={list(modules)!r}, noarchive=False)
+collector_data = collect_data_files('unio_collector', include_py_files=False)
+a_cli = Analysis([{str(cli)!r}], pathex=[], binaries=[], datas=collector_metadata + collector_data, hiddenimports={list(modules)!r}, noarchive=False)
+a_gui = Analysis([{str(launcher)!r}], pathex=[], binaries=[], datas=collector_metadata + collector_data, hiddenimports={list(modules)!r}, noarchive=False)
 pyz_cli = PYZ(a_cli.pure)
 pyz_gui = PYZ(a_gui.pure)
 exe_cli = EXE(
