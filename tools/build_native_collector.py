@@ -312,6 +312,15 @@ class NativeCollectorBuilder:
         environment = os.environ.copy()
         environment.pop("PYTHONPATH", None)
         environment["UNIO_COLLECTOR_LAUNCHER_SMOKE_TEST"] = "1"
+        for key in tuple(environment):
+            if key.startswith("AWS_"):
+                environment.pop(key)
+        environment["AWS_EC2_METADATA_DISABLED"] = "true"
+        environment["AWS_CONFIG_FILE"] = str(workspace / "unused-config")
+        environment["AWS_SHARED_CREDENTIALS_FILE"] = str(workspace / "unused-credentials")
+        fixture = workspace / "cost.json"
+        shutil.copyfile(self.root / "tests/standalone/fixtures/cost.json", fixture)
+        bundle = workspace / "evidence.zip"
         checks: dict[str, int] = {}
         for name, command in {
             "version": (str(cli), "version"),
@@ -319,6 +328,8 @@ class NativeCollectorBuilder:
             "profiles": (str(cli), "profiles", "--json"),
             "scanners": (str(cli), "scanners", "--json"),
             "launcher": (str(launcher),),
+            "collect_fixture": (str(cli), "collect", "--fixture", str(fixture), "--output", str(bundle), "--quiet"),
+            "validate_bundle": (str(cli), "validate-bundle", str(bundle)),
         }.items():
             completed = subprocess.run(command, check=False, cwd=workspace, env=environment, capture_output=True, text=True)  # noqa: S603
             checks[name] = completed.returncode
@@ -334,13 +345,14 @@ class NativeCollectorBuilder:
 def _spec_text(cli: Path, launcher: Path, modules: tuple[str, ...]) -> str:
     return f"""
 from pathlib import Path
-from PyInstaller.utils.hooks import copy_metadata
+from PyInstaller.utils.hooks import collect_data_files, copy_metadata
 collector_metadata = [
     (str(Path(source) / 'METADATA'), destination)
     for source, destination in copy_metadata('unio-collector')
 ]
-a_cli = Analysis([{str(cli)!r}], pathex=[], binaries=[], datas=collector_metadata, hiddenimports={list(modules)!r}, noarchive=False)
-a_gui = Analysis([{str(launcher)!r}], pathex=[], binaries=[], datas=collector_metadata, hiddenimports={list(modules)!r}, noarchive=False)
+collector_data = collect_data_files('unio_collector', include_py_files=False)
+a_cli = Analysis([{str(cli)!r}], pathex=[], binaries=[], datas=collector_metadata + collector_data, hiddenimports={list(modules)!r}, noarchive=False)
+a_gui = Analysis([{str(launcher)!r}], pathex=[], binaries=[], datas=collector_metadata + collector_data, hiddenimports={list(modules)!r}, noarchive=False)
 pyz_cli = PYZ(a_cli.pure)
 pyz_gui = PYZ(a_gui.pure)
 exe_cli = EXE(
