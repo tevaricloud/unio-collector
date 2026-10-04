@@ -3,7 +3,7 @@ from __future__ import annotations  # noqa: D100
 import os
 import threading
 from pathlib import Path
-from tkinter import END, MULTIPLE, BooleanVar, StringVar, Tk, filedialog, messagebox, ttk
+from tkinter import END, MULTIPLE, BooleanVar, StringVar, Tk, Toplevel, filedialog, messagebox, ttk
 from tkinter.scrolledtext import ScrolledText
 
 from unio_collector import __version__
@@ -68,6 +68,16 @@ class CollectorLauncherApp:
         self._build_restore(restore)
         self.log = ScrolledText(self.root, height=12, state="disabled")
         self.log.pack(fill="both", padx=12, pady=8)
+        log_actions = ttk.Frame(self.root)
+        log_actions.pack(fill="x", padx=12)
+        for label, command in (
+            ("View log", self._view_log),
+            ("Export output", self._export_output),
+            ("Copy output", self._copy_output),
+            ("Clear output", self._clear_output),
+        ):
+            ttk.Button(log_actions, text=label, command=command).pack(side="left", padx=3)
+        ttk.Label(log_actions, text="Logs may contain account IDs, resource names and local paths.").pack(side="left", padx=8)
         ttk.Button(self.root, text="Cancel current operation", command=self._cancel).pack(pady=(0, 10))
 
     def _build_collect(self, frame: ttk.Frame) -> None:
@@ -79,7 +89,7 @@ class CollectorLauncherApp:
         ttk.Button(frame, text="Browse", command=lambda: self._save_path(self.bundle, ".zip")).grid(row=1, column=2)
         ttk.Checkbutton(
             frame,
-            text="Confirm read-only AWS identity during doctor",
+            text="Check AWS account identity (does not verify read-only permissions)",
             variable=self.check_identity,
         ).grid(row=2, column=0, columnspan=2, sticky="w")
         ttk.Checkbutton(frame, text="Include previous complete month Cost Explorer baseline", variable=self.include_cost).grid(
@@ -243,7 +253,7 @@ class CollectorLauncherApp:
                 on_progress=lambda payload: self._append(_progress_text(payload)),
             )
 
-        self._run_task(task, cleanup=temporary.cleanup)
+        self._run_task(task, cleanup=temporary.cleanup, streamed=True)
 
     def _permissions(self) -> None:
         try:
@@ -295,7 +305,7 @@ class CollectorLauncherApp:
                 stdin_text=passphrase + "\n",
             )
 
-        self._run_task(task, cleanup=temporary.cleanup)
+        self._run_task(task, cleanup=temporary.cleanup, streamed=True)
 
     def _validate(self) -> None:
         self._run_async(("validate-bundle", self.bundle.get()))
@@ -347,7 +357,7 @@ class CollectorLauncherApp:
 
         self._run_task(task, cleanup=cleanup)
 
-    def _run_task(self, task: object, *, cleanup: object | None = None) -> None:
+    def _run_task(self, task: object, *, cleanup: object | None = None, streamed: bool = False) -> None:
         if self._busy:
             self._append("Another collector operation is already running.")
             return
@@ -356,7 +366,7 @@ class CollectorLauncherApp:
         def worker() -> None:
             try:
                 result = task()  # type: ignore[operator]
-                if result.output:
+                if result.output and not streamed:
                     self._append(result.output)
                 self._append(f"Command completed with exit code {result.exit_code}.")
             except Exception as exc:  # noqa: BLE001
@@ -385,6 +395,31 @@ class CollectorLauncherApp:
         path = filedialog.asksaveasfilename(defaultextension=extension)
         if path:
             variable.set(path)
+
+    def _view_log(self) -> None:
+        window = Toplevel(self.root)
+        window.title("Collector log snapshot")
+        output = ScrolledText(window, width=100, height=30)
+        output.pack(fill="both", expand=True)
+        output.insert(END, self.log.get("1.0", "end-1c"))
+        output.configure(state="disabled")
+
+    def _export_output(self) -> None:
+        path = filedialog.asksaveasfilename(title="Save collector output locally", defaultextension=".txt", filetypes=(("Text logs", "*.txt"),))
+        if path:
+            try:
+                Path(path).write_text(self.log.get("1.0", "end-1c"), encoding="utf-8")
+            except OSError as exc:
+                messagebox.showerror("Export failed", str(exc))
+
+    def _copy_output(self) -> None:
+        self.root.clipboard_clear()
+        self.root.clipboard_append(self.log.get("1.0", "end-1c"))
+
+    def _clear_output(self) -> None:
+        self.log.configure(state="normal")
+        self.log.delete("1.0", END)
+        self.log.configure(state="disabled")
 
     def _open_path(self, variable: StringVar) -> None:
         path = filedialog.askopenfilename()

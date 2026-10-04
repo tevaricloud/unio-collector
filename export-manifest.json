@@ -117,7 +117,7 @@
     {
       "category": "repository_metadata",
       "path": "pyproject.toml",
-      "sha256": "b63db1ec570b088c99fb51c3119202ebb8eb2afe6cf7ebf2278cd678898cf8aa",
+      "sha256": "57832ccaf2b4271648a84ac4ba177b424771812b8d226659b6f4279b3bbf6e14",
       "size": 5160
     },
     {
@@ -243,8 +243,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/build_native_collector.py",
-      "sha256": "a30e651b6690842a7d7842c8937158f85f2bbc47ed731aea8a87a6f97a293d11",
-      "size": 27935
+      "sha256": "004776fd530d0dea76ee6e60a6fad3dc8b368aac04147af3dff74713ed8c4fa8",
+      "size": 28767
     },
     {
       "category": "repository_metadata",
@@ -3849,8 +3849,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/collector_launcher/app.py",
-      "sha256": "4a36d345b48e6991012dc9120dbc3996b8a2c449d84066489184cfea5cca4f6b",
-      "size": 20145
+      "sha256": "2df961bf988fa036fba3a9d813da22e024ee7b64986cdada5f6d246be8e0e202",
+      "size": 21818
     },
     {
       "category": "collector_source",
@@ -9806,5 +9806,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "ce480774c467c64b57fa2e24f83c13ca588d266a502a5893f7fa70bd8f4d7149"
+  "tree_digest": "400f2485ac3d02f5cbcd47304c7fd5ec30a3091270b4de143f6c51397a8dfeb7"
 }
