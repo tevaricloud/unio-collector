@@ -23,6 +23,7 @@ from unio_collector.privacy.patterns import (
     RESOURCE_RE,
     TIMESTAMP_RE,
 )
+from unio_collector.privacy.producer_fields import unknown_producer_paths
 from unio_collector.privacy.region_scope import REGION_SCOPE_MEMBERS, region_scope_category
 from unio_collector.privacy.registry import (
     FALLBACK_SAFE_STRING_KEYS,
@@ -70,13 +71,9 @@ class PrivacyTransformer:
 
     def transform(self, value: Any, *, file_name: str) -> Any:  # noqa: ANN401
         """Transform one JSON-compatible value."""
-        return self._transform_value(
-            value,
-            member_path=file_name,
-            json_path="$",
-            key=None,
-            in_tags=False,
-        )
+        if not self._allow_unknown_fields:
+            self.summary.unclassified.extend(unknown_producer_paths(value, file_name))
+        return self._transform_value(value, member_path=file_name, json_path="$", key=None, in_tags=False)
 
     def _transform_value(
         self,
@@ -154,6 +151,11 @@ class PrivacyTransformer:
             )
             if blocked is not None:
                 return blocked
+            if decision.treatment == "remove":
+                if decision.category == "cost":
+                    self.summary.cost_values_removed += 1
+                self.summary.removed += 1
+                return None
             if scope_category is None and is_strict_cost_key(self._profile, key) and isinstance(value, int | float):
                 self.summary.cost_values_removed += 1
                 self.summary.removed += 1
