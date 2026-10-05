@@ -386,6 +386,13 @@ def _add_synthetic_region_scope(bundle: Path, fixture: Path) -> None:
         payload = json.loads(files[member])
         payload["region_scope"] = scope
         files[member] = json.dumps(payload, indent=2, sort_keys=True).encode("utf-8")
+    provenance = json.loads(fixture.with_name("protection-producers.json").read_text(encoding="utf-8"))
+    for member, field in (("account-scope.json", "scan_period"), ("analysis-readiness.json", "pricing_replay")):
+        payload = json.loads(files[member])
+        payload[field] = provenance[field]
+        files[member] = json.dumps(payload, indent=2, sort_keys=True).encode("utf-8")
+    files["collection-log.jsonl"] = (json.dumps(provenance["collection_log"], sort_keys=True) + "\n").encode("utf-8")
+    files["scan-result/pricing-context.json"] = json.dumps(provenance["pricing_context"], indent=2, sort_keys=True).encode("utf-8")
     checksums = {name: hashlib.sha256(data).hexdigest() for name, data in sorted(files.items()) if name not in {"manifest.json", "checksums.json"}}
     manifest = json.loads(files["manifest.json"])
     manifest["checksums"] = checksums

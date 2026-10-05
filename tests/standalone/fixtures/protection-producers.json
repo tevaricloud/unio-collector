@@ -1,0 +1,131 @@
+{
+  "scan_period": {
+    "kind": "days",
+    "raw_input": {
+      "days": 14
+    },
+    "current_start_date": "2026-08-02",
+    "current_end_date": "2026-08-15",
+    "previous_start_date": "2026-07-19",
+    "previous_end_date": "2026-08-01",
+    "duration_days": 14,
+    "selected_duration": "14 days"
+  },
+  "pricing_replay": {
+    "status": "loaded",
+    "context_file": "scan-result/pricing-context.json",
+    "context_serialized": true,
+    "financial_parity_candidate": true
+  },
+  "collection_log": {
+    "eventVersion": "unio-1",
+    "userIdentity": {
+      "type": "AssumedRole",
+      "Account": "123456789012",
+      "UserId": "synthetic-principal"
+    },
+    "eventTime": "2026-08-15T12:34:56+00:00",
+    "eventSource": "ec2.amazonaws.com",
+    "eventName": "DescribeInstances",
+    "awsRegion": "eu-west-1",
+    "sourceIPAddress": "local",
+    "userAgent": "unio_collector/0.1.7",
+    "requestParameters": {
+      "synthetic_unexported_parameter": "never-export-this"
+    },
+    "responseElements": {
+      "_omitted": true,
+      "awsRequestId": "synthetic-request"
+    },
+    "readOnly": true,
+    "eventType": "AwsApiCall",
+    "managementEvent": true,
+    "recipientAccountId": "123456789012",
+    "eventID": "01234567-89ab-cdef-0123-456789abcdef",
+    "errorCode": null,
+    "errorMessage": null,
+    "unio_collector": {
+      "scanner_id": "root_advisory",
+      "collector": "synthetic",
+      "operation_declared_in_registry": true,
+      "destructive": false,
+      "write_operation": false,
+      "operation_safety_status": "read_only",
+      "credential_material_returned": false,
+      "local_only_audit_record": true,
+      "declared_api_call": "ec2:DescribeInstances",
+      "authoritative_cloudtrail": false,
+      "aws_cassette_replay": false,
+      "expected_absence": false,
+      "permission_denied": false,
+      "service_unavailable": false,
+      "error_category": "none",
+      "error_reason": null,
+      "service_availability_status": null,
+      "attempt_id": null,
+      "scanner_call_classification": "not_tracked",
+      "completed_after_attempt_end": false,
+      "attempt_outcome_reason": null
+    }
+  },
+  "pricing_context": {
+    "schema_version": "2026-01",
+    "status": "loaded",
+    "provider": "synthetic",
+    "rates": [
+      {
+        "rate_type": "ebs_snapshot_gb_month",
+        "region": "eu-west-1",
+        "resource_variant": null,
+        "amount": "0.05",
+        "currency": "USD",
+        "unit": "GB-Mo",
+        "source": "synthetic"
+      },
+      {
+        "rate_type": "ebs_volume_gb_month",
+        "region": "eu-west-1",
+        "resource_variant": "gp3",
+        "amount": "0.08",
+        "currency": "USD",
+        "unit": "GB-Mo",
+        "source": "synthetic"
+      }
+    ],
+    "usage_records": [
+      {
+        "date": "2026-08-15",
+        "service_name": "Amazon Elastic Compute Cloud - Compute",
+        "region": "eu-west-1",
+        "usage_type": "EUW1-TimedStorage-ByteHrs",
+        "cost": "12.50",
+        "currency": "USD"
+      }
+    ],
+    "errors": [],
+    "warnings": [],
+    "limitations": [],
+    "api_call_count": 0,
+    "started_api_call_count": 0,
+    "reserved_api_call_count": 0,
+    "completed_api_call_count": 0,
+    "failed_api_call_count": 0,
+    "unfinished_api_call_count": 0,
+    "cache_hit_count": 0,
+    "cache_miss_count": 0,
+    "lookup_request_count": 0,
+    "scheduled_lookup_request_count": 0,
+    "omitted_lookup_request_count": 0,
+    "completed_lookup_request_count": 0,
+    "stopped_lookup_request_count": 0,
+    "observed_pages_per_lookup": null,
+    "max_api_calls": null,
+    "timeout_seconds": null,
+    "api_call_timeout_seconds": null,
+    "worker_count": null,
+    "stop_reason": null,
+    "budget_estimate": {},
+    "lookup_diagnostics": [],
+    "lookup_plan_summary": {}
+  }
+}
