@@ -6,6 +6,7 @@ from typing import Any
 
 from unio_collector.privacy.patterns import TIMESTAMP_RE
 from unio_collector.privacy.profiles import PrivacyProfile
+from unio_collector.privacy.region_scope import REGION_SCOPE_MEMBERS, region_scope_category
 from unio_collector.privacy.rules import (
     is_strict_cost_key,
     is_strict_log_key,
@@ -43,7 +44,12 @@ class StrictTransformationVerifier:
         key: str | None,
         failures: list[str],
     ) -> None:
-        if is_strict_cost_key(profile, key) and value is not None and value != "":
+        member, _, relative = path.partition(".$region_scope")
+        scope_category = region_scope_category("$.region_scope" + relative.replace(".$", ".")) if member in REGION_SCOPE_MEMBERS else None
+        if scope_category == "region" and isinstance(value, str) and value != "aws-region":
+            failures.append(path)
+            return
+        if scope_category is None and is_strict_cost_key(profile, key) and value is not None and value != "":
             failures.append(path)
             return
         if is_strict_region_key(profile, key) and value not in ("aws-region", None, ""):

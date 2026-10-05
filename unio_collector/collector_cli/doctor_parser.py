@@ -36,7 +36,7 @@ def add_doctor_command(
     doctor.add_argument(
         "--check-identity",
         action="store_true",
-        help="Run an explicit read-only identity check where supported.",
+        help="Query account identity with a read-only API; does not verify read-only permissions.",
     )
     doctor.add_argument(
         "--json-output",

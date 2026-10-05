@@ -1,0 +1,66 @@
+{
+  "scope_version": "2026-08",
+  "selection_mode": "billing_active_regions",
+  "explicit_region_scope": false,
+  "discovery_status": "completed",
+  "shared_region_discovery_scanner_id": "unio-collector-shared-region-discovery",
+  "regions_from_billing_requested": true,
+  "regions_from_billing_effective": true,
+  "billing_region_source": "cost_explorer_region_costs",
+  "billing_region_status": "applied",
+  "materiality_threshold": "0.01",
+  "billing_active_regions": [
+    "eu-central-1",
+    "eu-west-2"
+  ],
+  "normalized_candidate_regions": [
+    "eu-central-1",
+    "eu-west-2"
+  ],
+  "material_billing_candidate_regions": [
+    "eu-central-1"
+  ],
+  "residual_billing_candidate_regions": [
+    "eu-west-2"
+  ],
+  "unrecognized_billing_region_values": [
+    "synthetic-unrecognized-region"
+  ],
+  "explicit_requested_regions": [
+    "eu-central-1"
+  ],
+  "selected_regional_targets": [
+    "eu-central-1"
+  ],
+  "selected_regions": [
+    "eu-central-1"
+  ],
+  "enabled_regions": [
+    "eu-central-1",
+    "eu-west-2"
+  ],
+  "excluded_regions": [
+    {
+      "region_name": "ap-east-1",
+      "opt_in_status": "not-opted-in",
+      "status": "excluded",
+      "stage": "account_region_discovery",
+      "reason": "account_region_not_enabled"
+    }
+  ],
+  "excluded_region_count": 1,
+  "global_scope": {
+    "enabled": true,
+    "pseudo_scope": "global",
+    "regional_target": false
+  },
+  "control_sources": {
+    "requested_regions": "yaml",
+    "regions_from_billing": "cli",
+    "global_checks": "cli"
+  },
+  "service_specific_exclusions": [],
+  "limitations": [
+    "Synthetic region discovery limitation."
+  ]
+}

@@ -3,7 +3,7 @@ from __future__ import annotations  # noqa: D100
 import os
 import threading
 from pathlib import Path
-from tkinter import END, MULTIPLE, BooleanVar, StringVar, Tk, filedialog, messagebox, ttk
+from tkinter import END, MULTIPLE, BooleanVar, StringVar, Tk, Toplevel, filedialog, messagebox, ttk
 from tkinter.scrolledtext import ScrolledText
 
 from unio_collector import __version__
@@ -68,6 +68,16 @@ class CollectorLauncherApp:
         self._build_restore(restore)
         self.log = ScrolledText(self.root, height=12, state="disabled")
         self.log.pack(fill="both", padx=12, pady=8)
+        log_actions = ttk.Frame(self.root)
+        log_actions.pack(fill="x", padx=12)
+        for label, command in (
+            ("View log", self._view_log),
+            ("Export output", self._export_output),
+            ("Copy output", self._copy_output),
+            ("Clear output", self._clear_output),
+        ):
+            ttk.Button(log_actions, text=label, command=command).pack(side="left", padx=3)
+        ttk.Label(log_actions, text="Logs may contain account IDs, resource names and local paths.").pack(side="left", padx=8)
         ttk.Button(self.root, text="Cancel current operation", command=self._cancel).pack(pady=(0, 10))
 
     def _build_collect(self, frame: ttk.Frame) -> None:
@@ -79,7 +89,7 @@ class CollectorLauncherApp:
         ttk.Button(frame, text="Browse", command=lambda: self._save_path(self.bundle, ".zip")).grid(row=1, column=2)
         ttk.Checkbutton(
             frame,
-            text="Confirm read-only AWS identity during doctor",
+            text="Check AWS account identity (does not verify read-only permissions)",
             variable=self.check_identity,
         ).grid(row=2, column=0, columnspan=2, sticky="w")
         ttk.Checkbutton(frame, text="Include previous complete month Cost Explorer baseline", variable=self.include_cost).grid(
@@ -172,16 +182,19 @@ class CollectorLauncherApp:
         ttk.Button(frame, text="Browse", command=command).grid(row=row, column=2)
 
     def _load_catalogues(self) -> None:
+        self._busy = True
+
         def load() -> None:
             try:
                 profiles = self.controller.profiles()
                 scanners = self.controller.scanners()
+                self._scanner_records = scanners
+                self.root.after(0, lambda: self.profile_box.configure(values=("", *profiles)))
+                self.root.after(0, self._populate_scanners)
             except Exception as exc:  # noqa: BLE001
                 self._append(f"Catalogue loading failed: {exc}")
-                return
-            self._scanner_records = scanners
-            self.root.after(0, lambda: self.profile_box.configure(values=("", *profiles)))
-            self.root.after(0, self._populate_scanners)
+            finally:
+                self._busy = False
 
         threading.Thread(target=load, daemon=True).start()
 
@@ -243,7 +256,7 @@ class CollectorLauncherApp:
                 on_progress=lambda payload: self._append(_progress_text(payload)),
             )
 
-        self._run_task(task, cleanup=temporary.cleanup)
+        self._run_task(task, cleanup=temporary.cleanup, streamed=True)
 
     def _permissions(self) -> None:
         try:
@@ -265,7 +278,7 @@ class CollectorLauncherApp:
     def _collect_protected(self) -> None:
         passphrase = self.passphrase.get()
         if not passphrase:
-            self._append("A non-empty client-held passphrase is required.")
+            self._append("Enter a client-held passphrase. The field is cleared when an operation starts; re-enter it before retrying.")
             return
         temporary, path = self.controller.temporary_path("protected-progress.jsonl")
         try:
@@ -295,21 +308,27 @@ class CollectorLauncherApp:
                 stdin_text=passphrase + "\n",
             )
 
-        self._run_task(task, cleanup=temporary.cleanup)
+        self._run_task(task, cleanup=temporary.cleanup, streamed=True)
 
     def _validate(self) -> None:
         self._run_async(("validate-bundle", self.bundle.get()))
 
     def _protect(self) -> None:
+        if self._busy:
+            self._append("Another collector operation is already running.")
+            return
         passphrase = self.passphrase.get()
         if not passphrase:
-            self._append("A non-empty client-held passphrase is required.")
+            self._append("Enter a client-held passphrase. The field is cleared when an operation starts; re-enter it before retrying.")
             return
         argv = self.controller.protect_argv(
             bundle=Path(self.bundle.get()),
             output=Path(self.protected_bundle.get()),
             vault=Path(self.vault.get()),
             profile=self.privacy_profile.get(),
+            token_scope=self.token_scope.get(),
+            engagement_id=self.engagement_id.get(),
+            client_id=self.client_id.get() or None,
             environment_alias_file=(Path(self.environment_alias_file.get()) if self.environment_alias_file.get().strip() else None),
             environment_semantics=self.environment_semantics.get() or None,
         )
@@ -319,7 +338,7 @@ class CollectorLauncherApp:
     def _restore(self) -> None:
         passphrase = self.passphrase.get()
         if not passphrase:
-            self._append("A non-empty client-held passphrase is required.")
+            self._append("Enter a client-held passphrase. The field is cleared when an operation starts; re-enter it before retrying.")
             return
         key = Path(self.public_key.get()) if self.public_key.get() else None
         argv = self.controller.restore_argv(
@@ -339,24 +358,32 @@ class CollectorLauncherApp:
         then: tuple[str, ...] | None = None,
         cleanup: object | None = None,
     ) -> None:
+        self._cancelled = False
+
         def task() -> CommandResult:
             result = self.controller.run(argv, stdin_text=stdin_text)
-            if result.exit_code == 0 and then:
+            if result.exit_code == 0 and then and not self._cancelled:
                 return self.controller.run(then)
             return result
 
-        self._run_task(task, cleanup=cleanup)
+        operation = "Protection" if argv[:2] == ("privacy", "protect") else None
+        self._run_task(task, cleanup=cleanup, operation=operation)
 
-    def _run_task(self, task: object, *, cleanup: object | None = None) -> None:
+    def _run_task(self, task: object, *, cleanup: object | None = None, streamed: bool = False, operation: str | None = None) -> None:
         if self._busy:
             self._append("Another collector operation is already running.")
             return
         self._busy = True
+        generation = object()
+        self._operation_generation = generation
+        if operation:
+            self._append(f"{operation} started. Checking evidence and preparing local protected output.")
+            self.root.after(3000, lambda: self._operation_progress(operation, generation))
 
         def worker() -> None:
             try:
                 result = task()  # type: ignore[operator]
-                if result.output:
+                if result.output and not streamed:
                     self._append(result.output)
                 self._append(f"Command completed with exit code {result.exit_code}.")
             except Exception as exc:  # noqa: BLE001
@@ -368,9 +395,17 @@ class CollectorLauncherApp:
 
         threading.Thread(target=worker, daemon=True).start()
 
+    def _operation_progress(self, operation: str, generation: object) -> None:
+        if self._busy and self._operation_generation is generation:
+            self._append(f"{operation} is still running; progress percentage is unavailable.")
+            self.root.after(3000, lambda: self._operation_progress(operation, generation))
+
     def _cancel(self) -> None:
-        self.controller.cancel()
-        self._append("Cancellation requested. Any incomplete output must not be treated as a valid evidence bundle.")
+        if self.controller.cancel():
+            self._cancelled = True
+            self._append("Cancellation requested. Validate any output before use; cancelled protection may leave incomplete local staging files.")
+        else:
+            self._append("No active collector child process to cancel.")
 
     def _append(self, text: str) -> None:
         self.root.after(0, lambda: self._append_now(text))
@@ -385,6 +420,31 @@ class CollectorLauncherApp:
         path = filedialog.asksaveasfilename(defaultextension=extension)
         if path:
             variable.set(path)
+
+    def _view_log(self) -> None:
+        window = Toplevel(self.root)
+        window.title("Collector log snapshot")
+        output = ScrolledText(window, width=100, height=30)
+        output.pack(fill="both", expand=True)
+        output.insert(END, self.log.get("1.0", "end-1c"))
+        output.configure(state="disabled")
+
+    def _export_output(self) -> None:
+        path = filedialog.asksaveasfilename(title="Save collector output locally", defaultextension=".txt", filetypes=(("Text logs", "*.txt"),))
+        if path:
+            try:
+                Path(path).write_text(self.log.get("1.0", "end-1c"), encoding="utf-8")
+            except OSError as exc:
+                messagebox.showerror("Export failed", str(exc))
+
+    def _copy_output(self) -> None:
+        self.root.clipboard_clear()
+        self.root.clipboard_append(self.log.get("1.0", "end-1c"))
+
+    def _clear_output(self) -> None:
+        self.log.configure(state="normal")
+        self.log.delete("1.0", END)
+        self.log.configure(state="disabled")
 
     def _open_path(self, variable: StringVar) -> None:
         path = filedialog.askopenfilename()
