@@ -206,6 +206,12 @@
     },
     {
       "category": "tests",
+      "path": "tests/standalone/fixtures/protection-producers.json",
+      "sha256": "f3dd9cd51090bcdbeb1aa98ddbf060325ef608a23fc2984d474c2ac8f9436215",
+      "size": 20655
+    },
+    {
+      "category": "tests",
       "path": "tests/standalone/fixtures/region-scope.json",
       "sha256": "b563284d91213a8aadcc82383db8d755244daa6d11d8624e36017f16b2e9523c",
       "size": 1625
@@ -221,6 +227,12 @@
       "path": "tests/standalone/test_identity.py",
       "sha256": "ffa9a17f676cdb30a0aa3295b54e02554261ce5f370b06a509f9a5d21bbe0a82",
       "size": 8763
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_producers.py",
+      "sha256": "680b432dc4ca6597f3a867e8b41b0084018acb384f91b688a612974ab5290bf4",
+      "size": 13829
     },
     {
       "category": "tests",
@@ -249,8 +261,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/build_native_collector.py",
-      "sha256": "70386ac6c1290ee948f9f8d49de2ecb3ead70db42a0242683f6eb2f2e42ddfa3",
-      "size": 31424
+      "sha256": "9a0d68ba35544a300fd4cbd37000a3cf7acffcbfd35e9587ff86e8ec586b53ba",
+      "size": 36455
     },
     {
       "category": "repository_metadata",
@@ -3855,14 +3867,14 @@
     {
       "category": "collector_source",
       "path": "unio_collector/collector_launcher/app.py",
-      "sha256": "1c32d34ac4159366ca561888711ca16cacba8b8345eba64c76ae45a21fd28047",
-      "size": 23315
+      "sha256": "bea87a2eca1b13c58eaa08c23c7bd3428265b3fff1a0c797d2051edd34227b04",
+      "size": 23840
     },
     {
       "category": "collector_source",
       "path": "unio_collector/collector_launcher/controller.py",
-      "sha256": "9023a33f43dd18583e90b022a0c7e1186d79b01df5236d646e4608d9d3a31972",
-      "size": 12935
+      "sha256": "ecc9a728f8a2dce1346db922e85a876d68c2670159e19465cd5a092046ccd94d",
+      "size": 13019
     },
     {
       "category": "collector_source",
@@ -4629,8 +4641,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/bundle.py",
-      "sha256": "37b8c6e85112a320f532e9fe703f2628f52c8abfa2bd7a14203501e4845596da",
-      "size": 23550
+      "sha256": "efc23eea3144a2aa01e7f8f7396e235481fe168d72054b13523b78e8666ccd96",
+      "size": 24541
     },
     {
       "category": "collector_source",
@@ -4761,8 +4773,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/patterns.py",
-      "sha256": "adc4f47f1253359e53907f3abd1e05131d38d9b46059d7babf49f01607c93873",
-      "size": 746
+      "sha256": "b4ed0f0ed3805daf5c0704dfaf1dd87cc7f07b2962cd14867511a8428828bfe1",
+      "size": 964
     },
     {
       "category": "collector_source",
@@ -4796,6 +4808,12 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/privacy/producer_fields.py",
+      "sha256": "0ec4f18b81eea169b4579b25f4514eeb32bc2e79317d47b7b602d1e6edf5904f",
+      "size": 9743
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/privacy/profiles.py",
       "sha256": "5bb0f544e57f80f92ddf08dcc9b388b5c52f3c7506d0462cca86a5f6d6167d00",
       "size": 2310
@@ -4817,6 +4835,12 @@
       "path": "unio_collector/privacy/protection_state.py",
       "sha256": "b113d13fc16d2a5ed5075fd55f61164d229b0b93af6d5c26eb24442357f806e9",
       "size": 1522
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/provenance_fields.py",
+      "sha256": "96e0fe281b9d6a32e06de550c61452e4d7419a86ad1dd2e0067286b6f2d8386b",
+      "size": 4657
     },
     {
       "category": "collector_source",
@@ -4845,8 +4869,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/registry.py",
-      "sha256": "fb94cd5412eedbb73314e85e27f2e2026060d5f89c70d8c8bf65b6e134e8966d",
-      "size": 16762
+      "sha256": "d12bb891a3577e1339ce9fb68a6c7bb637bc1d9ed2267c80d3a51ef286312ac6",
+      "size": 16855
     },
     {
       "category": "collector_source",
@@ -4857,8 +4881,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/resolver.py",
-      "sha256": "322ddb20d39bf264e0f491b3b41911caca069ef2fb095d22ff1170e778af4b47",
-      "size": 7260
+      "sha256": "2d43c3f7f429370ce2bcac00233ef39eac48567be979eab57d4a5d5b31c70d8f",
+      "size": 8362
     },
     {
       "category": "collector_source",
@@ -4881,8 +4905,14 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/rules.py",
-      "sha256": "1856ea815e9971fd22bac2616257170da7441da176c18e57c95729dd188bf63b",
-      "size": 2683
+      "sha256": "dc5180739f739e8b0e7aa458ce953b59b78719afdbdaa626840f0fbcc22fa466",
+      "size": 2757
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/runtime_fields.py",
+      "sha256": "a9966183a428e91e83b1f40a352317bc871daa59dc5397093517b0d592ab5dac",
+      "size": 6387
     },
     {
       "category": "collector_source",
@@ -4911,8 +4941,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/strict_verifier.py",
-      "sha256": "d667081f101f67bacf5becdef72b164703649f9a3f9e92be6e87c7f61120ef82",
-      "size": 3431
+      "sha256": "1836a3b5d0b160e795f6004409fcea92cb6dbe192781ac889bbf918d57cfb15d",
+      "size": 4117
     },
     {
       "category": "collector_source",
@@ -4971,8 +5001,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/transform.py",
-      "sha256": "34782895a2a1ea981746bfa78569153b529e670750fa7cf6cdbc53dfa5eb9837",
-      "size": 19474
+      "sha256": "5db710d920ab62b14e06aca6a267133e7fd7998537590c551db18f4636d4436a",
+      "size": 19904
     },
     {
       "category": "collector_source",
@@ -9818,5 +9848,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "e0b9b27f6b6e69b9c02bc30ca7de3b8dce09f33de0f2d98dabcf7bb228085d2b"
+  "tree_digest": "a76a73069af870c2306e94065756819f8bd68a7878d9527b649325572a42c11f"
 }

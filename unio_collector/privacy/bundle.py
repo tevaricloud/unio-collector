@@ -32,15 +32,12 @@ from unio_collector.privacy.known_originals import collect_known_original_values
 from unio_collector.privacy.lifecycle_verifier import ProtectedExportLifecycleVerifier
 from unio_collector.privacy.options import PrivacyProtectOptions
 from unio_collector.privacy.preview import build_privacy_preview
+from unio_collector.privacy.producer_fields import reduce_strict_pricing_context
 from unio_collector.privacy.profiles import PrivacyProfile, load_privacy_profile
 from unio_collector.privacy.protect_result import PrivacyProtectResult
 from unio_collector.privacy.public_writer import PublicArtifactWriter
 from unio_collector.privacy.publication_preparer import ProtectionArtifactPreparer
-from unio_collector.privacy.receipt import (
-    build_export_receipt,
-    default_receipt_path,
-    encode_receipt,
-)
+from unio_collector.privacy.receipt import build_export_receipt, default_receipt_path, encode_receipt
 from unio_collector.privacy.registry import is_supported_json_path
 from unio_collector.privacy.schema_versioning import replace_schema_versions
 from unio_collector.privacy.security_warning import SecurityWarning, warning_messages
@@ -83,21 +80,22 @@ class ProtectedBundleProtector:
             message = (
                 "Protected export requires acknowledgement that losing the client-held vault, passphrase, or recovery material may make restoration impossible."
             )
-            raise ValueError(
-                message,
-            )
+            raise ValueError(message)
+        EvidenceBundleValidator().validate_or_raise(options.bundle_path)
+        with ZipFile(options.bundle_path) as archive:
+            if "privacy/protection-policy.json" in archive.namelist():
+                raise ValueError(
+                    "This bundle is already protected. Protect the original unprotected source bundle with the desired profile; "
+                    "protected bundles cannot be re-protected or upgraded to strict."
+                )
         receipt_path = options.receipt_path or default_receipt_path(options.output_path)
         targets = [options.output_path, options.vault_path, receipt_path]
         if options.recovery_key_path is not None:
             targets.append(options.recovery_key_path)
         if options.preview_output_path is not None:
             targets.append(options.preview_output_path)
-        coordinator = ArtifactTransactionCoordinator(
-            tuple(targets),
-            overwrite=options.overwrite,
-        )
+        coordinator = ArtifactTransactionCoordinator(tuple(targets), overwrite=options.overwrite)
         coordinator.validate_destinations()
-        EvidenceBundleValidator().validate_or_raise(options.bundle_path)
         profile = load_privacy_profile(
             options.profile_id,
             token_scope=options.token_scope,
@@ -290,9 +288,16 @@ class ProtectedBundleProtector:
                     source_manifest = json.loads(data.decode("utf-8"))
                 if name.endswith(".json") and is_supported_json_path(name):
                     payload = json.loads(data.decode("utf-8"))
-                    files[name] = dump_json(transformer.transform(payload, file_name=name))
+                    transformed = transformer.transform(payload, file_name=name)
+                    if name == "scan-result/pricing-context.json" and state.profile.profile_id == "strict":
+                        transformed = reduce_strict_pricing_context(transformed)
+                    if name == "analysis-readiness.json" and state.profile.profile_id == "strict" and isinstance(transformed.get("pricing_replay"), dict):
+                        transformed["pricing_replay"]["status"] = "redacted"
+                    files[name] = dump_json(transformed)
                 elif name.endswith(".jsonl") and is_supported_json_path(name):
                     records = [transformer.transform(json.loads(line), file_name=name) for line in data.decode("utf-8").splitlines() if line.strip()]
+                    if name == "collection-log.jsonl" and state.profile.profile_id == "strict":
+                        records = []
                     files[name] = dump_jsonl(records)
                 elif name.endswith((".json", ".jsonl")) and not name.startswith("privacy/"):
                     state.classification.unclassified.append(name)

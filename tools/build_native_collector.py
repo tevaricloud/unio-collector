@@ -330,6 +330,7 @@ class NativeCollectorBuilder:
             "launcher": (str(launcher),),
             "collect_fixture": (str(cli), "collect", "--fixture", str(fixture), "--output", str(bundle), "--quiet"),
             "validate_bundle": (str(cli), "validate-bundle", str(bundle)),
+            "validate_unknown_bundle": (str(cli), "validate-bundle", str(workspace / "unknown.zip")),
             **{
                 name: command
                 for profile in ("standard", "strict")
@@ -355,6 +356,24 @@ class NativeCollectorBuilder:
                     (f"validate_protected_{profile}", (str(cli), "validate-bundle", str(workspace / f"protected-{profile}.zip"))),
                 )
             },
+            **{
+                f"protect_unknown_{profile}": (
+                    str(cli),
+                    "privacy",
+                    "protect",
+                    "--bundle",
+                    str(workspace / "unknown.zip"),
+                    "--output",
+                    str(workspace / f"unknown-{profile}.zip"),
+                    "--vault",
+                    str(workspace / f"private-unknown-{profile}" / "vault.json"),
+                    "--profile",
+                    profile,
+                    "--passphrase-stdin",
+                    "--acknowledge-vault-loss-risk",
+                )
+                for profile in ("standard", "strict")
+            },
         }.items():
             completed = subprocess.run(  # noqa: S603
                 command,
@@ -366,18 +385,53 @@ class NativeCollectorBuilder:
                 input="synthetic-native-smoke-only\n" if name.startswith("protect_") else None,
             )
             if name == "collect_fixture" and completed.returncode == 0:
-                _add_synthetic_region_scope(bundle, self.root / "tests/standalone/fixtures/region-scope.json")
+                ledger_namespace = _add_synthetic_region_scope(bundle, self.root / "tests/standalone/fixtures/region-scope.json")
+                shutil.copyfile(bundle, workspace / "unknown.zip")
+                _add_synthetic_region_scope(workspace / "unknown.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_ledger_field=True)
+                unknown_digest = hashlib.sha256((workspace / "unknown.zip").read_bytes()).hexdigest()
             checks[name] = completed.returncode
-            if completed.returncode != 0:
+            expected = 1 if name.startswith("protect_unknown_") else 0
+            if completed.returncode != expected:
                 message = f"Native {name} smoke failed: {completed.stdout} {completed.stderr}"
                 raise RuntimeError(message)
+            if name.startswith("protect_unknown_"):
+                profile = name.removeprefix("protect_unknown_")
+                _verify_unknown_smoke(workspace, profile, completed, unknown_digest, ledger_namespace)
             if name in {"version", "version_flag"} and completed.stdout.strip() != f"unio-collector {version}":
                 message = f"Native {name} reports {completed.stdout.strip()!r}, expected collector version {version}."
                 raise RuntimeError(message)
-        return {"checks": checks, "expected_version": version, "version_verified": True, "source_checkout": False, "system_python_required": False}
+        return {
+            "checks": checks,
+            "expected_version": version,
+            "version_verified": True,
+            "source_checkout": False,
+            "system_python_required": False,
+            "expected_exit_codes": {name: 1 if name.startswith("protect_unknown_") else 0 for name in checks},
+            "producer_fixture_sha256": hashlib.sha256((self.root / "tests/standalone/fixtures/protection-producers.json").read_bytes()).hexdigest(),
+            "ledger_namespace": ledger_namespace,
+        }
 
 
-def _add_synthetic_region_scope(bundle: Path, fixture: Path) -> None:
+def _verify_unknown_smoke(workspace: Path, profile: str, completed: subprocess.CompletedProcess[str], input_digest: str, ledger_namespace: str) -> None:
+    """Require the negative smoke to reject the unknown field without publication."""
+    if any(
+        path not in completed.stdout + completed.stderr
+        for path in (
+            f"collection-log.jsonl.{ledger_namespace}.unknown_synthetic_field",
+            "collection-summary.json.api_runtime_summary.records[].unknown_synthetic_field",
+        )
+    ):
+        raise RuntimeError("Native negative smoke failed for an unrelated reason.")  # noqa: EM101, TRY003
+    if any(
+        (workspace / candidate).exists()
+        for candidate in (f"unknown-{profile}.zip", f"unknown-{profile}.zip.receipt.json", f"private-unknown-{profile}/vault.json")
+    ):
+        raise RuntimeError("Native rejected protection published an artifact.")  # noqa: EM101, TRY003
+    if list(workspace.rglob("*.tmp")) or hashlib.sha256((workspace / "unknown.zip").read_bytes()).hexdigest() != input_digest:
+        raise RuntimeError("Native rejection changed input or left staging files.")  # noqa: EM101, TRY003
+
+
+def _add_synthetic_region_scope(bundle: Path, fixture: Path, *, unknown_ledger_field: bool = False) -> str:
     """Enrich only the smoke-created fixture ZIP with producer-shaped metadata."""
     scope = json.loads(fixture.read_text(encoding="utf-8"))
     with ZipFile(bundle) as archive:
@@ -386,14 +440,39 @@ def _add_synthetic_region_scope(bundle: Path, fixture: Path) -> None:
         payload = json.loads(files[member])
         payload["region_scope"] = scope
         files[member] = json.dumps(payload, indent=2, sort_keys=True).encode("utf-8")
+    provenance = json.loads(fixture.with_name("protection-producers.json").read_text(encoding="utf-8"))
+    ledger_namespace = json.loads(files["bundle-schema.json"])["format"].removesuffix("-result-evidence-bundle")
+    if ledger_namespace not in provenance["collection_log"]:
+        message = "Synthetic ledger fixture must retain the wire-protocol envelope, not the Python import namespace."
+        raise ValueError(message)
+    if unknown_ledger_field:
+        provenance["collection_log"][ledger_namespace]["unknown_synthetic_field"] = None
+    for member, field in (("account-scope.json", "scan_period"), ("analysis-readiness.json", "pricing_replay")):
+        payload = json.loads(files[member])
+        payload[field] = provenance[field]
+        files[member] = json.dumps(payload, indent=2, sort_keys=True).encode("utf-8")
+    summary = json.loads(files["collection-summary.json"])
+    summary["api_runtime_summary"] = provenance["api_runtime_summary"]["populated"]
+    if unknown_ledger_field:
+        summary["api_runtime_summary"]["records"][0]["unknown_synthetic_field"] = None
+    summary["billing_region_scope_derivation"] = provenance["billing_region_scope_derivation"]
+    summary["billing_region_coverage"] = provenance["billing_region_coverage"]
+    summary["stable_limitation_details"] = provenance["stable_limitation_details"]
+    summary["collection_runtime_summary"] = provenance["collection_runtime_summary"]
+    files["scan-result/api-runtime-summary.json"] = json.dumps(summary["api_runtime_summary"], indent=2, sort_keys=True).encode("utf-8")
+    files["collection-summary.json"] = json.dumps(summary, indent=2, sort_keys=True).encode("utf-8")
+    files["collection-log.jsonl"] = (json.dumps(provenance["collection_log"], sort_keys=True) + "\n").encode("utf-8")
+    files["scan-result/pricing-context.json"] = json.dumps(provenance["pricing_context"], indent=2, sort_keys=True).encode("utf-8")
     checksums = {name: hashlib.sha256(data).hexdigest() for name, data in sorted(files.items()) if name not in {"manifest.json", "checksums.json"}}
     manifest = json.loads(files["manifest.json"])
+    manifest["product_execution"] = provenance["product_execution"]
     manifest["checksums"] = checksums
     files["manifest.json"] = json.dumps(manifest, indent=2, sort_keys=True).encode("utf-8")
     files["checksums.json"] = json.dumps({"algorithm": "sha256", "checksums": checksums}, indent=2, sort_keys=True).encode("utf-8")
     with ZipFile(bundle, "w", compression=ZIP_DEFLATED) as archive:
         for name, data in sorted(files.items()):
             archive.writestr(name, data)
+    return ledger_namespace
 
 
 def _spec_text(cli: Path, launcher: Path, modules: tuple[str, ...]) -> str:

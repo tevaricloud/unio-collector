@@ -4,6 +4,7 @@ import re
 from fnmatch import fnmatchcase
 from typing import TYPE_CHECKING
 
+from unio_collector.privacy.producer_fields import producer_scope
 from unio_collector.privacy.region_scope import REGION_SCOPE_MEMBERS
 from unio_collector.privacy.registry import PATH_REGISTRY
 from unio_collector.privacy.treatment_decision import PrivacyTreatmentDecision
@@ -58,6 +59,30 @@ class PrivacyRegistryResolver:
                 fallback_allowed=False,
                 decision_source="exact_json_path",
                 reason="Matched an explicit region-scope producer field.",
+            )
+
+        if producer_scope(member_path, json_path):
+            entry = next(
+                (
+                    entry
+                    for entry in PATH_REGISTRY
+                    if entry.domain == domain
+                    and entry.member_pattern == member_path
+                    and self._json_suffix_matches(pattern=entry.json_path_pattern, json_path=json_path, key=key)
+                    and profile_id in entry.allowed_profiles
+                ),
+                None,
+            )
+            if entry is None:
+                return self._unsupported(reason=f"No explicit producer treatment covers {member_path}:{json_path}.")
+            return PrivacyTreatmentDecision(
+                treatment=entry.treatment,
+                category=entry.value_category,
+                canonicaliser_id=None,
+                canonicaliser_version=None,
+                fallback_allowed=False,
+                decision_source="exact_json_path",
+                reason="Matched an explicit producer field.",
             )
 
         suffix_entry = self._resolve_json_suffix_entry(
