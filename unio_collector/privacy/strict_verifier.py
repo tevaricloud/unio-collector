@@ -5,6 +5,7 @@ import json
 from typing import Any
 
 from unio_collector.privacy.patterns import TIMESTAMP_RE
+from unio_collector.privacy.producer_fields import producer_category
 from unio_collector.privacy.profiles import PrivacyProfile
 from unio_collector.privacy.region_scope import REGION_SCOPE_MEMBERS, region_scope_category
 from unio_collector.privacy.rules import (
@@ -28,8 +29,14 @@ class StrictTransformationVerifier:
             if name.startswith("privacy/"):
                 continue
             if name.endswith(".json"):
-                self._walk(json.loads(data.decode("utf-8")), profile, name, None, failures)
+                payload = json.loads(data.decode("utf-8"))
+                if name == "scan-result/pricing-context.json" and (payload.get("rates") or payload.get("usage_records")):
+                    failures.append(name)
+                self._walk(payload, profile, name, None, failures)
             elif name.endswith(".jsonl"):
+                if name == "collection-log.jsonl" and data.strip():
+                    failures.append(name)
+                    continue
                 for index, line in enumerate(data.decode("utf-8").splitlines()):
                     if line.strip():
                         self._walk(json.loads(line), profile, f"{name}[{index}]", None, failures)
@@ -44,6 +51,11 @@ class StrictTransformationVerifier:
         key: str | None,
         failures: list[str],
     ) -> None:
+        producer_member, _, producer_relative = path.partition(".$")
+        category = producer_category(producer_member, "$." + producer_relative.replace(".$", "."))
+        if category == "cost" and value not in (None, ""):
+            failures.append(path)
+            return
         member, _, relative = path.partition(".$region_scope")
         scope_category = region_scope_category("$.region_scope" + relative.replace(".$", ".")) if member in REGION_SCOPE_MEMBERS else None
         if scope_category == "region" and isinstance(value, str) and value != "aws-region":
