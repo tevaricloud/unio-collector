@@ -104,7 +104,7 @@ class LauncherController:
         self._add_environment_alias(args, selection)
         if not selection.include_cost_data:
             args.append("--no-cost-data")
-        if client_id:
+        if token_scope == "client" and client_id:  # noqa: S105
             args.extend(("--client-id", client_id))
         return tuple(args)
 
@@ -151,7 +151,7 @@ class LauncherController:
             "--acknowledge-vault-loss-risk",
         ]
         args.extend(("--token-scope", token_scope, "--engagement-id", engagement_id))
-        if client_id:
+        if token_scope == "client" and client_id:  # noqa: S105
             args.extend(("--client-id", client_id))
         if environment_semantics is not None:
             args.extend(("--environment-semantics", environment_semantics))

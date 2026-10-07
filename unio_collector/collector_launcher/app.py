@@ -1,13 +1,14 @@
 from __future__ import annotations  # noqa: D100
 
+import json
 import os
 import threading
 from pathlib import Path
 from tkinter import END, MULTIPLE, BooleanVar, StringVar, Tk, Toplevel, filedialog, messagebox, ttk
 from tkinter.scrolledtext import ScrolledText
 
-from unio_collector import __version__
 from unio_collector.collector.config.presets import SCAN_PRESET_IDS
+from unio_collector.collector.package.native.build_identity import CollectorBuildIdentity
 from unio_collector.collector_launcher.controller import LauncherController
 from unio_collector.collector_launcher.result import CommandResult
 from unio_collector.collector_launcher.selection import LauncherSelection
@@ -25,6 +26,7 @@ class CollectorLauncherApp:
         client_documents = _client_documents()
         self.profile = StringVar(value="")
         self.bundle = StringVar(value=str(client_documents / "evidence-bundle.zip"))
+        self.validation_bundle = StringVar(value="")
         self.check_identity = BooleanVar(value=False)
         self.include_cost = BooleanVar(value=True)
         self.allow_chargeable = BooleanVar(value=False)
@@ -48,7 +50,7 @@ class CollectorLauncherApp:
         self._load_catalogues()
 
     def _build(self) -> None:
-        self.root.title(f"Unio Collector {__version__}")
+        self.root.title(CollectorBuildIdentity().label())
         self.root.geometry("920x720")
         header = ttk.Label(
             self.root,
@@ -66,6 +68,8 @@ class CollectorLauncherApp:
         self._build_collect(collect)
         self._build_privacy(privacy)
         self._build_restore(restore)
+        self.token_scope.trace_add("write", lambda *_: self._update_client_scope())
+        self._update_client_scope()
         self.log = ScrolledText(self.root, height=12, state="disabled")
         self.log.pack(fill="both", padx=12, pady=8)
         log_actions = ttk.Frame(self.root)
@@ -132,7 +136,8 @@ class CollectorLauncherApp:
         ttk.Button(buttons, text="2. View permissions", command=self._permissions).pack(side="left", padx=3)
         ttk.Button(buttons, text="3. Collect", command=self._collect).pack(side="left", padx=3)
         ttk.Button(buttons, text="3a. Collect protected", command=self._collect_protected).pack(side="left", padx=3)
-        ttk.Button(buttons, text="4. Validate bundle", command=self._validate).pack(side="left", padx=3)
+        self._path_row(frame, 12, "Existing bundle to validate", self.validation_bundle, save=False)
+        ttk.Button(frame, text="Validate existing bundle", command=self._validate).grid(row=13, column=1, sticky="w")
         frame.columnconfigure(1, weight=1)
         frame.rowconfigure(10, weight=1)
 
@@ -154,7 +159,8 @@ class CollectorLauncherApp:
         ttk.Label(frame, text="Engagement ID").grid(row=6, column=0, sticky="w")
         ttk.Entry(frame, textvariable=self.engagement_id).grid(row=6, column=1, sticky="ew")
         ttk.Label(frame, text="Client ID (client token scope only)").grid(row=7, column=0, sticky="w")
-        ttk.Entry(frame, textvariable=self.client_id).grid(row=7, column=1, sticky="ew")
+        self.client_id_entry = ttk.Entry(frame, textvariable=self.client_id)
+        self.client_id_entry.grid(row=7, column=1, sticky="ew")
         ttk.Label(frame, text="Passphrase (not stored or placed on the command line)").grid(row=8, column=0, sticky="w")
         ttk.Entry(frame, textvariable=self.passphrase, show="*").grid(row=8, column=1, sticky="ew")
         ttk.Button(frame, text="Protect existing bundle", command=self._protect).grid(row=9, column=0, pady=8)
@@ -179,7 +185,7 @@ class CollectorLauncherApp:
         ttk.Label(frame, text=label).grid(row=row, column=0, sticky="w")
         ttk.Entry(frame, textvariable=variable).grid(row=row, column=1, sticky="ew")
         command = (lambda: self._save_path(variable, "")) if save else (lambda: self._open_path(variable))
-        ttk.Button(frame, text="Browse", command=command).grid(row=row, column=2)
+        ttk.Button(frame, text="Save as" if save else "Open", command=command).grid(row=row, column=2)
 
     def _load_catalogues(self) -> None:
         self._busy = True
@@ -310,8 +316,11 @@ class CollectorLauncherApp:
 
         self._run_task(task, cleanup=temporary.cleanup, streamed=True)
 
+    def _update_client_scope(self) -> None:
+        self.client_id_entry.configure(state="normal" if self.token_scope.get() == "client" else "disabled")
+
     def _validate(self) -> None:
-        self._run_async(("validate-bundle", self.bundle.get()))
+        self._run_async(("validate-bundle", self.validation_bundle.get()))
 
     def _protect(self) -> None:
         if self._busy:
@@ -470,6 +479,9 @@ def main() -> int:
     """Start the native collector launcher."""
     root = Tk()
     if os.getenv("UNIO_COLLECTOR_LAUNCHER_SMOKE_TEST") == "1":
+        identity_output = os.getenv("UNIO_LAUNCHER_IDENTITY_OUTPUT")
+        if identity_output:
+            Path(identity_output).write_text(json.dumps(CollectorBuildIdentity().read(), sort_keys=True), encoding="utf-8")
         root.update_idletasks()
         root.destroy()
         return 0

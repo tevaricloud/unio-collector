@@ -8,10 +8,20 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
-import uuid
 from importlib import import_module
 from pathlib import Path
+
+try:
+    from tools.windows_installer.identity import UPGRADE_CODE, WindowsInstallerIdentity
+    from tools.windows_installer.metadata import WindowsMsiInspector
+except ModuleNotFoundError as exc:
+    if exc.name != "tools":
+        raise
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from tools.windows_installer.identity import UPGRADE_CODE, WindowsInstallerIdentity
+    from tools.windows_installer.metadata import WindowsMsiInspector
 
 CHECKSUM_FIELD_COUNT = 2
 
@@ -80,6 +90,7 @@ class NativeInstallerBuilder:
                 else "not_applicable"
             ),
             "format": target.installer_format,
+            "msi_metadata": json.loads((output / "native-msi-metadata.json").read_text(encoding="utf-8")) if operating_system == "windows" else None,
             "signing_status": "unsigned",
             "status": "built",
         }
@@ -94,10 +105,26 @@ class NativeInstallerBuilder:
             staged_payload = workspace / "payload"
             shutil.copytree(payload, staged_payload)
             wxs = workspace / "Package.wxs"
-            wxs.write_text(_wix_source(staged_payload, version), encoding="utf-8")
+            identity = WindowsInstallerIdentity.for_repository(Path(__file__).resolve().parent.parent, version)
+            build_identity = json.loads((staged_payload / "collector-build.json").read_text(encoding="utf-8"))
+            if any(
+                build_identity.get(key) != expected
+                for key, expected in (
+                    ("application_version", version),
+                    ("installer_version", identity.installer_version),
+                    ("installer_revision", identity.revision),
+                    ("channel", identity.channel),
+                )
+            ):
+                message = "MSI identity must match the validated native payload."
+                raise ValueError(message)
+            wxs.write_text(_wix_source(staged_payload, version, identity=identity), encoding="utf-8")
             artifact = output / f"unio-collector-{version}-windows-x86_64.msi"
             staged_artifact = workspace / "collector.msi"
-            subprocess.run([wix, "build", str(wxs), "-o", str(staged_artifact)], check=True, cwd=workspace)  # noqa: S603
+            subprocess.run([wix, "build", str(wxs), "-arch", "x64", "-o", str(staged_artifact)], check=True, cwd=workspace)  # noqa: S603
+            metadata = WindowsMsiInspector().read(staged_artifact)
+            WindowsMsiInspector().validate(metadata, identity)
+            (output / "native-msi-metadata.json").write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8")
             shutil.copy2(staged_artifact, artifact)
         return artifact
 
@@ -168,12 +195,22 @@ class NativeInstallerBuilder:
         return artifact
 
 
-def _wix_source(payload: Path, version: str) -> str:
+def _wix_source(payload: Path, version: str, *, identity: WindowsInstallerIdentity | None = None) -> str:
     source = str(payload / "**").replace("&", "&amp;")
-    upgrade_code = str(uuid.uuid5(uuid.NAMESPACE_URL, "https://tevari.co.uk/unio-collector/windows"))
+    identity = identity or WindowsInstallerIdentity(version, 1)
+    upgrade_code = UPGRADE_CODE
+    installer_version = identity.installer_version
     return f"""<?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-  <Package Name="Unio Collector" Manufacturer="Tevari Ltd" Version="{version}" UpgradeCode="{upgrade_code}" Scope="perUser">
+  <Package Name="Unio Collector" Manufacturer="Tevari Ltd" Version="{installer_version}" UpgradeCode="{upgrade_code}" Scope="perUser">
+    <MajorUpgrade AllowDowngrades="no" AllowSameVersionUpgrades="no" Schedule="afterInstallInitialize" IgnoreRemoveFailure="no"
+                  DowngradeErrorMessage="A newer Unio Collector installer is already installed." />
+    <Upgrade Id="{upgrade_code}">
+      <UpgradeVersion Minimum="{installer_version}" Maximum="{installer_version}" IncludeMinimum="yes" IncludeMaximum="yes"
+                      OnlyDetect="yes" Property="UNIO_EQUAL_VERSION_FOUND" />
+    </Upgrade>
+    <Launch Condition="Installed OR NOT UNIO_EQUAL_VERSION_FOUND"
+            Message="A different package at this installer version is already installed. Use the identical MSI or a higher reviewed installer revision." />
     <MediaTemplate EmbedCab="yes" />
     <StandardDirectory Id="LocalAppDataFolder">
       <Directory Id="ProgramsFolder" Name="Programs">
@@ -182,6 +219,9 @@ def _wix_source(payload: Path, version: str) -> str:
             <Environment Id="CollectorPath" Name="PATH" Value="[INSTALLFOLDER]" Permanent="no" Part="last" Action="set" System="no" />
             <Shortcut Id="CollectorShortcut" Directory="ProgramMenuFolder" Name="Unio Collector"
                       Target="[INSTALLFOLDER]Unio Collector.exe" WorkingDirectory="INSTALLFOLDER" />
+            <Shortcut Id="CollectorCliShortcut" Directory="ProgramMenuFolder" Name="Unio Collector CLI"
+                      Target="[SystemFolder]cmd.exe"
+                      Arguments="/K &quot;&quot;[INSTALLFOLDER]unio-collector.exe&quot; version --build-info&quot;" WorkingDirectory="INSTALLFOLDER" />
             <RegistryValue Root="HKCU" Key="Software&#92;Tevari&#92;Unio Collector" Name="installed"
                            Type="integer" Value="1" KeyPath="yes" />
           </Component>
@@ -246,11 +286,15 @@ def _record_installer(output: Path, artifact: Path) -> None:
             message = "Native release manifest artifact hashes are invalid."
             raise RuntimeError(message)
         artifact_hashes[artifact.name] = _sha256(artifact)
+        if artifact.suffix == ".msi" and (output / "native-msi-metadata.json").is_file():
+            artifact_hashes["native-msi-metadata.json"] = _sha256(output / "native-msi-metadata.json")
         release["installer_artifact"] = artifact.name
         release["installer_signing_status"] = "unsigned"
         release_path.write_text(json.dumps(release, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     checksum_path = output / "SHA256SUMS"
     names: set[str] = {artifact.name}
+    if artifact.suffix == ".msi" and (output / "native-msi-metadata.json").is_file():
+        names.add("native-msi-metadata.json")
     if checksum_path.is_file():
         for line in checksum_path.read_text(encoding="utf-8").splitlines():
             fields = line.split(maxsplit=1)
