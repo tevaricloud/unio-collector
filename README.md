@@ -213,3 +213,19 @@ disabled to avoid runner-dependent unpinned tools (Ruff owns Python lint).
 All security failures are fatal. Scanner source snippets are not uploaded;
 Gitleaks retains only its safe summary. CI retains bounded Python and native
 diagnostics without broad artifact paths or AI review services.
+
+## Windows installer build identity
+
+Test installers retain the displayed application version while using a separately
+reviewed MSI revision: version 0.1.7, test revision 1 has MSI version 0.1.7001.
+Distinct distributed test builds must increase that revision. Installing identical
+MSI bytes uses Windows Installer maintenance; a different package at an already
+installed revision is rejected. Older versions upgrade in the same per-user
+installation, and downgrades are rejected. Application version output remains
+unchanged; `unio-collector version --build-info` reports the native source commit,
+installer revision and actual executable hash. The GUI title also identifies the
+build. These identifiers supplement verified artifact hashes, not signatures.
+
+The Windows installation rehearsal is restricted to a fresh Windows Sandbox.
+Portable native smoke and compiled MSI metadata checks do not establish installed
+upgrade, rollback or uninstall behaviour.

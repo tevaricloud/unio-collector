@@ -22,7 +22,9 @@ from unio_collector.privacy.patterns import (
     IPV4_VERSION,
     RESOURCE_RE,
     TIMESTAMP_RE,
+    is_safe_literal,
 )
+from unio_collector.privacy.producer_fields import producer_category, unknown_producer_paths
 from unio_collector.privacy.region_scope import REGION_SCOPE_MEMBERS, region_scope_category
 from unio_collector.privacy.registry import (
     FALLBACK_SAFE_STRING_KEYS,
@@ -70,13 +72,9 @@ class PrivacyTransformer:
 
     def transform(self, value: Any, *, file_name: str) -> Any:  # noqa: ANN401
         """Transform one JSON-compatible value."""
-        return self._transform_value(
-            value,
-            member_path=file_name,
-            json_path="$",
-            key=None,
-            in_tags=False,
-        )
+        if not self._allow_unknown_fields:
+            self.summary.unclassified.extend(unknown_producer_paths(value, file_name))
+        return self._transform_value(value, member_path=file_name, json_path="$", key=None, in_tags=False)
 
     def _transform_value(
         self,
@@ -95,6 +93,9 @@ class PrivacyTransformer:
                 value=value,
             )
             return value
+        if producer_category(member_path, json_path) in {"diagnostic_counts", "diagnostic_groups"} and isinstance(value, dict):
+            self.summary.removed += len(value)
+            return {}
         if scope_category is None and is_strict_cost_key(self._profile, key) and isinstance(value, dict | list):
             self.summary.cost_values_removed += 1
             self.summary.removed += 1
@@ -154,6 +155,11 @@ class PrivacyTransformer:
             )
             if blocked is not None:
                 return blocked
+            if decision.treatment == "remove":
+                if decision.category == "cost":
+                    self.summary.cost_values_removed += 1
+                self.summary.removed += 1
+                return None
             if scope_category is None and is_strict_cost_key(self._profile, key) and isinstance(value, int | float):
                 self.summary.cost_values_removed += 1
                 self.summary.removed += 1
@@ -340,7 +346,7 @@ class PrivacyTransformer:
         }:
             self.summary.preserved += 1
             return value
-        if decision.treatment == "preserve" or self._is_safe_literal(value):
+        if decision.treatment == "preserve" or is_safe_literal(value):
             self.summary.preserved += 1
             return value
         if decision.fallback_allowed:
@@ -377,7 +383,7 @@ class PrivacyTransformer:
         if key_lower in FALLBACK_TEXT_KEYS:
             self.summary.text_values_tokenised += 1
             return self._tokenise_embedded_values(value)
-        if key_lower in FALLBACK_SAFE_STRING_KEYS or self._is_safe_literal(value):
+        if key_lower in FALLBACK_SAFE_STRING_KEYS or is_safe_literal(value):
             self.summary.preserved += 1
             return value
         transformed = self._tokenise_embedded_values(value)
@@ -485,9 +491,6 @@ class PrivacyTransformer:
         token = self._token_service.token_for(canonical, observed_value=value)
         self.summary.record_token(canonical.category)
         return token
-
-    def _is_safe_literal(self, value: str) -> bool:
-        return not value.strip() or value.isdigit() or value in {"true", "false", "none", "null"}
 
     def _preserve_string(self, value: Any) -> Any:  # noqa: ANN401
         if isinstance(value, str):

@@ -34,6 +34,9 @@ def is_strict_timestamp_key(profile: PrivacyProfile, key: str | None) -> bool:
     lowered = (key or "").lower()
     exact = {
         "timestamp",
+        "eventtime",
+        "date_from",
+        "date_to",
         "time",
         "date",
         "created_at",
@@ -52,7 +55,7 @@ def is_strict_region_key(profile: PrivacyProfile, key: str | None) -> bool:
     if profile.region_visibility != "generalised":
         return False
     lowered = (key or "").lower()
-    return lowered in {"region", "regions", "scanned_regions", "selected_regions"} or lowered.endswith("_region")
+    return lowered in {"region", "regions", "scanned_regions", "selected_regions", "awsregion"} or lowered.endswith("_region")
 
 
 def is_strict_topology_key(profile: PrivacyProfile, key: str | None) -> bool:
