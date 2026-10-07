@@ -93,8 +93,8 @@
     {
       "category": "repository_metadata",
       "path": "README.md",
-      "sha256": "569c7babff91a0432e43805c43d6f1e9ac564bd07e3fb0155c4863ab2cf128d5",
-      "size": 11980
+      "sha256": "4fc88f66fbd6383a0f91389b79c657670ae22e6b44da963a9dfec59ce024a014",
+      "size": 12941
     },
     {
       "category": "repository_metadata",
@@ -189,7 +189,7 @@
     {
       "category": "tests",
       "path": "tests/collector/snapshots/collector_cli_contract.json",
-      "sha256": "a10b9658eb2f842d9d064df4f7110a52f1c13c70da65222d3cf27356f65a5712",
+      "sha256": "c4ed92535cb9fab84cc66021e3cd9f7001523e75a2a17685a8803f3c9ed450a8",
       "size": 6558
     },
     {
@@ -203,6 +203,12 @@
       "path": "tests/standalone/fixtures/cost.json",
       "sha256": "b9f89f50f043d8414b722f540bc47f58e18d4eabf23aeec260642afd8a6e03fa",
       "size": 498
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/fixtures/protection-producers.json",
+      "sha256": "f3dd9cd51090bcdbeb1aa98ddbf060325ef608a23fc2984d474c2ac8f9436215",
+      "size": 20655
     },
     {
       "category": "tests",
@@ -221,6 +227,18 @@
       "path": "tests/standalone/test_identity.py",
       "sha256": "ffa9a17f676cdb30a0aa3295b54e02554261ce5f370b06a509f9a5d21bbe0a82",
       "size": 8763
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_producers.py",
+      "sha256": "680b432dc4ca6597f3a867e8b41b0084018acb384f91b688a612974ab5290bf4",
+      "size": 13829
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_progress.py",
+      "sha256": "de80e535c82d99e6b9f34c9728941eb25108d414f484689802e83c44277bbdaa",
+      "size": 3546
     },
     {
       "category": "tests",
@@ -249,8 +267,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/build_native_collector.py",
-      "sha256": "70386ac6c1290ee948f9f8d49de2ecb3ead70db42a0242683f6eb2f2e42ddfa3",
-      "size": 31424
+      "sha256": "02ec80382f01208e0beeafaa24c60a65517dbbf9d1f95d29dfad38b279a4f032",
+      "size": 39007
     },
     {
       "category": "repository_metadata",
@@ -363,8 +381,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/package_native_collector.py",
-      "sha256": "fe7fc1b19b2f3771d813098c7bf59fae6983aeff0c12206cc207ed5b22cc8b33",
-      "size": 12913
+      "sha256": "2a26556eb7299a4e004e17caad05d9337f9004d8c0966392bb98d67fdcf17daa",
+      "size": 15996
     },
     {
       "category": "repository_metadata",
@@ -377,6 +395,42 @@
       "path": "tools/validate_collector_wheel.py",
       "sha256": "685d3d2ad8feeac2a2f8e6ad0041cd54de6836bc9846cd4a2562c7658fc1b7a7",
       "size": 60277
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/windows_installer/__init__.py",
+      "sha256": "da209406119f7387533b6bd319b9fc14cfae35c8034697d0dbd62cf497f9b8f7",
+      "size": 58
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/windows_installer/fixtures.py",
+      "sha256": "92c8c250b605b27ed1980597d0b714a915ebcc38ab7d7776bb5851d489d3c1df",
+      "size": 5249
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/windows_installer/identity.py",
+      "sha256": "f9317f6f70a9dce526672afd69ccd8cc1d582bc2e8643ea4e4345ff14f7789c6",
+      "size": 2765
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/windows_installer/metadata.py",
+      "sha256": "c0caced21be3323d743cda2c3e7b526c15335cfacd7631c35ebe7ef4fc4eaa3f",
+      "size": 7278
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/windows_installer/policy.json",
+      "sha256": "81919bd1378743208ad6b7dff537943ea507e17e6316dbacfa9e2cacfdb72af1",
+      "size": 98
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/windows_installer/smoke.py",
+      "sha256": "07b8b4ae5d49fe1a9f65c572c92b41dc38980b393c7de3013f87cfa807ad42d2",
+      "size": 775
     },
     {
       "category": "collector_source",
@@ -3385,6 +3439,12 @@
       "size": 240
     },
     {
+      "category": "collector_source",
+      "path": "unio_collector/collector/package/native/build_identity.py",
+      "sha256": "75f0f24661d9736ff904684252e536bcb9db8eb41c240a34bc16661fd00a954f",
+      "size": 2481
+    },
+    {
       "category": "repository_metadata",
       "path": "unio_collector/collector/package/native/inventory.py",
       "sha256": "0a5ac509106cb02939afc2653ecd8d50c7b6867ed7d233817a0ae13ad72ce356",
@@ -3615,8 +3675,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/collector_cli/command_parsers.py",
-      "sha256": "4881860687c47f3b6df18d9a85a3a65665667406b29a82de69e570dd724f51fb",
-      "size": 17287
+      "sha256": "a686ec1d4dbb6c3da4585cb1a7e80f168785be5c0ec0aae8ceea015aca8b067e",
+      "size": 17420
     },
     {
       "category": "collector_source",
@@ -3777,8 +3837,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/collector_cli/services/privacy.py",
-      "sha256": "7179d269fcb078f6d5f8cc1ee920b1cd731df40521db7979939bca3ffa254176",
-      "size": 14456
+      "sha256": "831234f574c86bb873d7292b77f5d56db3472b8c136757e9debbdbe388af943c",
+      "size": 14472
     },
     {
       "category": "collector_source",
@@ -3819,8 +3879,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/collector_cli/services/version.py",
-      "sha256": "380ed660bdd7f71c5c0289dea6c03f92fcf97eb9973b74a9fb594e01c6841fc7",
-      "size": 1795
+      "sha256": "928ea4fa46d114c0c0ec902be0e03dafc1ae7239928811ea8fb7ffa588b8526e",
+      "size": 2267
     },
     {
       "category": "collector_source",
@@ -3855,14 +3915,32 @@
     {
       "category": "collector_source",
       "path": "unio_collector/collector_launcher/app.py",
-      "sha256": "1c32d34ac4159366ca561888711ca16cacba8b8345eba64c76ae45a21fd28047",
-      "size": 23315
+      "sha256": "dee94858987e16c5a09920827dcf32de485c4d87b8122b82e58ccacc3d170d93",
+      "size": 24178
     },
     {
       "category": "collector_source",
       "path": "unio_collector/collector_launcher/controller.py",
-      "sha256": "9023a33f43dd18583e90b022a0c7e1186d79b01df5236d646e4608d9d3a31972",
-      "size": 12935
+      "sha256": "6a5050f17bbfb200f3f9586e4c7bdec28b8ac7a946536698599e00eb7875193a",
+      "size": 13766
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/collector_launcher/feedback.py",
+      "sha256": "f4d5e6ec4ddf3909cfa075aeb49bfad88fc43ba0dc83083fe4332e0c93c816ee",
+      "size": 3196
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/collector_launcher/progress.py",
+      "sha256": "8178454e556e8f74631852358a99d3b20bf590c3e09a5c2909e380618777dce3",
+      "size": 2564
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/collector_launcher/protection.py",
+      "sha256": "ccc7fb3e460caf9eed3f0b425fb8a84fa1ea11daad25da85e169261ce3234905",
+      "size": 3630
     },
     {
       "category": "collector_source",
@@ -3875,6 +3953,18 @@
       "path": "unio_collector/collector_launcher/selection.py",
       "sha256": "ed750ca5eee0030f8bbc7ab564efa7847df89cbcd769bdb2277dfadc05ecd171",
       "size": 642
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/collector_launcher/stage.py",
+      "sha256": "4aaba9b2965c0acb477e7642bd97e0959264c03ee48829be74af196d73e19a0b",
+      "size": 336
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/collector_launcher/task.py",
+      "sha256": "0c3a486d91db4bcef24c0e888e8da4f997fc919b490d6404f80ec1b61c238401",
+      "size": 1748
     },
     {
       "category": "collector_source",
@@ -4629,8 +4719,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/bundle.py",
-      "sha256": "37b8c6e85112a320f532e9fe703f2628f52c8abfa2bd7a14203501e4845596da",
-      "size": 23550
+      "sha256": "efc23eea3144a2aa01e7f8f7396e235481fe168d72054b13523b78e8666ccd96",
+      "size": 24541
     },
     {
       "category": "collector_source",
@@ -4761,8 +4851,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/patterns.py",
-      "sha256": "adc4f47f1253359e53907f3abd1e05131d38d9b46059d7babf49f01607c93873",
-      "size": 746
+      "sha256": "b4ed0f0ed3805daf5c0704dfaf1dd87cc7f07b2962cd14867511a8428828bfe1",
+      "size": 964
     },
     {
       "category": "collector_source",
@@ -4796,6 +4886,12 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/privacy/producer_fields.py",
+      "sha256": "0ec4f18b81eea169b4579b25f4514eeb32bc2e79317d47b7b602d1e6edf5904f",
+      "size": 9743
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/privacy/profiles.py",
       "sha256": "5bb0f544e57f80f92ddf08dcc9b388b5c52f3c7506d0462cca86a5f6d6167d00",
       "size": 2310
@@ -4817,6 +4913,12 @@
       "path": "unio_collector/privacy/protection_state.py",
       "sha256": "b113d13fc16d2a5ed5075fd55f61164d229b0b93af6d5c26eb24442357f806e9",
       "size": 1522
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/provenance_fields.py",
+      "sha256": "96e0fe281b9d6a32e06de550c61452e4d7419a86ad1dd2e0067286b6f2d8386b",
+      "size": 4657
     },
     {
       "category": "collector_source",
@@ -4845,8 +4947,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/registry.py",
-      "sha256": "fb94cd5412eedbb73314e85e27f2e2026060d5f89c70d8c8bf65b6e134e8966d",
-      "size": 16762
+      "sha256": "d12bb891a3577e1339ce9fb68a6c7bb637bc1d9ed2267c80d3a51ef286312ac6",
+      "size": 16855
     },
     {
       "category": "collector_source",
@@ -4857,8 +4959,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/resolver.py",
-      "sha256": "322ddb20d39bf264e0f491b3b41911caca069ef2fb095d22ff1170e778af4b47",
-      "size": 7260
+      "sha256": "2d43c3f7f429370ce2bcac00233ef39eac48567be979eab57d4a5d5b31c70d8f",
+      "size": 8362
     },
     {
       "category": "collector_source",
@@ -4881,8 +4983,14 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/rules.py",
-      "sha256": "1856ea815e9971fd22bac2616257170da7441da176c18e57c95729dd188bf63b",
-      "size": 2683
+      "sha256": "dc5180739f739e8b0e7aa458ce953b59b78719afdbdaa626840f0fbcc22fa466",
+      "size": 2757
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/runtime_fields.py",
+      "sha256": "a9966183a428e91e83b1f40a352317bc871daa59dc5397093517b0d592ab5dac",
+      "size": 6387
     },
     {
       "category": "collector_source",
@@ -4911,8 +5019,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/strict_verifier.py",
-      "sha256": "d667081f101f67bacf5becdef72b164703649f9a3f9e92be6e87c7f61120ef82",
-      "size": 3431
+      "sha256": "1836a3b5d0b160e795f6004409fcea92cb6dbe192781ac889bbf918d57cfb15d",
+      "size": 4117
     },
     {
       "category": "collector_source",
@@ -4971,8 +5079,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/transform.py",
-      "sha256": "34782895a2a1ea981746bfa78569153b529e670750fa7cf6cdbc53dfa5eb9837",
-      "size": 19474
+      "sha256": "5db710d920ab62b14e06aca6a267133e7fd7998537590c551db18f4636d4436a",
+      "size": 19904
     },
     {
       "category": "collector_source",
@@ -9818,5 +9926,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "e0b9b27f6b6e69b9c02bc30ca7de3b8dce09f33de0f2d98dabcf7bb228085d2b"
+  "tree_digest": "48fbba755d6b391f8ff16be8b635c06a4b12c24ca0c1ba5445c18860c13521d3"
 }
