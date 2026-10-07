@@ -164,9 +164,9 @@
       "argv": [
         "version"
       ],
-      "help_sha256": "47e9c0dd01db0689a5d1c797bc2487aa869200de5ad3c6759e3656e4cd33148b",
+      "help_sha256": "f148623b9fcc262266f7413182e260deb7b38f53f90a5a72c645ffec52e50189",
       "id": "version",
-      "parser_actions_sha256": "c94a07998777c639ce5cec36f391e6f8b0651afd57383d67733f04bdb97b0bf1"
+      "parser_actions_sha256": "5906f28f91e4bf0366281d76df17262c175cc6cf5ef4e6f07aeb031d208eedc0"
     },
     {
       "argv": [
