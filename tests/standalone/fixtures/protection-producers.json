@@ -1,0 +1,2419 @@
+{
+  "scan_period": {
+    "kind": "days",
+    "raw_input": {
+      "days": 14
+    },
+    "current_start_date": "2026-08-02",
+    "current_end_date": "2026-08-15",
+    "previous_start_date": "2026-07-19",
+    "previous_end_date": "2026-08-01",
+    "duration_days": 14,
+    "selected_duration": "14 days"
+  },
+  "pricing_replay": {
+    "status": "loaded",
+    "context_file": "scan-result/pricing-context.json",
+    "context_serialized": true,
+    "financial_parity_candidate": true
+  },
+  "collection_log": {
+    "eventVersion": "unio-1",
+    "userIdentity": {
+      "type": "AssumedRole",
+      "Account": "123456789012",
+      "UserId": "synthetic-principal"
+    },
+    "eventTime": "2026-08-15T12:34:56+00:00",
+    "eventSource": "ec2.amazonaws.com",
+    "eventName": "DescribeInstances",
+    "awsRegion": "eu-west-1",
+    "sourceIPAddress": "local",
+    "userAgent": "unio/0.1.7",
+    "requestParameters": {
+      "synthetic_unexported_parameter": "never-export-this"
+    },
+    "responseElements": {
+      "_omitted": true,
+      "awsRequestId": "synthetic-request"
+    },
+    "readOnly": true,
+    "eventType": "AwsApiCall",
+    "managementEvent": true,
+    "recipientAccountId": "123456789012",
+    "eventID": "01234567-89ab-cdef-0123-456789abcdef",
+    "errorCode": null,
+    "errorMessage": null,
+    "unio": {
+      "scanner_id": "root_advisory",
+      "collector": "synthetic",
+      "operation_declared_in_registry": true,
+      "destructive": false,
+      "write_operation": false,
+      "operation_safety_status": "read_only",
+      "credential_material_returned": false,
+      "local_only_audit_record": true,
+      "declared_api_call": "ec2:DescribeInstances",
+      "authoritative_cloudtrail": false,
+      "aws_cassette_replay": false,
+      "expected_absence": false,
+      "permission_denied": false,
+      "service_unavailable": false,
+      "error_category": "none",
+      "error_reason": "synthetic service outcome for account 123456789012",
+      "service_availability_status": "available",
+      "attempt_id": "synthetic-attempt-01234567",
+      "scanner_call_classification": "not_tracked",
+      "completed_after_attempt_end": false,
+      "attempt_outcome_reason": "synthetic attempt for account 123456789012"
+    }
+  },
+  "pricing_context": {
+    "schema_version": "2026-01",
+    "status": "loaded",
+    "provider": "synthetic",
+    "rates": [
+      {
+        "rate_type": "ebs_snapshot_gb_month",
+        "region": "eu-west-1",
+        "resource_variant": null,
+        "amount": "0.05",
+        "currency": "USD",
+        "unit": "GB-Mo",
+        "source": "synthetic"
+      },
+      {
+        "rate_type": "ebs_volume_gb_month",
+        "region": "eu-west-1",
+        "resource_variant": "gp3",
+        "amount": "0.08",
+        "currency": "USD",
+        "unit": "GB-Mo",
+        "source": "synthetic"
+      }
+    ],
+    "usage_records": [
+      {
+        "date": "2026-08-15",
+        "service_name": "Amazon Elastic Compute Cloud - Compute",
+        "region": "eu-west-1",
+        "usage_type": "EUW1-TimedStorage-ByteHrs",
+        "cost": "12.50",
+        "currency": "USD"
+      }
+    ],
+    "errors": [],
+    "warnings": [],
+    "limitations": [],
+    "api_call_count": 0,
+    "started_api_call_count": 0,
+    "reserved_api_call_count": 0,
+    "completed_api_call_count": 0,
+    "failed_api_call_count": 0,
+    "unfinished_api_call_count": 0,
+    "cache_hit_count": 0,
+    "cache_miss_count": 0,
+    "lookup_request_count": 0,
+    "scheduled_lookup_request_count": 0,
+    "omitted_lookup_request_count": 0,
+    "completed_lookup_request_count": 0,
+    "stopped_lookup_request_count": 0,
+    "observed_pages_per_lookup": null,
+    "max_api_calls": null,
+    "timeout_seconds": null,
+    "api_call_timeout_seconds": null,
+    "worker_count": null,
+    "stop_reason": null,
+    "budget_estimate": {},
+    "lookup_diagnostics": [],
+    "lookup_plan_summary": {}
+  },
+  "api_runtime_summary": {
+    "disabled": {
+      "enabled": false,
+      "records": [],
+      "totals": {
+        "failure_count": 0,
+        "handled_absence_count": 0,
+        "late_failure_count": 0,
+        "late_handled_absence_count": 0,
+        "late_metric_datapoint_count": 0,
+        "late_page_count": 0,
+        "late_permission_denied_count": 0,
+        "late_request_count": 0,
+        "late_resource_count": 0,
+        "late_result_count": 0,
+        "late_service_unavailable_count": 0,
+        "late_success_count": 0,
+        "late_throttle_count": 0,
+        "metric_datapoint_count": 0,
+        "page_count": 0,
+        "permission_denied_count": 0,
+        "rate_limit_wait_count": 0,
+        "rate_limit_wait_total_ms": 0,
+        "replayed_count": 0,
+        "request_count": 0,
+        "resource_count": 0,
+        "result_count": 0,
+        "service_unavailable_count": 0,
+        "success_count": 0,
+        "throttle_count": 0
+      }
+    },
+    "empty": {
+      "enabled": true,
+      "records": [],
+      "totals": {
+        "failure_count": 0,
+        "handled_absence_count": 0,
+        "late_failure_count": 0,
+        "late_handled_absence_count": 0,
+        "late_metric_datapoint_count": 0,
+        "late_page_count": 0,
+        "late_permission_denied_count": 0,
+        "late_request_count": 0,
+        "late_resource_count": 0,
+        "late_result_count": 0,
+        "late_service_unavailable_count": 0,
+        "late_success_count": 0,
+        "late_throttle_count": 0,
+        "metric_datapoint_count": 0,
+        "page_count": 0,
+        "permission_denied_count": 0,
+        "rate_limit_wait_count": 0,
+        "rate_limit_wait_total_ms": 0,
+        "replayed_count": 0,
+        "request_count": 0,
+        "resource_count": 0,
+        "result_count": 0,
+        "service_unavailable_count": 0,
+        "success_count": 0,
+        "throttle_count": 0
+      }
+    },
+    "populated": {
+      "enabled": true,
+      "records": [
+        {
+          "account_id": "123456789012",
+          "attempt_id": "synthetic-attempt-01234567",
+          "error_category_counts": {
+            "synthetic-category": 4
+          },
+          "error_code_counts": {
+            "SyntheticError-123456789012": 4
+          },
+          "expected_absence_reason_counts": {
+            "synthetic-reason-123456789012": 4
+          },
+          "failure_count": 0,
+          "handled_absence_count": 1,
+          "late_failure_count": 1,
+          "late_handled_absence_count": 2,
+          "late_metric_datapoint_count": 10,
+          "late_page_count": 4,
+          "late_permission_denied_count": 2,
+          "late_request_count": 2,
+          "late_resource_count": 8,
+          "late_result_count": 6,
+          "late_service_unavailable_count": 2,
+          "late_success_count": 1,
+          "late_throttle_count": 2,
+          "latency_avg_ms": 25.5,
+          "latency_max_ms": 25.5,
+          "latency_min_ms": 25.5,
+          "metric_datapoint_count": 10,
+          "operation": "DescribeInstances",
+          "page_count": 4,
+          "permission_denied_count": 2,
+          "rate_limit_wait_avg_ms": 7.5,
+          "rate_limit_wait_count": 4,
+          "rate_limit_wait_max_ms": 7.5,
+          "rate_limit_wait_total_ms": 30.0,
+          "region": "us-east-1",
+          "replayed_count": 4,
+          "request_count": 4,
+          "resource_count": 8,
+          "result_count": 6,
+          "scanner_id": "synthetic-scanner",
+          "service": "ec2",
+          "service_availability_status_counts": {
+            "unavailable": 4
+          },
+          "service_unavailable_count": 2,
+          "success_count": 1,
+          "throttle_count": 2
+        },
+        {
+          "account_id": "unknown-account",
+          "attempt_id": null,
+          "error_category_counts": {},
+          "error_code_counts": {},
+          "expected_absence_reason_counts": {},
+          "failure_count": 0,
+          "handled_absence_count": 0,
+          "late_failure_count": 0,
+          "late_handled_absence_count": 0,
+          "late_metric_datapoint_count": 0,
+          "late_page_count": 0,
+          "late_permission_denied_count": 0,
+          "late_request_count": 0,
+          "late_resource_count": 0,
+          "late_result_count": 0,
+          "late_service_unavailable_count": 0,
+          "late_success_count": 0,
+          "late_throttle_count": 0,
+          "latency_avg_ms": 0.0,
+          "latency_max_ms": 0.0,
+          "latency_min_ms": 0.0,
+          "metric_datapoint_count": 0,
+          "operation": "DescribeInstances",
+          "page_count": 1,
+          "permission_denied_count": 0,
+          "rate_limit_wait_avg_ms": 0.0,
+          "rate_limit_wait_count": 0,
+          "rate_limit_wait_max_ms": 0.0,
+          "rate_limit_wait_total_ms": 0.0,
+          "region": "aws-global",
+          "replayed_count": 0,
+          "request_count": 1,
+          "resource_count": 0,
+          "result_count": 0,
+          "scanner_id": "synthetic-scanner",
+          "service": "ec2",
+          "service_availability_status_counts": {},
+          "service_unavailable_count": 0,
+          "success_count": 1,
+          "throttle_count": 0
+        }
+      ],
+      "totals": {
+        "failure_count": 0,
+        "handled_absence_count": 1,
+        "late_failure_count": 1,
+        "late_handled_absence_count": 2,
+        "late_metric_datapoint_count": 10,
+        "late_page_count": 4,
+        "late_permission_denied_count": 2,
+        "late_request_count": 2,
+        "late_resource_count": 8,
+        "late_result_count": 6,
+        "late_service_unavailable_count": 2,
+        "late_success_count": 1,
+        "late_throttle_count": 2,
+        "metric_datapoint_count": 10,
+        "page_count": 5,
+        "permission_denied_count": 2,
+        "rate_limit_wait_count": 4,
+        "rate_limit_wait_total_ms": 30.0,
+        "replayed_count": 4,
+        "request_count": 5,
+        "resource_count": 8,
+        "result_count": 6,
+        "service_unavailable_count": 2,
+        "success_count": 2,
+        "throttle_count": 2
+      }
+    }
+  },
+  "collection_runtime_summary": {
+    "task_count": 5,
+    "failed_task_count": 4,
+    "result_count": 15,
+    "resource_count": 20,
+    "metric_datapoint_count": 25,
+    "page_count": 10,
+    "cumulative_task_duration_ms": 125,
+    "average_task_duration_ms": 25,
+    "duration_note": "Collection task durations are cumulative across concurrent worker tasks; compare scan wall-clock runtime using workflow-timing.json total_duration_ms.",
+    "slowest_tasks": [
+      {
+        "name": "synthetic-task-01234567",
+        "scanner_id": "synthetic-scanner",
+        "collector_id": "synthetic-collector",
+        "account_id": null,
+        "region": null,
+        "service": "ec2",
+        "operation": "DescribeInstances",
+        "status": "completed",
+        "duration_ms": 25,
+        "result_count": 3,
+        "resource_count": 4,
+        "metric_datapoint_count": 5,
+        "page_count": 2,
+        "error_code": null,
+        "error_message": null
+      },
+      {
+        "name": "synthetic-task-01234567",
+        "scanner_id": "synthetic-scanner",
+        "collector_id": "synthetic-collector",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "service": "ec2",
+        "operation": "DescribeInstances",
+        "status": "failed",
+        "duration_ms": 25,
+        "result_count": 3,
+        "resource_count": 4,
+        "metric_datapoint_count": 5,
+        "page_count": 2,
+        "error_code": "SyntheticError-123456789012",
+        "error_message": "synthetic account 123456789012"
+      },
+      {
+        "name": "synthetic-task-01234567",
+        "scanner_id": "synthetic-scanner",
+        "collector_id": "synthetic-collector",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "service": "ec2",
+        "operation": "DescribeInstances",
+        "status": "permission_denied",
+        "duration_ms": 25,
+        "result_count": 3,
+        "resource_count": 4,
+        "metric_datapoint_count": 5,
+        "page_count": 2,
+        "error_code": "SyntheticError-123456789012",
+        "error_message": "synthetic account 123456789012"
+      },
+      {
+        "name": "synthetic-task-01234567",
+        "scanner_id": "synthetic-scanner",
+        "collector_id": "synthetic-collector",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "service": "ec2",
+        "operation": "DescribeInstances",
+        "status": "throttled",
+        "duration_ms": 25,
+        "result_count": 3,
+        "resource_count": 4,
+        "metric_datapoint_count": 5,
+        "page_count": 2,
+        "error_code": "SyntheticError-123456789012",
+        "error_message": "synthetic account 123456789012"
+      },
+      {
+        "name": "synthetic-task-01234567",
+        "scanner_id": "synthetic-scanner",
+        "collector_id": "synthetic-collector",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "service": "ec2",
+        "operation": "DescribeInstances",
+        "status": "unsupported_region",
+        "duration_ms": 25,
+        "result_count": 3,
+        "resource_count": 4,
+        "metric_datapoint_count": 5,
+        "page_count": 2,
+        "error_code": "SyntheticError-123456789012",
+        "error_message": "synthetic account 123456789012"
+      }
+    ],
+    "by_scanner": {
+      "synthetic-scanner": {
+        "task_count": 5,
+        "completed_count": 1,
+        "failed_count": 4,
+        "status_counts": {
+          "completed": 1,
+          "failed": 1,
+          "permission_denied": 1,
+          "throttled": 1,
+          "unsupported_region": 1
+        },
+        "services": {
+          "ec2": 5
+        },
+        "regions": {
+          "aws-global": 1,
+          "us-east-1": 4
+        },
+        "result_count": 15,
+        "resource_count": 20,
+        "metric_datapoint_count": 25,
+        "page_count": 10,
+        "cumulative_task_duration_ms": 125,
+        "max_task_duration_ms": 25,
+        "average_task_duration_ms": 25
+      }
+    },
+    "by_operation": {
+      "synthetic-scanner|unknown-account|aws-global|ec2|DescribeInstances": {
+        "scanner_id": "synthetic-scanner",
+        "account_id": "unknown-account",
+        "region": "aws-global",
+        "service": "ec2",
+        "operation": "DescribeInstances",
+        "task_count": 1,
+        "completed_count": 1,
+        "failed_count": 0,
+        "status_counts": {
+          "completed": 1
+        },
+        "error_code_counts": {},
+        "result_count": 3,
+        "resource_count": 4,
+        "metric_datapoint_count": 5,
+        "page_count": 2,
+        "cumulative_task_duration_ms": 25,
+        "max_task_duration_ms": 25,
+        "average_task_duration_ms": 25
+      },
+      "synthetic-scanner|123456789012|us-east-1|ec2|DescribeInstances": {
+        "scanner_id": "synthetic-scanner",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "service": "ec2",
+        "operation": "DescribeInstances",
+        "task_count": 4,
+        "completed_count": 0,
+        "failed_count": 4,
+        "status_counts": {
+          "failed": 1,
+          "permission_denied": 1,
+          "throttled": 1,
+          "unsupported_region": 1
+        },
+        "error_code_counts": {
+          "SyntheticError-123456789012": 4
+        },
+        "result_count": 12,
+        "resource_count": 16,
+        "metric_datapoint_count": 20,
+        "page_count": 8,
+        "cumulative_task_duration_ms": 100,
+        "max_task_duration_ms": 25,
+        "average_task_duration_ms": 25
+      }
+    },
+    "by_throttle_domain": {
+      "unknown-account|aws-global|ec2": {
+        "account_id": "unknown-account",
+        "region": "aws-global",
+        "service": "ec2",
+        "task_count": 1,
+        "completed_count": 1,
+        "failed_count": 0,
+        "status_counts": {
+          "completed": 1
+        },
+        "error_code_counts": {},
+        "result_count": 3,
+        "resource_count": 4,
+        "metric_datapoint_count": 5,
+        "page_count": 2,
+        "cumulative_task_duration_ms": 25,
+        "max_task_duration_ms": 25,
+        "average_task_duration_ms": 25
+      },
+      "123456789012|us-east-1|ec2": {
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "service": "ec2",
+        "task_count": 4,
+        "completed_count": 0,
+        "failed_count": 4,
+        "status_counts": {
+          "failed": 1,
+          "permission_denied": 1,
+          "throttled": 1,
+          "unsupported_region": 1
+        },
+        "error_code_counts": {
+          "SyntheticError-123456789012": 4
+        },
+        "result_count": 12,
+        "resource_count": 16,
+        "metric_datapoint_count": 20,
+        "page_count": 8,
+        "cumulative_task_duration_ms": 100,
+        "max_task_duration_ms": 25,
+        "average_task_duration_ms": 25
+      }
+    },
+    "contains_client_result_data": false
+  },
+  "empty_collection_runtime_summary": {
+    "task_count": 0,
+    "failed_task_count": 0,
+    "result_count": 0,
+    "resource_count": 0,
+    "metric_datapoint_count": 0,
+    "page_count": 0,
+    "cumulative_task_duration_ms": 0,
+    "average_task_duration_ms": 0,
+    "duration_note": "Collection task durations are cumulative across concurrent worker tasks; compare scan wall-clock runtime using workflow-timing.json total_duration_ms.",
+    "slowest_tasks": [],
+    "by_scanner": {},
+    "by_operation": {},
+    "by_throttle_domain": {},
+    "contains_client_result_data": false
+  },
+  "product_execution": {
+    "definition_version": "1",
+    "out_of_product_overrides": [],
+    "period_policy": {
+      "default_duration_days": 14,
+      "maximum_duration_days": 366,
+      "policy_id": "moneta-period-v1"
+    },
+    "primary_report_order": [
+      "business",
+      "action-plan",
+      "aws-native-recommendations",
+      "technical"
+    ],
+    "product_id": "moneta",
+    "registry_version": "1",
+    "report_label": "synthetic label for 123456789012",
+    "report_set_id": "aws-product-report-set-v1",
+    "selection_source": "synthetic-selection"
+  },
+  "billing_region_coverage": {
+    "status": "available",
+    "selected_regions": [
+      "us-west-2"
+    ],
+    "explicit_region_scope": true,
+    "materiality_threshold": "0.01",
+    "billing_active_regions": [
+      "us-east-1"
+    ],
+    "billing_active_regions_outside_scan": [
+      "us-east-1"
+    ],
+    "material_billing_active_regions": [
+      "us-east-1"
+    ],
+    "residual_billing_active_regions": [],
+    "material_billing_active_regions_outside_scan": [
+      "us-east-1"
+    ],
+    "residual_billing_active_regions_outside_scan": [],
+    "outside_scan_count": 1,
+    "material_outside_scan_count": 1,
+    "residual_outside_scan_count": 0,
+    "billing_region_count": 1,
+    "billing_global_or_unallocated_cost": "0",
+    "currency": "USD",
+    "current_period": {
+      "start_date": "2026-08-01",
+      "end_date": "2026-08-31"
+    },
+    "region_costs": [
+      {
+        "region": "us-east-1",
+        "current_cost": "12",
+        "currency": "USD",
+        "selected_for_scan": false,
+        "material": true,
+        "outside_selected_scan_scope": true
+      }
+    ],
+    "material_warning_required": true,
+    "residual_notice_required": false,
+    "notice_required": true,
+    "notice_severity": "warning",
+    "limitations": [],
+    "unrecognized_billing_region_values": []
+  },
+  "stable_limitation_details": [
+    {
+      "account_id": "123456789012",
+      "affected_fields": [
+        "synthetic-field"
+      ],
+      "api_action": "ec2:DescribeInstances",
+      "category": "permission_denied",
+      "client_explanation": "",
+      "collection_continued": null,
+      "confidence_effect": "",
+      "evidence_categories": [
+        "synthetic-category"
+      ],
+      "evidence_interpretation": "",
+      "iam_action_requirement": "",
+      "outcome": "",
+      "record_id": "synthetic-record",
+      "region": "us-east-1",
+      "related_findings_may_be_incomplete": null,
+      "remediation_permission": "",
+      "requested_account_id": "123456789012",
+      "requested_region": "us-east-1",
+      "requirement_type": "",
+      "resource_id": "synthetic-resource",
+      "resource_type": "",
+      "safe_scope": "",
+      "scanner_continued": null,
+      "scanner_id": "",
+      "service": "ec2"
+    }
+  ],
+  "billing_region_scope_derivation": {
+    "enabled": false,
+    "status": "not_requested",
+    "requested_regions": [
+      "us-east-1"
+    ],
+    "billing_active_regions": [],
+    "normalized_candidate_regions": [],
+    "derived_material_regions": [],
+    "residual_regions": [],
+    "unrecognized_billing_region_values": [],
+    "final_regions": [
+      "us-east-1"
+    ]
+  },
+  "collection_summary_shapes": {
+    "success": {
+      "generated_at": "2026-08-31T00:00:00+00:00",
+      "scanner_count": 1,
+      "finding_count": 0,
+      "evidence_count": 0,
+      "api_call_count": 0,
+      "api_runtime_summary": {},
+      "collection_runtime_summary": {},
+      "scanner_analysis_boundary_summary": {},
+      "strict_analysis_readiness": {},
+      "minimisation": {
+        "enabled": true,
+        "mode": "standard",
+        "redact_before_export": true,
+        "excluded_services": [
+          "s3"
+        ],
+        "no_cost_data": true
+      },
+      "limitations": [
+        {
+          "type": "service_excluded",
+          "service": "s3",
+          "reason": "Service evidence was excluded by collector option: s3."
+        },
+        {
+          "type": "cost_data_excluded",
+          "service": "cost-explorer",
+          "reason": "Cost data was excluded by collector option --no-cost-data."
+        },
+        {
+          "type": "redacted_before_export",
+          "service": "all",
+          "reason": "Evidence was redacted before export; raw identifiers may be unavailable."
+        },
+        {
+          "type": "minimised_export",
+          "service": "all",
+          "reason": "Collector minimisation mode was standard."
+        },
+        {
+          "type": "region_scope",
+          "service": "all",
+          "permission": "region-scope",
+          "reason": "Synthetic region exclusion for 123456789012"
+        }
+      ],
+      "collection_status": "complete",
+      "permission_degradation_record_count": 0,
+      "limitation_count": 0,
+      "limitation_counts": {},
+      "stable_limitation_counts": {},
+      "stable_limitation_details": [],
+      "secondary_classification_counts": {},
+      "region_scope": {
+        "limitations": [
+          "Synthetic region exclusion for 123456789012"
+        ]
+      },
+      "billing_region_coverage": {
+        "status": "available",
+        "selected_regions": [
+          "us-west-2"
+        ],
+        "explicit_region_scope": true,
+        "materiality_threshold": "0.01",
+        "billing_active_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "material_billing_active_regions": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions": [],
+        "material_billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions_outside_scan": [],
+        "outside_scan_count": 1,
+        "material_outside_scan_count": 1,
+        "residual_outside_scan_count": 0,
+        "billing_region_count": 1,
+        "billing_global_or_unallocated_cost": "0",
+        "currency": "USD",
+        "current_period": {
+          "start_date": "2026-08-01",
+          "end_date": "2026-08-31"
+        },
+        "region_costs": [
+          {
+            "region": "us-east-1",
+            "current_cost": "12",
+            "currency": "USD",
+            "selected_for_scan": false,
+            "material": true,
+            "outside_selected_scan_scope": true
+          }
+        ],
+        "material_warning_required": true,
+        "residual_notice_required": false,
+        "notice_required": true,
+        "notice_severity": "warning",
+        "limitations": [],
+        "unrecognized_billing_region_values": [],
+        "region_scope_derivation": {
+          "enabled": false,
+          "status": "not_requested",
+          "requested_regions": [
+            "us-east-1"
+          ],
+          "billing_active_regions": [],
+          "normalized_candidate_regions": [],
+          "derived_material_regions": [],
+          "residual_regions": [],
+          "unrecognized_billing_region_values": [],
+          "final_regions": [
+            "us-east-1"
+          ]
+        }
+      },
+      "billing_region_scope_derivation": {
+        "enabled": false,
+        "status": "not_requested",
+        "requested_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions": [],
+        "normalized_candidate_regions": [],
+        "derived_material_regions": [],
+        "residual_regions": [],
+        "unrecognized_billing_region_values": [],
+        "final_regions": [
+          "us-east-1"
+        ]
+      }
+    },
+    "populated": {
+      "generated_at": "2026-08-31T00:00:00+00:00",
+      "scanner_count": 1,
+      "finding_count": 0,
+      "evidence_count": 0,
+      "api_call_count": 0,
+      "api_runtime_summary": {},
+      "collection_runtime_summary": {},
+      "scanner_analysis_boundary_summary": {},
+      "strict_analysis_readiness": {},
+      "minimisation": {
+        "enabled": true,
+        "mode": "standard",
+        "redact_before_export": true,
+        "excluded_services": [
+          "s3"
+        ],
+        "no_cost_data": true
+      },
+      "limitations": [
+        {
+          "type": "service_excluded",
+          "service": "s3",
+          "reason": "Service evidence was excluded by collector option: s3."
+        },
+        {
+          "type": "cost_data_excluded",
+          "service": "cost-explorer",
+          "reason": "Cost data was excluded by collector option --no-cost-data."
+        },
+        {
+          "type": "redacted_before_export",
+          "service": "all",
+          "reason": "Evidence was redacted before export; raw identifiers may be unavailable."
+        },
+        {
+          "type": "minimised_export",
+          "service": "all",
+          "reason": "Collector minimisation mode was standard."
+        },
+        {
+          "type": "region_scope",
+          "service": "all",
+          "permission": "region-scope",
+          "reason": "Synthetic region exclusion for 123456789012"
+        }
+      ],
+      "collection_status": "degraded",
+      "permission_degradation_record_count": 22,
+      "limitation_count": 21,
+      "limitation_counts": {
+        "chargeable_api_disabled": 2,
+        "permission_denied": 4,
+        "endpoint_unavailable": 2,
+        "expected_absence": 2,
+        "inferred": 2,
+        "scanner_failed": 1,
+        "unknown": 2,
+        "partial": 2,
+        "service_not_enabled": 1,
+        "stale": 1,
+        "unsupported_operation": 1,
+        "unsupported_region": 1
+      },
+      "stable_limitation_counts": {
+        "evidence_unavailable": 6,
+        "optional_enrichment_permission_denied": 3,
+        "scanner_execution_degraded": 7,
+        "evidence_unsupported": 2,
+        "required_permission_denied": 1
+      },
+      "stable_limitation_details": [
+        {
+          "category": "evidence_unavailable",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "chargeable_disabled",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "evidence_unavailable",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "dependency_unavailable",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "evidence_unavailable",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "not_exercised",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "evidence_unavailable",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "service_unavailable",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "evidence_unavailable",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "chargeable_disabled",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "evidence_unavailable",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "dependency_unavailable",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "evidence_unsupported",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "unsupported_operation",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "evidence_unsupported",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "unsupported_region",
+          "iam_action_requirement": "conditional",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "optional_enrichment_permission_denied",
+          "record_id": "",
+          "scanner_id": "",
+          "service": "",
+          "api_action": "",
+          "account_id": "",
+          "region": "",
+          "outcome": "denied",
+          "iam_action_requirement": "conditional",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": ""
+        },
+        {
+          "category": "optional_enrichment_permission_denied",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "denied",
+          "iam_action_requirement": "conditional",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "optional_enrichment_permission_denied",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "denied",
+          "iam_action_requirement": "conditional",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "required_permission_denied",
+          "record_id": "",
+          "scanner_id": "",
+          "service": "",
+          "api_action": "",
+          "account_id": "",
+          "region": "",
+          "outcome": "denied",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": ""
+        },
+        {
+          "category": "scanner_execution_degraded",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "inferred",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "scanner_execution_degraded",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "interrupted",
+          "iam_action_requirement": "conditional",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "scanner_execution_degraded",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "partial",
+          "iam_action_requirement": "conditional",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "scanner_execution_degraded",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "stale",
+          "iam_action_requirement": "conditional",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "scanner_execution_degraded",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "throttled",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "scanner_execution_degraded",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "unknown",
+          "iam_action_requirement": "conditional",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "scanner_execution_degraded",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "inferred",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        }
+      ],
+      "secondary_classification_counts": {
+        "expected_absence": 1,
+        "service_unavailable": 1,
+        "permission_denied": 3,
+        "throttling": 1,
+        "unsupported_operation": 1,
+        "unsupported_region": 1,
+        "failure": 1,
+        "access_denied_policy_source_unknown": 1,
+        "chargeable_api_disabled": 1,
+        "interrupted": 1,
+        "partial_collection": 1,
+        "unknown": 1,
+        "legacy_limitation": 1,
+        "completed": 1,
+        "completed_with_warnings": 1,
+        "disabled": 1,
+        "failed": 1,
+        "skipped": 1,
+        "unavailable": 1
+      },
+      "region_scope": {
+        "limitations": [
+          "Synthetic region exclusion for 123456789012"
+        ]
+      },
+      "billing_region_coverage": {
+        "status": "available",
+        "selected_regions": [
+          "us-west-2"
+        ],
+        "explicit_region_scope": true,
+        "materiality_threshold": "0.01",
+        "billing_active_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "material_billing_active_regions": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions": [],
+        "material_billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions_outside_scan": [],
+        "outside_scan_count": 1,
+        "material_outside_scan_count": 1,
+        "residual_outside_scan_count": 0,
+        "billing_region_count": 1,
+        "billing_global_or_unallocated_cost": "0",
+        "currency": "USD",
+        "current_period": {
+          "start_date": "2026-08-01",
+          "end_date": "2026-08-31"
+        },
+        "region_costs": [
+          {
+            "region": "us-east-1",
+            "current_cost": "12",
+            "currency": "USD",
+            "selected_for_scan": false,
+            "material": true,
+            "outside_selected_scan_scope": true
+          }
+        ],
+        "material_warning_required": true,
+        "residual_notice_required": false,
+        "notice_required": true,
+        "notice_severity": "warning",
+        "limitations": [],
+        "unrecognized_billing_region_values": [],
+        "region_scope_derivation": {
+          "enabled": false,
+          "status": "not_requested",
+          "requested_regions": [
+            "us-east-1"
+          ],
+          "billing_active_regions": [],
+          "normalized_candidate_regions": [],
+          "derived_material_regions": [],
+          "residual_regions": [],
+          "unrecognized_billing_region_values": [],
+          "final_regions": [
+            "us-east-1"
+          ]
+        }
+      },
+      "billing_region_scope_derivation": {
+        "enabled": false,
+        "status": "not_requested",
+        "requested_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions": [],
+        "normalized_candidate_regions": [],
+        "derived_material_regions": [],
+        "residual_regions": [],
+        "unrecognized_billing_region_values": [],
+        "final_regions": [
+          "us-east-1"
+        ]
+      }
+    },
+    "denied": {
+      "generated_at": "2026-08-31T00:00:00+00:00",
+      "scanner_count": 1,
+      "finding_count": 0,
+      "evidence_count": 0,
+      "api_call_count": 0,
+      "api_runtime_summary": {},
+      "collection_runtime_summary": {},
+      "scanner_analysis_boundary_summary": {},
+      "strict_analysis_readiness": {},
+      "minimisation": {
+        "enabled": true,
+        "mode": "standard",
+        "redact_before_export": true,
+        "excluded_services": [
+          "s3"
+        ],
+        "no_cost_data": true
+      },
+      "limitations": [
+        {
+          "type": "service_excluded",
+          "service": "s3",
+          "reason": "Service evidence was excluded by collector option: s3."
+        },
+        {
+          "type": "cost_data_excluded",
+          "service": "cost-explorer",
+          "reason": "Cost data was excluded by collector option --no-cost-data."
+        },
+        {
+          "type": "redacted_before_export",
+          "service": "all",
+          "reason": "Evidence was redacted before export; raw identifiers may be unavailable."
+        },
+        {
+          "type": "minimised_export",
+          "service": "all",
+          "reason": "Collector minimisation mode was standard."
+        },
+        {
+          "type": "region_scope",
+          "service": "all",
+          "permission": "region-scope",
+          "reason": "Synthetic region exclusion for 123456789012"
+        }
+      ],
+      "collection_status": "failed",
+      "permission_degradation_record_count": 4,
+      "limitation_count": 4,
+      "limitation_counts": {
+        "permission_denied": 4
+      },
+      "stable_limitation_counts": {
+        "optional_enrichment_permission_denied": 3,
+        "required_permission_denied": 1
+      },
+      "stable_limitation_details": [
+        {
+          "category": "optional_enrichment_permission_denied",
+          "record_id": "",
+          "scanner_id": "",
+          "service": "",
+          "api_action": "",
+          "account_id": "",
+          "region": "",
+          "outcome": "denied",
+          "iam_action_requirement": "conditional",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": ""
+        },
+        {
+          "category": "optional_enrichment_permission_denied",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "denied",
+          "iam_action_requirement": "conditional",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "optional_enrichment_permission_denied",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "denied",
+          "iam_action_requirement": "conditional",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        },
+        {
+          "category": "required_permission_denied",
+          "record_id": "",
+          "scanner_id": "",
+          "service": "",
+          "api_action": "",
+          "account_id": "",
+          "region": "",
+          "outcome": "denied",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": ""
+        }
+      ],
+      "secondary_classification_counts": {
+        "service_unavailable": 1,
+        "disabled": 1,
+        "permission_denied": 2
+      },
+      "region_scope": {
+        "limitations": [
+          "Synthetic region exclusion for 123456789012"
+        ]
+      },
+      "billing_region_coverage": {
+        "status": "available",
+        "selected_regions": [
+          "us-west-2"
+        ],
+        "explicit_region_scope": true,
+        "materiality_threshold": "0.01",
+        "billing_active_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "material_billing_active_regions": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions": [],
+        "material_billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions_outside_scan": [],
+        "outside_scan_count": 1,
+        "material_outside_scan_count": 1,
+        "residual_outside_scan_count": 0,
+        "billing_region_count": 1,
+        "billing_global_or_unallocated_cost": "0",
+        "currency": "USD",
+        "current_period": {
+          "start_date": "2026-08-01",
+          "end_date": "2026-08-31"
+        },
+        "region_costs": [
+          {
+            "region": "us-east-1",
+            "current_cost": "12",
+            "currency": "USD",
+            "selected_for_scan": false,
+            "material": true,
+            "outside_selected_scan_scope": true
+          }
+        ],
+        "material_warning_required": true,
+        "residual_notice_required": false,
+        "notice_required": true,
+        "notice_severity": "warning",
+        "limitations": [],
+        "unrecognized_billing_region_values": [],
+        "region_scope_derivation": {
+          "enabled": false,
+          "status": "not_requested",
+          "requested_regions": [
+            "us-east-1"
+          ],
+          "billing_active_regions": [],
+          "normalized_candidate_regions": [],
+          "derived_material_regions": [],
+          "residual_regions": [],
+          "unrecognized_billing_region_values": [],
+          "final_regions": [
+            "us-east-1"
+          ]
+        }
+      },
+      "billing_region_scope_derivation": {
+        "enabled": false,
+        "status": "not_requested",
+        "requested_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions": [],
+        "normalized_candidate_regions": [],
+        "derived_material_regions": [],
+        "residual_regions": [],
+        "unrecognized_billing_region_values": [],
+        "final_regions": [
+          "us-east-1"
+        ]
+      }
+    },
+    "partial": {
+      "generated_at": "2026-08-31T00:00:00+00:00",
+      "scanner_count": 1,
+      "finding_count": 0,
+      "evidence_count": 0,
+      "api_call_count": 0,
+      "api_runtime_summary": {},
+      "collection_runtime_summary": {},
+      "scanner_analysis_boundary_summary": {},
+      "strict_analysis_readiness": {},
+      "minimisation": {
+        "enabled": true,
+        "mode": "standard",
+        "redact_before_export": true,
+        "excluded_services": [
+          "s3"
+        ],
+        "no_cost_data": true
+      },
+      "limitations": [
+        {
+          "type": "service_excluded",
+          "service": "s3",
+          "reason": "Service evidence was excluded by collector option: s3."
+        },
+        {
+          "type": "cost_data_excluded",
+          "service": "cost-explorer",
+          "reason": "Cost data was excluded by collector option --no-cost-data."
+        },
+        {
+          "type": "redacted_before_export",
+          "service": "all",
+          "reason": "Evidence was redacted before export; raw identifiers may be unavailable."
+        },
+        {
+          "type": "minimised_export",
+          "service": "all",
+          "reason": "Collector minimisation mode was standard."
+        },
+        {
+          "type": "region_scope",
+          "service": "all",
+          "permission": "region-scope",
+          "reason": "Synthetic region exclusion for 123456789012"
+        }
+      ],
+      "collection_status": "degraded",
+      "permission_degradation_record_count": 1,
+      "limitation_count": 1,
+      "limitation_counts": {
+        "partial": 1
+      },
+      "stable_limitation_counts": {
+        "scanner_execution_degraded": 1
+      },
+      "stable_limitation_details": [
+        {
+          "category": "scanner_execution_degraded",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "partial",
+          "iam_action_requirement": "conditional",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        }
+      ],
+      "secondary_classification_counts": {
+        "access_denied_policy_source_unknown": 1
+      },
+      "region_scope": {
+        "limitations": [
+          "Synthetic region exclusion for 123456789012"
+        ]
+      },
+      "billing_region_coverage": {
+        "status": "available",
+        "selected_regions": [
+          "us-west-2"
+        ],
+        "explicit_region_scope": true,
+        "materiality_threshold": "0.01",
+        "billing_active_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "material_billing_active_regions": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions": [],
+        "material_billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions_outside_scan": [],
+        "outside_scan_count": 1,
+        "material_outside_scan_count": 1,
+        "residual_outside_scan_count": 0,
+        "billing_region_count": 1,
+        "billing_global_or_unallocated_cost": "0",
+        "currency": "USD",
+        "current_period": {
+          "start_date": "2026-08-01",
+          "end_date": "2026-08-31"
+        },
+        "region_costs": [
+          {
+            "region": "us-east-1",
+            "current_cost": "12",
+            "currency": "USD",
+            "selected_for_scan": false,
+            "material": true,
+            "outside_selected_scan_scope": true
+          }
+        ],
+        "material_warning_required": true,
+        "residual_notice_required": false,
+        "notice_required": true,
+        "notice_severity": "warning",
+        "limitations": [],
+        "unrecognized_billing_region_values": [],
+        "region_scope_derivation": {
+          "enabled": false,
+          "status": "not_requested",
+          "requested_regions": [
+            "us-east-1"
+          ],
+          "billing_active_regions": [],
+          "normalized_candidate_regions": [],
+          "derived_material_regions": [],
+          "residual_regions": [],
+          "unrecognized_billing_region_values": [],
+          "final_regions": [
+            "us-east-1"
+          ]
+        }
+      },
+      "billing_region_scope_derivation": {
+        "enabled": false,
+        "status": "not_requested",
+        "requested_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions": [],
+        "normalized_candidate_regions": [],
+        "derived_material_regions": [],
+        "residual_regions": [],
+        "unrecognized_billing_region_values": [],
+        "final_regions": [
+          "us-east-1"
+        ]
+      }
+    },
+    "unavailable": {
+      "generated_at": "2026-08-31T00:00:00+00:00",
+      "scanner_count": 1,
+      "finding_count": 0,
+      "evidence_count": 0,
+      "api_call_count": 0,
+      "api_runtime_summary": {},
+      "collection_runtime_summary": {},
+      "scanner_analysis_boundary_summary": {},
+      "strict_analysis_readiness": {},
+      "minimisation": {
+        "enabled": true,
+        "mode": "standard",
+        "redact_before_export": true,
+        "excluded_services": [
+          "s3"
+        ],
+        "no_cost_data": true
+      },
+      "limitations": [
+        {
+          "type": "service_excluded",
+          "service": "s3",
+          "reason": "Service evidence was excluded by collector option: s3."
+        },
+        {
+          "type": "cost_data_excluded",
+          "service": "cost-explorer",
+          "reason": "Cost data was excluded by collector option --no-cost-data."
+        },
+        {
+          "type": "redacted_before_export",
+          "service": "all",
+          "reason": "Evidence was redacted before export; raw identifiers may be unavailable."
+        },
+        {
+          "type": "minimised_export",
+          "service": "all",
+          "reason": "Collector minimisation mode was standard."
+        },
+        {
+          "type": "region_scope",
+          "service": "all",
+          "permission": "region-scope",
+          "reason": "Synthetic region exclusion for 123456789012"
+        }
+      ],
+      "collection_status": "failed",
+      "permission_degradation_record_count": 1,
+      "limitation_count": 1,
+      "limitation_counts": {
+        "service_not_enabled": 1
+      },
+      "stable_limitation_counts": {
+        "evidence_unavailable": 1
+      },
+      "stable_limitation_details": [
+        {
+          "category": "evidence_unavailable",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "service_unavailable",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        }
+      ],
+      "secondary_classification_counts": {
+        "chargeable_api_disabled": 1
+      },
+      "region_scope": {
+        "limitations": [
+          "Synthetic region exclusion for 123456789012"
+        ]
+      },
+      "billing_region_coverage": {
+        "status": "available",
+        "selected_regions": [
+          "us-west-2"
+        ],
+        "explicit_region_scope": true,
+        "materiality_threshold": "0.01",
+        "billing_active_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "material_billing_active_regions": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions": [],
+        "material_billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions_outside_scan": [],
+        "outside_scan_count": 1,
+        "material_outside_scan_count": 1,
+        "residual_outside_scan_count": 0,
+        "billing_region_count": 1,
+        "billing_global_or_unallocated_cost": "0",
+        "currency": "USD",
+        "current_period": {
+          "start_date": "2026-08-01",
+          "end_date": "2026-08-31"
+        },
+        "region_costs": [
+          {
+            "region": "us-east-1",
+            "current_cost": "12",
+            "currency": "USD",
+            "selected_for_scan": false,
+            "material": true,
+            "outside_selected_scan_scope": true
+          }
+        ],
+        "material_warning_required": true,
+        "residual_notice_required": false,
+        "notice_required": true,
+        "notice_severity": "warning",
+        "limitations": [],
+        "unrecognized_billing_region_values": [],
+        "region_scope_derivation": {
+          "enabled": false,
+          "status": "not_requested",
+          "requested_regions": [
+            "us-east-1"
+          ],
+          "billing_active_regions": [],
+          "normalized_candidate_regions": [],
+          "derived_material_regions": [],
+          "residual_regions": [],
+          "unrecognized_billing_region_values": [],
+          "final_regions": [
+            "us-east-1"
+          ]
+        }
+      },
+      "billing_region_scope_derivation": {
+        "enabled": false,
+        "status": "not_requested",
+        "requested_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions": [],
+        "normalized_candidate_regions": [],
+        "derived_material_regions": [],
+        "residual_regions": [],
+        "unrecognized_billing_region_values": [],
+        "final_regions": [
+          "us-east-1"
+        ]
+      }
+    },
+    "unsupported": {
+      "generated_at": "2026-08-31T00:00:00+00:00",
+      "scanner_count": 1,
+      "finding_count": 0,
+      "evidence_count": 0,
+      "api_call_count": 0,
+      "api_runtime_summary": {},
+      "collection_runtime_summary": {},
+      "scanner_analysis_boundary_summary": {},
+      "strict_analysis_readiness": {},
+      "minimisation": {
+        "enabled": true,
+        "mode": "standard",
+        "redact_before_export": true,
+        "excluded_services": [
+          "s3"
+        ],
+        "no_cost_data": true
+      },
+      "limitations": [
+        {
+          "type": "service_excluded",
+          "service": "s3",
+          "reason": "Service evidence was excluded by collector option: s3."
+        },
+        {
+          "type": "cost_data_excluded",
+          "service": "cost-explorer",
+          "reason": "Cost data was excluded by collector option --no-cost-data."
+        },
+        {
+          "type": "redacted_before_export",
+          "service": "all",
+          "reason": "Evidence was redacted before export; raw identifiers may be unavailable."
+        },
+        {
+          "type": "minimised_export",
+          "service": "all",
+          "reason": "Collector minimisation mode was standard."
+        },
+        {
+          "type": "region_scope",
+          "service": "all",
+          "permission": "region-scope",
+          "reason": "Synthetic region exclusion for 123456789012"
+        }
+      ],
+      "collection_status": "failed",
+      "permission_degradation_record_count": 1,
+      "limitation_count": 1,
+      "limitation_counts": {
+        "unsupported_operation": 1
+      },
+      "stable_limitation_counts": {
+        "evidence_unsupported": 1
+      },
+      "stable_limitation_details": [
+        {
+          "category": "evidence_unsupported",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "unsupported_operation",
+          "iam_action_requirement": "required",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        }
+      ],
+      "secondary_classification_counts": {
+        "legacy_limitation": 1
+      },
+      "region_scope": {
+        "limitations": [
+          "Synthetic region exclusion for 123456789012"
+        ]
+      },
+      "billing_region_coverage": {
+        "status": "available",
+        "selected_regions": [
+          "us-west-2"
+        ],
+        "explicit_region_scope": true,
+        "materiality_threshold": "0.01",
+        "billing_active_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "material_billing_active_regions": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions": [],
+        "material_billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions_outside_scan": [],
+        "outside_scan_count": 1,
+        "material_outside_scan_count": 1,
+        "residual_outside_scan_count": 0,
+        "billing_region_count": 1,
+        "billing_global_or_unallocated_cost": "0",
+        "currency": "USD",
+        "current_period": {
+          "start_date": "2026-08-01",
+          "end_date": "2026-08-31"
+        },
+        "region_costs": [
+          {
+            "region": "us-east-1",
+            "current_cost": "12",
+            "currency": "USD",
+            "selected_for_scan": false,
+            "material": true,
+            "outside_selected_scan_scope": true
+          }
+        ],
+        "material_warning_required": true,
+        "residual_notice_required": false,
+        "notice_required": true,
+        "notice_severity": "warning",
+        "limitations": [],
+        "unrecognized_billing_region_values": [],
+        "region_scope_derivation": {
+          "enabled": false,
+          "status": "not_requested",
+          "requested_regions": [
+            "us-east-1"
+          ],
+          "billing_active_regions": [],
+          "normalized_candidate_regions": [],
+          "derived_material_regions": [],
+          "residual_regions": [],
+          "unrecognized_billing_region_values": [],
+          "final_regions": [
+            "us-east-1"
+          ]
+        }
+      },
+      "billing_region_scope_derivation": {
+        "enabled": false,
+        "status": "not_requested",
+        "requested_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions": [],
+        "normalized_candidate_regions": [],
+        "derived_material_regions": [],
+        "residual_regions": [],
+        "unrecognized_billing_region_values": [],
+        "final_regions": [
+          "us-east-1"
+        ]
+      }
+    },
+    "degraded": {
+      "generated_at": "2026-08-31T00:00:00+00:00",
+      "scanner_count": 1,
+      "finding_count": 0,
+      "evidence_count": 0,
+      "api_call_count": 0,
+      "api_runtime_summary": {},
+      "collection_runtime_summary": {},
+      "scanner_analysis_boundary_summary": {},
+      "strict_analysis_readiness": {},
+      "minimisation": {
+        "enabled": true,
+        "mode": "standard",
+        "redact_before_export": true,
+        "excluded_services": [
+          "s3"
+        ],
+        "no_cost_data": true
+      },
+      "limitations": [
+        {
+          "type": "service_excluded",
+          "service": "s3",
+          "reason": "Service evidence was excluded by collector option: s3."
+        },
+        {
+          "type": "cost_data_excluded",
+          "service": "cost-explorer",
+          "reason": "Cost data was excluded by collector option --no-cost-data."
+        },
+        {
+          "type": "redacted_before_export",
+          "service": "all",
+          "reason": "Evidence was redacted before export; raw identifiers may be unavailable."
+        },
+        {
+          "type": "minimised_export",
+          "service": "all",
+          "reason": "Collector minimisation mode was standard."
+        },
+        {
+          "type": "region_scope",
+          "service": "all",
+          "permission": "region-scope",
+          "reason": "Synthetic region exclusion for 123456789012"
+        }
+      ],
+      "collection_status": "failed",
+      "permission_degradation_record_count": 1,
+      "limitation_count": 1,
+      "limitation_counts": {
+        "scanner_failed": 1
+      },
+      "stable_limitation_counts": {
+        "scanner_execution_degraded": 1
+      },
+      "stable_limitation_details": [
+        {
+          "category": "scanner_execution_degraded",
+          "record_id": "synthetic-record",
+          "scanner_id": "synthetic-scanner",
+          "service": "kms",
+          "api_action": "kms:DescribeKey",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "outcome": "interrupted",
+          "iam_action_requirement": "conditional",
+          "requirement_type": "",
+          "resource_type": "",
+          "resource_id": "synthetic-resource",
+          "safe_scope": "",
+          "evidence_categories": [],
+          "affected_fields": [],
+          "requested_account_id": "",
+          "requested_region": "",
+          "scanner_continued": null,
+          "collection_continued": null,
+          "related_findings_may_be_incomplete": null,
+          "evidence_interpretation": "",
+          "confidence_effect": "",
+          "remediation_permission": "",
+          "client_explanation": "Synthetic limitation for 123456789012"
+        }
+      ],
+      "secondary_classification_counts": {
+        "unsupported_region": 1
+      },
+      "region_scope": {
+        "limitations": [
+          "Synthetic region exclusion for 123456789012"
+        ]
+      },
+      "billing_region_coverage": {
+        "status": "available",
+        "selected_regions": [
+          "us-west-2"
+        ],
+        "explicit_region_scope": true,
+        "materiality_threshold": "0.01",
+        "billing_active_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "material_billing_active_regions": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions": [],
+        "material_billing_active_regions_outside_scan": [
+          "us-east-1"
+        ],
+        "residual_billing_active_regions_outside_scan": [],
+        "outside_scan_count": 1,
+        "material_outside_scan_count": 1,
+        "residual_outside_scan_count": 0,
+        "billing_region_count": 1,
+        "billing_global_or_unallocated_cost": "0",
+        "currency": "USD",
+        "current_period": {
+          "start_date": "2026-08-01",
+          "end_date": "2026-08-31"
+        },
+        "region_costs": [
+          {
+            "region": "us-east-1",
+            "current_cost": "12",
+            "currency": "USD",
+            "selected_for_scan": false,
+            "material": true,
+            "outside_selected_scan_scope": true
+          }
+        ],
+        "material_warning_required": true,
+        "residual_notice_required": false,
+        "notice_required": true,
+        "notice_severity": "warning",
+        "limitations": [],
+        "unrecognized_billing_region_values": [],
+        "region_scope_derivation": {
+          "enabled": false,
+          "status": "not_requested",
+          "requested_regions": [
+            "us-east-1"
+          ],
+          "billing_active_regions": [],
+          "normalized_candidate_regions": [],
+          "derived_material_regions": [],
+          "residual_regions": [],
+          "unrecognized_billing_region_values": [],
+          "final_regions": [
+            "us-east-1"
+          ]
+        }
+      },
+      "billing_region_scope_derivation": {
+        "enabled": false,
+        "status": "not_requested",
+        "requested_regions": [
+          "us-east-1"
+        ],
+        "billing_active_regions": [],
+        "normalized_candidate_regions": [],
+        "derived_material_regions": [],
+        "residual_regions": [],
+        "unrecognized_billing_region_values": [],
+        "final_regions": [
+          "us-east-1"
+        ]
+      }
+    }
+  }
+}

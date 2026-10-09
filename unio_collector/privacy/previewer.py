@@ -53,7 +53,9 @@ class PrivacyPreviewer:
         )
         files, _manifest = protector._read_and_transform_files(options.bundle_path, state)
         known_originals = collect_known_original_values(state.token_service, minimum_length=4)
-        leak_scan = scan_provisional_archive(files, known_original_values=known_originals)
+        leak_scan = scan_provisional_archive(
+            files, known_original_values=known_originals, generated_tokens=frozenset(state.token_service.vault_builder.entries_by_token)
+        )
         token_count = len(state.token_service.vault_builder.entries_by_token)
         return {
             "schema_version": PRIVACY_PREVIEW_SCHEMA_VERSION,

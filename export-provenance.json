@@ -1,23 +1,23 @@
 {
   "counts": {
-    "collector_source": 1518,
+    "collector_source": 1575,
     "other_assets": 0,
-    "repository_metadata": 111,
-    "tests": 9
+    "repository_metadata": 139,
+    "tests": 62
   },
-  "envelope_policy_sha256": "ef88113ff8aef159d8b9329192ea24d3d2b8e367303aa4c1a8e6db02dd4c0dc1",
+  "envelope_policy_sha256": "80ccccb9ab4dc6b10b0434b0898ef24a6e8cf7b1dbfbeaa1c0cd7b3e73c0e521",
   "envelope_policy_version": "2026-09-collector-envelope-v2",
-  "file_count": 1638,
+  "file_count": 1776,
   "generation_tool_version": "2026-09-collector-repository-v2",
   "licence_name": "Tevari Cloud Unio Collector Source-Available License",
   "licence_status": "approved",
   "licence_version": "1.0",
-  "manifest_sha256": "64e99b3d626ce273a5e57cfd2ccdff088e8a7dde21ade5415c5a9d3e1e416ac5",
+  "manifest_sha256": "65290e54baa8c2fb6a953bd4a8d9827cd28500e83beea581a60c063974836a37",
   "package_plan_version": "2026-02",
   "policy_schema_version": "2026-09-collector-export-policy-v2",
-  "policy_sha256": "0a383d165f9d61fb31bf159a90257e3501dc753b3062400a0f26fc42248c2424",
+  "policy_sha256": "5185dac9b62ae12e0973aeb1ad83afd4861afbb075968a22f87b6b8f6c6ea618",
   "publication_ready": true,
-  "publication_transformation_sha256": "76480808a4723cb22969d11c27f211cd191e3042883063b84a66dc2283e5600c",
+  "publication_transformation_sha256": "01ccb4ad2fe3dec02ea239c65b7c8490b1993caa106dd64e4d3b0775df445751",
   "publication_transformation_version": "2026-09-unio-publication-v3",
   "schema_version": "2026-09-collector-repository-v2",
   "sensitive_data_validation": {
@@ -27,9 +27,9 @@
     "project_disclosure": "clean"
   },
   "source_byte_identity": false,
-  "source_git_tree": "dbce98c3597ab52a0c2046410738949713447db2",
+  "source_git_tree": "0baafd3a4325ce21aad0b170855deadba01e6d5b",
   "source_repository": "tevari-cloud/unio-private-source",
-  "source_sha": "3d2c3c3c7aa3a7ab675c4bca40a95512623fb3a0",
+  "source_sha": "952198eadabce101ca145d5631e96268a48a4b0c",
   "source_state_clean": true,
-  "tree_digest": "e0b9b27f6b6e69b9c02bc30ca7de3b8dce09f33de0f2d98dabcf7bb228085d2b"
+  "tree_digest": "30f5c961ef1f0434fd5a1902275ecb49cc5e0c48e142ca8f97cdd108965b4484"
 }
