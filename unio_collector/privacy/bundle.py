@@ -25,6 +25,7 @@ from unio_collector.privacy.constants import (
     PROTECTED_EXPORT_RECEIPT_SCHEMA_VERSION,
     TOKEN_FORMAT_VERSION,
 )
+from unio_collector.privacy.diagnostics import format_unknown_paths
 from unio_collector.privacy.environment.transformer import build_environment_transformer
 from unio_collector.privacy.inspect_result import PrivacyInspectResult
 from unio_collector.privacy.inspector import ProtectedBundleInspector
@@ -32,15 +33,12 @@ from unio_collector.privacy.known_originals import collect_known_original_values
 from unio_collector.privacy.lifecycle_verifier import ProtectedExportLifecycleVerifier
 from unio_collector.privacy.options import PrivacyProtectOptions
 from unio_collector.privacy.preview import build_privacy_preview
+from unio_collector.privacy.producer_fields import normalise_producer_payload
 from unio_collector.privacy.profiles import PrivacyProfile, load_privacy_profile
 from unio_collector.privacy.protect_result import PrivacyProtectResult
 from unio_collector.privacy.public_writer import PublicArtifactWriter
 from unio_collector.privacy.publication_preparer import ProtectionArtifactPreparer
-from unio_collector.privacy.receipt import (
-    build_export_receipt,
-    default_receipt_path,
-    encode_receipt,
-)
+from unio_collector.privacy.receipt import build_export_receipt, default_receipt_path, encode_receipt
 from unio_collector.privacy.registry import is_supported_json_path
 from unio_collector.privacy.schema_versioning import replace_schema_versions
 from unio_collector.privacy.security_warning import SecurityWarning, warning_messages
@@ -83,21 +81,22 @@ class ProtectedBundleProtector:
             message = (
                 "Protected export requires acknowledgement that losing the client-held vault, passphrase, or recovery material may make restoration impossible."
             )
-            raise ValueError(
-                message,
-            )
+            raise ValueError(message)
+        EvidenceBundleValidator().validate_or_raise(options.bundle_path)
+        with ZipFile(options.bundle_path) as archive:
+            if "privacy/protection-policy.json" in archive.namelist():
+                raise ValueError(
+                    "This bundle is already protected. Protect the original unprotected source bundle with the desired profile; "
+                    "protected bundles cannot be re-protected or upgraded to strict."
+                )
         receipt_path = options.receipt_path or default_receipt_path(options.output_path)
         targets = [options.output_path, options.vault_path, receipt_path]
         if options.recovery_key_path is not None:
             targets.append(options.recovery_key_path)
         if options.preview_output_path is not None:
             targets.append(options.preview_output_path)
-        coordinator = ArtifactTransactionCoordinator(
-            tuple(targets),
-            overwrite=options.overwrite,
-        )
+        coordinator = ArtifactTransactionCoordinator(tuple(targets), overwrite=options.overwrite)
         coordinator.validate_destinations()
-        EvidenceBundleValidator().validate_or_raise(options.bundle_path)
         profile = load_privacy_profile(
             options.profile_id,
             token_scope=options.token_scope,
@@ -123,7 +122,7 @@ class ProtectedBundleProtector:
                 f"Protected export failed because prohibited privacy-registry fields were encountered: {details}",
             )
         if state.classification.unclassified and not profile.preserve_unknown_fields:
-            details = "; ".join(state.classification.unclassified[:20])
+            details = format_unknown_paths(state.classification.unclassified)
             raise ValueError(f"Protected export failed because unclassified fields were encountered: {details}")
         self._add_privacy_files(
             files,
@@ -142,6 +141,8 @@ class ProtectedBundleProtector:
                 state.token_service,
                 minimum_length=MINIMUM_KNOWN_ORIGINAL_VALUE_LENGTH,
             ),
+            generated_tokens=frozenset(state.token_service.vault_builder.entries_by_token),
+            require_passed=True,
         )
         self._add_privacy_files(
             files,
@@ -215,6 +216,7 @@ class ProtectedBundleProtector:
                         state.token_service,
                         minimum_length=MINIMUM_KNOWN_ORIGINAL_VALUE_LENGTH,
                     ),
+                    generated_tokens=frozenset(state.token_service.vault_builder.entries_by_token),
                     existing_recovery_key=state.vault_context.recovery_key,
                 )
                 published_artifacts = [*private_artifacts]
@@ -290,9 +292,13 @@ class ProtectedBundleProtector:
                     source_manifest = json.loads(data.decode("utf-8"))
                 if name.endswith(".json") and is_supported_json_path(name):
                     payload = json.loads(data.decode("utf-8"))
-                    files[name] = dump_json(transformer.transform(payload, file_name=name))
+                    transformed = transformer.transform(payload, file_name=name)
+                    transformed = normalise_producer_payload(name, transformed, state.profile.profile_id)
+                    files[name] = dump_json(transformed)
                 elif name.endswith(".jsonl") and is_supported_json_path(name):
                     records = [transformer.transform(json.loads(line), file_name=name) for line in data.decode("utf-8").splitlines() if line.strip()]
+                    if name == "collection-log.jsonl" and state.profile.profile_id == "strict":
+                        records = []
                     files[name] = dump_jsonl(records)
                 elif name.endswith((".json", ".jsonl")) and not name.startswith("privacy/"):
                     state.classification.unclassified.append(name)
@@ -489,6 +495,4 @@ class ProtectedBundleProtector:
         manifest["checksums"] = checksums
         manifest["evidence_files"] = [name for name in sorted(files) if name.startswith(("evidence/", "scan-result/"))]
         files["manifest.json"] = dump_json(manifest)
-        files["checksums.json"] = dump_json(
-            {"algorithm": "sha256", "checksums": checksums},
-        )
+        files["checksums.json"] = dump_json({"algorithm": "sha256", "checksums": checksums})

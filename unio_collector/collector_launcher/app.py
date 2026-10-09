@@ -1,18 +1,27 @@
 from __future__ import annotations  # noqa: D100
 
+import json
 import os
 import threading
 from pathlib import Path
 from tkinter import END, MULTIPLE, BooleanVar, StringVar, Tk, Toplevel, filedialog, messagebox, ttk
 from tkinter.scrolledtext import ScrolledText
+from typing import TYPE_CHECKING
 
-from unio_collector import __version__
 from unio_collector.collector.config.presets import SCAN_PRESET_IDS
+from unio_collector.collector.package.native.build_identity import CollectorBuildIdentity
 from unio_collector.collector_launcher.controller import LauncherController
+from unio_collector.collector_launcher.feedback import ProtectionFeedback
+from unio_collector.collector_launcher.progress import collection_progress_text
+from unio_collector.collector_launcher.protection import ProtectionOperation
 from unio_collector.collector_launcher.result import CommandResult
 from unio_collector.collector_launcher.selection import LauncherSelection
+from unio_collector.collector_launcher.task import LauncherTask
 from unio_collector.config.scan.profiles import SCAN_DETAIL_PROFILE_IDS
 from unio_collector.scanners.pillars import SCAN_PILLAR_IDS
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class CollectorLauncherApp:
@@ -25,6 +34,7 @@ class CollectorLauncherApp:
         client_documents = _client_documents()
         self.profile = StringVar(value="")
         self.bundle = StringVar(value=str(client_documents / "evidence-bundle.zip"))
+        self.validation_bundle = StringVar(value="")
         self.check_identity = BooleanVar(value=False)
         self.include_cost = BooleanVar(value=True)
         self.allow_chargeable = BooleanVar(value=False)
@@ -48,7 +58,7 @@ class CollectorLauncherApp:
         self._load_catalogues()
 
     def _build(self) -> None:
-        self.root.title(f"Unio Collector {__version__}")
+        self.root.title(CollectorBuildIdentity().label())
         self.root.geometry("920x720")
         header = ttk.Label(
             self.root,
@@ -66,6 +76,13 @@ class CollectorLauncherApp:
         self._build_collect(collect)
         self._build_privacy(privacy)
         self._build_restore(restore)
+        self.token_scope.trace_add("write", lambda *_: self._update_client_scope())
+        self._update_client_scope()
+        self.operation_status = StringVar(value="Ready")
+        ttk.Label(self.root, textvariable=self.operation_status).pack(fill="x", padx=12)
+        self.operation_bar = ttk.Progressbar(self.root, mode="indeterminate")
+        self.operation_bar.pack(fill="x", padx=12)
+        self._feedback = ProtectionFeedback(self.root, self.operation_status, self.operation_bar, self._append, lambda: self._busy)
         self.log = ScrolledText(self.root, height=12, state="disabled")
         self.log.pack(fill="both", padx=12, pady=8)
         log_actions = ttk.Frame(self.root)
@@ -132,7 +149,8 @@ class CollectorLauncherApp:
         ttk.Button(buttons, text="2. View permissions", command=self._permissions).pack(side="left", padx=3)
         ttk.Button(buttons, text="3. Collect", command=self._collect).pack(side="left", padx=3)
         ttk.Button(buttons, text="3a. Collect protected", command=self._collect_protected).pack(side="left", padx=3)
-        ttk.Button(buttons, text="4. Validate bundle", command=self._validate).pack(side="left", padx=3)
+        self._path_row(frame, 12, "Existing bundle to validate", self.validation_bundle, save=False)
+        ttk.Button(frame, text="Validate existing bundle", command=self._validate).grid(row=13, column=1, sticky="w")
         frame.columnconfigure(1, weight=1)
         frame.rowconfigure(10, weight=1)
 
@@ -154,7 +172,8 @@ class CollectorLauncherApp:
         ttk.Label(frame, text="Engagement ID").grid(row=6, column=0, sticky="w")
         ttk.Entry(frame, textvariable=self.engagement_id).grid(row=6, column=1, sticky="ew")
         ttk.Label(frame, text="Client ID (client token scope only)").grid(row=7, column=0, sticky="w")
-        ttk.Entry(frame, textvariable=self.client_id).grid(row=7, column=1, sticky="ew")
+        self.client_id_entry = ttk.Entry(frame, textvariable=self.client_id)
+        self.client_id_entry.grid(row=7, column=1, sticky="ew")
         ttk.Label(frame, text="Passphrase (not stored or placed on the command line)").grid(row=8, column=0, sticky="w")
         ttk.Entry(frame, textvariable=self.passphrase, show="*").grid(row=8, column=1, sticky="ew")
         ttk.Button(frame, text="Protect existing bundle", command=self._protect).grid(row=9, column=0, pady=8)
@@ -179,7 +198,7 @@ class CollectorLauncherApp:
         ttk.Label(frame, text=label).grid(row=row, column=0, sticky="w")
         ttk.Entry(frame, textvariable=variable).grid(row=row, column=1, sticky="ew")
         command = (lambda: self._save_path(variable, "")) if save else (lambda: self._open_path(variable))
-        ttk.Button(frame, text="Browse", command=command).grid(row=row, column=2)
+        ttk.Button(frame, text="Save as" if save else "Open", command=command).grid(row=row, column=2)
 
     def _load_catalogues(self) -> None:
         self._busy = True
@@ -253,7 +272,7 @@ class CollectorLauncherApp:
                 argv,
                 progress_path=path,
                 on_output=self._append,
-                on_progress=lambda payload: self._append(_progress_text(payload)),
+                on_progress=lambda payload: self._append(collection_progress_text(payload)),
             )
 
         self._run_task(task, cleanup=temporary.cleanup, streamed=True)
@@ -304,14 +323,17 @@ class CollectorLauncherApp:
                 argv,
                 progress_path=path,
                 on_output=self._append,
-                on_progress=lambda payload: self._append(_progress_text(payload)),
+                on_progress=lambda payload: self._append(collection_progress_text(payload)),
                 stdin_text=passphrase + "\n",
             )
 
         self._run_task(task, cleanup=temporary.cleanup, streamed=True)
 
+    def _update_client_scope(self) -> None:
+        self.client_id_entry.configure(state="normal" if self.token_scope.get() == "client" else "disabled")
+
     def _validate(self) -> None:
-        self._run_async(("validate-bundle", self.bundle.get()))
+        self._run_async(("validate-bundle", self.validation_bundle.get()))
 
     def _protect(self) -> None:
         if self._busy:
@@ -333,7 +355,7 @@ class CollectorLauncherApp:
             environment_semantics=self.environment_semantics.get() or None,
         )
         self.passphrase.set("")
-        self._run_async(argv, stdin_text=passphrase + "\n", then=("privacy", "inspect", "--bundle", self.protected_bundle.get()))
+        self._run_async(argv, stdin_text=passphrase + "\n")
 
     def _restore(self) -> None:
         passphrase = self.passphrase.get()
@@ -358,6 +380,9 @@ class CollectorLauncherApp:
         then: tuple[str, ...] | None = None,
         cleanup: object | None = None,
     ) -> None:
+        if self._busy:
+            self._append("Another collector operation is already running.")
+            return
         self._cancelled = False
 
         def task() -> CommandResult:
@@ -367,40 +392,34 @@ class CollectorLauncherApp:
             return result
 
         operation = "Protection" if argv[:2] == ("privacy", "protect") else None
-        self._run_task(task, cleanup=cleanup, operation=operation)
+        if operation:
+            self._protection_operation = ProtectionOperation(self.controller, argv, stdin_text, self._feedback.advance)
+            self._run_task(self._protection_operation, cleanup=cleanup, operation=operation)
+        else:
+            self._run_task(task, cleanup=cleanup)
 
-    def _run_task(self, task: object, *, cleanup: object | None = None, streamed: bool = False, operation: str | None = None) -> None:
+    def _run_task(self, task: Callable[[], CommandResult], *, cleanup: object | None = None, streamed: bool = False, operation: str | None = None) -> None:
         if self._busy:
             self._append("Another collector operation is already running.")
             return
         self._busy = True
         generation = object()
-        self._operation_generation = generation
         if operation:
-            self._append(f"{operation} started. Checking evidence and preparing local protected output.")
-            self.root.after(3000, lambda: self._operation_progress(operation, generation))
+            self._feedback.start(generation)
 
-        def worker() -> None:
-            try:
-                result = task()  # type: ignore[operator]
-                if result.output and not streamed:
-                    self._append(result.output)
-                self._append(f"Command completed with exit code {result.exit_code}.")
-            except Exception as exc:  # noqa: BLE001
-                self._append(f"Operation failed: {exc}")
-            finally:
-                if callable(cleanup):
-                    cleanup()
-                self._busy = False
+        def finish(exit_code: int) -> None:
+            if operation:
+                self._feedback.finish(exit_code, generation)
+            self._busy = False
 
+        worker = LauncherTask(
+            task, self._append, lambda code: self.root.after(0, lambda: finish(code)), cleanup=cleanup, streamed=streamed, report_exit=not bool(operation)
+        )
         threading.Thread(target=worker, daemon=True).start()
 
-    def _operation_progress(self, operation: str, generation: object) -> None:
-        if self._busy and self._operation_generation is generation:
-            self._append(f"{operation} is still running; progress percentage is unavailable.")
-            self.root.after(3000, lambda: self._operation_progress(operation, generation))
-
     def _cancel(self) -> None:
+        if self._feedback.cancel(getattr(self, "_protection_operation", None)):
+            return
         if self.controller.cancel():
             self._cancelled = True
             self._append("Cancellation requested. Validate any output before use; cancelled protection may leave incomplete local staging files.")
@@ -452,15 +471,6 @@ class CollectorLauncherApp:
             variable.set(path)
 
 
-def _progress_text(payload: dict[str, object]) -> str:
-    event_type = str(payload.get("event_type") or "progress")
-    scanner = str(payload.get("scanner_display_name") or payload.get("scanner_id") or "")
-    index = payload.get("scanner_index")
-    total = payload.get("scanner_total")
-    prefix = f"[{index}/{total}] " if index is not None and total is not None else ""
-    return f"{prefix}{event_type.replace('_', ' ').title()}: {scanner}".rstrip(": ")
-
-
 def _client_documents() -> Path:
     documents = Path.home() / "Documents"
     return documents if documents.is_dir() else Path.home()
@@ -470,6 +480,9 @@ def main() -> int:
     """Start the native collector launcher."""
     root = Tk()
     if os.getenv("UNIO_COLLECTOR_LAUNCHER_SMOKE_TEST") == "1":
+        identity_output = os.getenv("UNIO_LAUNCHER_IDENTITY_OUTPUT")
+        if identity_output:
+            Path(identity_output).write_text(json.dumps(CollectorBuildIdentity().read(), sort_keys=True), encoding="utf-8")
         root.update_idletasks()
         root.destroy()
         return 0

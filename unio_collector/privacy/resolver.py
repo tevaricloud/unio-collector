@@ -2,8 +2,10 @@ from __future__ import annotations  # noqa: D100
 
 import re
 from fnmatch import fnmatchcase
+from functools import lru_cache
 from typing import TYPE_CHECKING
 
+from unio_collector.privacy.producer_fields import producer_scope
 from unio_collector.privacy.region_scope import REGION_SCOPE_MEMBERS
 from unio_collector.privacy.registry import PATH_REGISTRY
 from unio_collector.privacy.treatment_decision import PrivacyTreatmentDecision
@@ -58,6 +60,30 @@ class PrivacyRegistryResolver:
                 fallback_allowed=False,
                 decision_source="exact_json_path",
                 reason="Matched an explicit region-scope producer field.",
+            )
+
+        if producer_scope(member_path, json_path):
+            entry = next(
+                (
+                    entry
+                    for entry in PATH_REGISTRY
+                    if entry.domain == domain
+                    and entry.member_pattern == member_path
+                    and self._json_suffix_matches(pattern=entry.json_path_pattern, json_path=json_path, key=key)
+                    and profile_id in entry.allowed_profiles
+                ),
+                None,
+            )
+            if entry is None:
+                return self._unsupported(reason=f"No explicit producer treatment covers {member_path}:{json_path}.")
+            return PrivacyTreatmentDecision(
+                treatment=entry.treatment,
+                category=entry.value_category,
+                canonicaliser_id=None,
+                canonicaliser_version=None,
+                fallback_allowed=False,
+                decision_source="exact_json_path",
+                reason="Matched an explicit producer field.",
             )
 
         suffix_entry = self._resolve_json_suffix_entry(
@@ -165,8 +191,7 @@ class PrivacyRegistryResolver:
         key: str | None,
     ) -> bool:
         if "[*]" in pattern:
-            indexed_pattern = re.escape(pattern).replace(r"\[\*\]", r"\[[0-9]*\]")
-            return re.fullmatch(indexed_pattern, json_path) is not None
+            return _indexed_pattern(pattern).fullmatch(json_path) is not None
         if pattern.startswith("$.") and not pattern.startswith("$.."):
             return pattern == json_path
         if not pattern.startswith("$..") or pattern == "$..*":
@@ -188,3 +213,10 @@ class PrivacyRegistryResolver:
             decision_source="unsupported",
             reason=reason,
         )
+
+
+@lru_cache(maxsize=1024)
+def _indexed_pattern(pattern: str) -> re.Pattern[str]:
+    """Compile only immutable registry patterns; never cache client paths or values."""
+    indexed = re.escape(pattern).replace(r"\[\*\]", r"\[[0-9]*\]")
+    return re.compile(indexed)

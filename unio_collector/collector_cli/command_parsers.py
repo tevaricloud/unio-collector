@@ -404,6 +404,7 @@ def add_version_command(
         help="Print the collector version.",
     )
     add_debug_argument(version)
+    version.add_argument("--build-info", action="store_true", help="Print local native build identity and executable hash as JSON.")
     version.add_argument(
         "--check",
         action="store_true",
