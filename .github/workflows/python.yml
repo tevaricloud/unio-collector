@@ -31,7 +31,7 @@ jobs:
       - name: Install validation bootstrap dependency
         run: python -B -m tools.collector_repository bootstrap --root .
       - name: Validate independently
-        run: python -B -m tools.collector_repository validate --root . --output "$RUNNER_TEMP/unio-collector-python-${GITHUB_RUN_ATTEMPT}"
+        run: python -B -m tools.collector_repository validate --root . --pytest-workers 2 --output "$RUNNER_TEMP/unio-collector-python-${GITHUB_RUN_ATTEMPT}"
       - name: Retain compact evidence
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
@@ -39,6 +39,7 @@ jobs:
           name: python-validation
           path: |
             ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/validation-summary.json
+            ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/process-progress.json
             ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/installed-wheel-summary.json
           retention-days: 3
           if-no-files-found: warn

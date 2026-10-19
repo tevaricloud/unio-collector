@@ -45,14 +45,14 @@
     {
       "category": "repository_metadata",
       "path": ".github/workflows/native.yml",
-      "sha256": "7a7c7a41caf16b1d5393b6a5e5c6f701cf3c377c9c3384a1b71b355b1cf55a2f",
-      "size": 5234
+      "sha256": "48d890e46640cae07012c858a333fbae3172a9ff3189e159f106cebfed8c87c3",
+      "size": 5373
     },
     {
       "category": "repository_metadata",
       "path": ".github/workflows/python.yml",
-      "sha256": "ca71e8c6145f1a6faa360068fb66be28dcd9cb520a4e29f5d3724fd60f8719a1",
-      "size": 2770
+      "sha256": "40888ced12f3291614ee39180073ebc4fc48e2ceb6c2f8da1c29688883eb6e9a",
+      "size": 2890
     },
     {
       "category": "repository_metadata",
@@ -1485,8 +1485,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/collector_repository/process.py",
-      "sha256": "29e31675b2f42550ffacf43c4876e9242cf929cf4a7f03feeb8580130749d901",
-      "size": 4320
+      "sha256": "81820653a8ea02d237e793fb2aa61377885254deef2e6652bc882ccf5d68314d",
+      "size": 6296
     },
     {
       "category": "repository_metadata",
@@ -1509,8 +1509,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/collector_repository/validation.py",
-      "sha256": "17ccfc81f52007c9ea2a40ce12c17bea83dd7be810aa180f66a54ab48dfb59b0",
-      "size": 7320
+      "sha256": "32e975dd87a031b82e27b6ae88ced12a8b2231c831ae8bc4b8a82e587134f44c",
+      "size": 7338
     },
     {
       "category": "repository_metadata",
@@ -1713,7 +1713,7 @@
     {
       "category": "repository_metadata",
       "path": "tools/windows_installer/policy.json",
-      "sha256": "faffbec6b7e68bd510f443fc983f6a41859b27cfe398d10f2a44b5fbdde6573b",
+      "sha256": "5c9eb80e6e157d6cd43ae3ef63dad91e12ee2a4317388b4641265acfadc8405d",
       "size": 98
     },
     {
@@ -12596,5 +12596,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "1c76d7df6ddd3e93d3f061e7ad737c4a69bc4408d38a9b769d9c80f7f38bf524"
+  "tree_digest": "615bf5e04b6e3bf808ab709784d8db169ebf2ac5affca7c5e84ab78969c1781c"
 }

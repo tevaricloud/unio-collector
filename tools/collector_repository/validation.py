@@ -79,7 +79,7 @@ class RepositoryValidator:
 
     def _source(self, root: Path, workspace: Path, python: Path, process: RepositoryProcess, *, pytest_workers: int = 1) -> None:
         executable = str(python)
-        tests = ["-m", "pytest", "-q", "-p", "no:cacheprovider", "--basetemp", str(workspace / "pytest")]
+        tests = ["-m", "pytest", "-q", "-p", "no:cacheprovider", "--durations=20", "--basetemp", str(workspace / "pytest")]
         if pytest_workers > 1:
             tests.extend(["-n", str(pytest_workers), "--dist", "loadscope"])
         tests.append("tests/standalone")

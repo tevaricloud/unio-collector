@@ -66,9 +66,9 @@ jobs:
         shell: bash
         run: |
           if [[ "$RUNNER_OS" == Linux ]]; then
-            xvfb-run -a python -B -m tools.collector_repository native --root . --output "$RUNNER_TEMP/unio-collector-native-${GITHUB_RUN_ATTEMPT}"
+            xvfb-run -a python -B -m tools.collector_repository native --root . --pytest-workers 2 --output "$RUNNER_TEMP/unio-collector-native-${GITHUB_RUN_ATTEMPT}"
           else
-            python -B -m tools.collector_repository native --root . --output "$RUNNER_TEMP/unio-collector-native-${GITHUB_RUN_ATTEMPT}"
+            python -B -m tools.collector_repository native --root . --pytest-workers 2 --output "$RUNNER_TEMP/unio-collector-native-${GITHUB_RUN_ATTEMPT}"
           fi
       - name: Retain compact validation evidence
         if: always()
@@ -77,6 +77,7 @@ jobs:
           name: native-evidence-${{ matrix.target }}
           path: |
             ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/validation-summary.json
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/process-progress.json
             ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/installed-wheel-summary.json
             ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native/*summary.json
             ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native/*manifest.json
