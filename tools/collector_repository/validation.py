@@ -20,8 +20,9 @@ from tools.collector_repository.secrets import GitleaksSecretScanner
 class RepositoryValidator:
     """Coordinate the bounded public checks and existing collector build tools."""
 
-    def validate(self, root: Path, output: Path, *, native: bool = False, source_sha: str | None = None) -> dict[str, object]:
+    def validate(self, root: Path, output: Path, *, native: bool = False, source_sha: str | None = None, pytest_workers: int = 1) -> dict[str, object]:
         """Validate source or a pristine export, recording honest partial failures."""
+        require(pytest_workers >= 1, "Pytest worker count must be a positive integer.")
         root = root.resolve()
         PublicAssistantArtifactPolicy().validate(root)
         PublicNamingValidator().validate(root)
@@ -35,7 +36,12 @@ class RepositoryValidator:
                 before = RepositoryIdentity().verify(root)
             except ValueError:
                 before = None
-        payload: dict[str, object] = {"schema_version": "2026-09-collector-validation-v1", "status": "failed", "pristine_export": before is not None}
+        payload: dict[str, object] = {
+            "schema_version": "2026-09-collector-validation-v1",
+            "status": "failed",
+            "pristine_export": before is not None,
+            "pytest_workers": pytest_workers,
+        }
         payload["project_disclosure"] = "verified-publication-attestation" if before is not None and "sensitive_data_validation" in before else "not-attested"
         with tempfile.TemporaryDirectory(prefix="unio-collector-standalone-validation-", dir=output.parent) as raw:
             workspace = Path(raw)
@@ -44,7 +50,7 @@ class RepositoryValidator:
             try:
                 payload["secret_scan"] = GitleaksSecretScanner().scan(root, output)
                 python = self._environment(root, workspace, process)
-                self._source(root, workspace, python, process)
+                self._source(root, workspace, python, process, pytest_workers=pytest_workers)
                 wheel = self._wheel(root, output, python, process, source_sha=source_sha)
                 if native:
                     self._native(root, output, python, wheel, process)
@@ -71,14 +77,18 @@ class RepositoryValidator:
         process.run("dependency-check", [str(python), "-I", "-m", "pip", "check"], cwd=workspace)
         return python
 
-    def _source(self, root: Path, workspace: Path, python: Path, process: RepositoryProcess) -> None:
+    def _source(self, root: Path, workspace: Path, python: Path, process: RepositoryProcess, *, pytest_workers: int = 1) -> None:
         executable = str(python)
+        tests = ["-m", "pytest", "-q", "-p", "no:cacheprovider", "--basetemp", str(workspace / "pytest")]
+        if pytest_workers > 1:
+            tests.extend(["-n", str(pytest_workers), "--dist", "loadscope"])
+        tests.append("tests/standalone")
         for name, arguments in (
             ("compile", ["-m", "compileall", "-q", "unio_collector", "tools", "tests/standalone"]),
             ("ruff", ["-m", "ruff", "check", "--no-cache", "--output-format", "concise", "unio_collector", "tools", "tests/standalone"]),
             ("format", ["-m", "ruff", "format", "--check", "--no-cache", "unio_collector", "tools", "tests/standalone"]),
             ("pyright", ["-m", "pyright", "--pythonpath", executable]),
-            ("tests", ["-m", "pytest", "-q", "-p", "no:cacheprovider", "--basetemp", str(workspace / "pytest"), "tests/standalone"]),
+            ("tests", tests),
         ):
             process.run(name, [executable, *arguments], cwd=root)
 

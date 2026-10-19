@@ -9,6 +9,14 @@ from pathlib import Path
 from tools.collector_repository.identity import canonical_json
 
 
+def _positive_workers(value: str) -> int:
+    workers = int(value)
+    if workers < 1:
+        message = "pytest workers must be positive"
+        raise argparse.ArgumentTypeError(message)
+    return workers
+
+
 def main(argv: list[str] | None = None) -> int:
     """Execute a local-only standalone repository operation."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -20,6 +28,9 @@ def main(argv: list[str] | None = None) -> int:
             command.add_argument("--output", type=Path, required=True)
         if name in {"validate", "native"}:
             command.add_argument("--source-sha")
+            command.add_argument(
+                "--pytest-workers", type=_positive_workers, default=1, help="Source pytest processes (default: serial); all standalone tests remain selected."
+            )
         if name == "provision":
             command.add_argument("--tools", nargs="+", choices=("gitleaks", "actionlint"), default=["gitleaks"])
     args = parser.parse_args(argv)
@@ -50,6 +61,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.output,
                 native=args.command == "native",
                 source_sha=args.source_sha,
+                pytest_workers=args.pytest_workers,
             )
     except (ValueError, OSError, RuntimeError) as exc:
         sys.stderr.write(f"Standalone repository operation failed: {exc}\n")

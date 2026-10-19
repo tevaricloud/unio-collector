@@ -24,6 +24,8 @@ class LauncherController:
         self.command_prefix = tuple(command_prefix or _collector_command_prefix())
         self._process: subprocess.Popen[str] | None = None
         self._execution_lock = threading.Lock()
+        self._process_lock = threading.Lock()
+        self._process_cancel_event: threading.Event | None = None
 
     def profiles(self) -> tuple[str, ...]:
         """Return local AWS profile names from the authoritative CLI service."""
@@ -104,7 +106,7 @@ class LauncherController:
         self._add_environment_alias(args, selection)
         if not selection.include_cost_data:
             args.append("--no-cost-data")
-        if client_id:
+        if token_scope == "client" and client_id:  # noqa: S105
             args.extend(("--client-id", client_id))
         return tuple(args)
 
@@ -151,7 +153,7 @@ class LauncherController:
             "--acknowledge-vault-loss-risk",
         ]
         args.extend(("--token-scope", token_scope, "--engagement-id", engagement_id))
-        if client_id:
+        if token_scope == "client" and client_id:  # noqa: S105
             args.extend(("--client-id", client_id))
         if environment_semantics is not None:
             args.extend(("--environment-semantics", environment_semantics))
@@ -188,25 +190,32 @@ class LauncherController:
         argv: Sequence[str],
         *,
         stdin_text: str | None = None,
+        cancel_event: threading.Event | None = None,
     ) -> CommandResult:
         """Run one collector command and capture its sanitized user-facing output."""
         command = (*self.command_prefix, *argv)
         with self._execution_lock:
-            process = subprocess.Popen(  # noqa: S603
-                command,
-                stdin=subprocess.PIPE if stdin_text is not None else None,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                creationflags=_creation_flags(),
-            )
-            self._process = process
+            with self._process_lock:
+                if cancel_event is not None and cancel_event.is_set():
+                    return CommandResult(tuple(argv), 130, "")
+                process = subprocess.Popen(  # noqa: S603
+                    command,
+                    stdin=subprocess.PIPE if stdin_text is not None else None,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    creationflags=_creation_flags(),
+                )
+                self._process = process
+                self._process_cancel_event = cancel_event
             try:
                 stdout, stderr = process.communicate(input=stdin_text)
                 output = "\n".join(value for value in (stdout.strip(), stderr.strip()) if value)
                 return CommandResult(tuple(argv), process.returncode, output)
             finally:
-                self._process = None
+                with self._process_lock:
+                    self._process = None
+                    self._process_cancel_event = None
 
     def run_streaming(
         self,
@@ -260,12 +269,15 @@ class LauncherController:
                     process.wait()
                 self._process = None
 
-    def cancel(self) -> bool:
+    def cancel(self, *, cancel_event: threading.Event | None = None) -> bool:
         """Terminate only the active local collector child process."""
-        process = self._process
-        if process is not None and process.poll() is None:
-            process.terminate()
-            return True
+        with self._process_lock:
+            if cancel_event is not None and self._process_cancel_event is not cancel_event:
+                return False
+            process = self._process
+            if process is not None and process.poll() is None:
+                process.terminate()
+                return True
         return False
 
     def temporary_path(self, name: str) -> tuple[tempfile.TemporaryDirectory[str], Path]:

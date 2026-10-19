@@ -118,6 +118,8 @@ class AwsNativeCollectionCoordinator:
             "confidence",
             "finding",
             "findingReasonCode",
+            "instanceFinding",
+            "storageFinding",
             "recommendationSourceType",
             "implementationEffort",
             "summary",

@@ -196,7 +196,10 @@ class ComputeOptimizerRecommendationReviewCollector(BaseUnioScanner):
             "recommendationOptions",
             "volumeRecommendationOptions",
             "lambdaFunctionRecommendationOptions",
+            "memorySizeRecommendationOptions",
             "rdsDBRecommendationOptions",
+            "instanceRecommendationOptions",
+            "storageRecommendationOptions",
             "serviceRecommendationOptions",
         )
         estimated = extract_estimated_savings(option or item)
@@ -213,7 +216,7 @@ class ComputeOptimizerRecommendationReviewCollector(BaseUnioScanner):
             resource_arn=str(resource_arn) if resource_arn else None,
             region=region,
             finding=str(
-                item.get("finding") or item.get("findingReasonCode") or "",
+                first_text(item, "finding", "findingReasonCode", "instanceFinding", "storageFinding") or "",
             ),
             confidence=str(
                 item.get("confidence") or "",

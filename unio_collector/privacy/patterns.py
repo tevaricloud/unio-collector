@@ -19,3 +19,8 @@ RESOURCE_RE = re.compile(
 
 ARN_PART_COUNT = 6
 IPV4_VERSION = 4
+
+
+def is_safe_literal(value: str) -> bool:
+    """Recognise the unchanged empty, numeric and boolean/null literal forms."""
+    return not value.strip() or value.isdigit() or value in {"true", "false", "none", "null"}

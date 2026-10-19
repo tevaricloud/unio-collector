@@ -93,8 +93,8 @@
     {
       "category": "repository_metadata",
       "path": "README.md",
-      "sha256": "569c7babff91a0432e43805c43d6f1e9ac564bd07e3fb0155c4863ab2cf128d5",
-      "size": 11980
+      "sha256": "a50ce8f9d58822e7add3c739d9579d669c705c7864a9121f1364e407134f8079",
+      "size": 13411
     },
     {
       "category": "repository_metadata",
@@ -117,8 +117,8 @@
     {
       "category": "repository_metadata",
       "path": "pyproject.toml",
-      "sha256": "57832ccaf2b4271648a84ac4ba177b424771812b8d226659b6f4279b3bbf6e14",
-      "size": 5160
+      "sha256": "c0690c44afb76f333b41e74b308299fe67dcfc4acd86b58073e967e65e637280",
+      "size": 5184
     },
     {
       "category": "repository_metadata",
@@ -189,7 +189,7 @@
     {
       "category": "tests",
       "path": "tests/collector/snapshots/collector_cli_contract.json",
-      "sha256": "a10b9658eb2f842d9d064df4f7110a52f1c13c70da65222d3cf27356f65a5712",
+      "sha256": "c4ed92535cb9fab84cc66021e3cd9f7001523e75a2a17685a8803f3c9ed450a8",
       "size": 6558
     },
     {
@@ -206,9 +206,165 @@
     },
     {
       "category": "tests",
+      "path": "tests/standalone/fixtures/protection-producers.json",
+      "sha256": "18b60c0fc7ae8945d7ec6c269371905270baa98a724efd02e6c06effc7c7b3a2",
+      "size": 78604
+    },
+    {
+      "category": "tests",
       "path": "tests/standalone/fixtures/region-scope.json",
       "sha256": "b563284d91213a8aadcc82383db8d755244daa6d11d8624e36017f16b2e9523c",
       "size": 1625
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_account_bundle.py",
+      "sha256": "eed044de678fc98a2561f235864a9dd51274773d1f034b7c42d7496c11a043ab",
+      "size": 3910
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_account_risk.py",
+      "sha256": "d3c67d0ae2448585ff1fb53138c85932d3c645e53d7cad7e1c79480398cf3658",
+      "size": 7936
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_address_branches.py",
+      "sha256": "41f08df05d5584e8821cb08f34287cf7cccf93e66085154dd383088e25879312",
+      "size": 3882
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_address_bundle.py",
+      "sha256": "3823b1083ead66cefb64c4ee54bb292ea286e727bb775465da0fc7f116bcf60c",
+      "size": 4107
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_address_producer.py",
+      "sha256": "5d9a1a6bc3ba03a464bb33f98726d500933dedde5cf0ff9edb52320b55601549",
+      "size": 5042
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_analytics_producer.py",
+      "sha256": "96db03d33577d8bd22e3c43be63be4a655e9282fe7f2ff94fe8b271ac74df559",
+      "size": 14294
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_attribution_compat.py",
+      "sha256": "45e5160af16c9599aebeed7d1a890fcc0b8edea8f8dde58ede49930f6d4f0b55",
+      "size": 5560
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_attribution_negative.py",
+      "sha256": "abd168502bd4c82e0bfd90a2637e1a9a6f06611714c0e31d492b83c6e8db4e7c",
+      "size": 8645
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_attribution_producer.py",
+      "sha256": "da80cee5276b0aedeaabe25a1b7a424785503f0308644b0c7f8ed3663d81722c",
+      "size": 6772
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_audit_producer.py",
+      "sha256": "6b9f321149a452f9ecf474db009a05b728c21f1302ec8aaa1e7cb12808ad29a0",
+      "size": 9585
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_audit_scan.py",
+      "sha256": "0701744b81103ca647fdc3a0db0cb483c5dd294357db8bb40c30062ba4360ee6",
+      "size": 6000
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_backup_producer.py",
+      "sha256": "da923506be34f5cdd3f2a97fd68cdd2d0893ca2c5803e819036d224bdd037c22",
+      "size": 8797
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_balancer_branches.py",
+      "sha256": "44e90924414fae6774ede86bdd6e0253d807c8644beb860e0489e27e68f2baba",
+      "size": 3147
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_balancer_bundle.py",
+      "sha256": "89e86c536723be3843a58118537c2dbb63f477f4ec443df5fb5413a743aa6c32",
+      "size": 4083
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_balancer_producer.py",
+      "sha256": "60fe58cca385864e1378b6cf12ea02d521d515a0d637346fe9b4a26a20c6fc39",
+      "size": 7752
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_bedrock_bundle.py",
+      "sha256": "34bfb64e2c57cee6ef5959c1c1fc1957bf3ca4f2191a71e0e8b104c12f6daaeb",
+      "size": 7989
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_bedrock_producer.py",
+      "sha256": "df733da29dab489be63416a6745c523067c2785c1fdd77f6b0949681c5edff68",
+      "size": 8324
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_billing_producer.py",
+      "sha256": "95d759f86aaf51705e67c0454b57a3daf791ac2cb40c8e3463b756196e358557",
+      "size": 9881
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_billing_schema.py",
+      "sha256": "76dae17acf8aac3c0fb369cd7ee26079ad8705b4c1037431d2534528efbef140",
+      "size": 7884
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_cache_notes.py",
+      "sha256": "2724e63884a64a5e563539341fefa96528a1252422c37954e989cfa62b7b8d4b",
+      "size": 5682
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_commitment_compat.py",
+      "sha256": "c4287303cf61aa5b0709bf9f65954bcaf60cad92531d5abc367ae37d80b3a4a9",
+      "size": 2391
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_commitment_controls.py",
+      "sha256": "8b19529e28b745acbb215e151a35e0ce2290d74f866b2021609be5a06581a98c",
+      "size": 4737
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_commitment_negative.py",
+      "sha256": "fa0232c927bdf6e4cdd07566a9036a950ee3affd2a8698ce505915f80f5f1dc8",
+      "size": 4808
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_commitment_producer.py",
+      "sha256": "770bfb06d418c963abbedd53064012b8bf8a9c3671449fba5f9b6227e3197c12",
+      "size": 6432
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_compute_producers.py",
+      "sha256": "1323599842616e7f938e3376111b42badabe344d50aa2be0e7364b4c28f8ed84",
+      "size": 11938
     },
     {
       "category": "tests",
@@ -218,9 +374,399 @@
     },
     {
       "category": "tests",
+      "path": "tests/standalone/test_cur_producer.py",
+      "sha256": "0e5b96b67197a3f6789a74948bdb47b9c5b99b179742c69b0436d5f0654bea69",
+      "size": 11930
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_daily_bundle.py",
+      "sha256": "42eda3f6cdf0053bfd7ad1f2354de98b5b6c604ea4cc41b5456c8e4936e4222b",
+      "size": 3754
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_daily_producer.py",
+      "sha256": "b145ce70df7e62683f3c6825f13142fdd00226d2a1748be726611a1296420dae",
+      "size": 5273
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_delta_producer.py",
+      "sha256": "cf8c0c93f1add20ceb6519ff26bcb1754d89325d87cd1faab0f8e20eb5f8187e",
+      "size": 9679
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_delta_scan.py",
+      "sha256": "3eebdbc846f287e6ca9339eb5fb3f81a363b10353aa3d0641de00f6f050c4da1",
+      "size": 9792
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_dynamo_producer.py",
+      "sha256": "42b2027eaa187572e4340b05071c9f077148fe46a0bf765a4caa46c16fb33b9d",
+      "size": 7351
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_edge_producer.py",
+      "sha256": "8d2bef6e83667be46a7316f5d4fa3f796b37e639227172c2a55da06228e5b9f9",
+      "size": 9068
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_edge_scan.py",
+      "sha256": "872c1cceda894e2a15d2db11f0b7fba458bf347097fd57c432fea5870ee11ba7",
+      "size": 6053
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_environment_scan.py",
+      "sha256": "5e4925a7e7d3c8fb3023f08641380a16d4d1a2895c59c78949853976c12dd11b",
+      "size": 8820
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_exposure_inventory.py",
+      "sha256": "e80d4bf023bfc551b846180063aef4c373ee04e666482cdc5c07448a0bf9c92e",
+      "size": 3963
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_exposure_producer.py",
+      "sha256": "9b60ee3fa6a2ad395091888c22459638dccaa4a0bfea2e87093fa7ed71217bfb",
+      "size": 9964
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_exposure_scan.py",
+      "sha256": "5ffe430a0bfd43b86b61d68f3ef49a3f5d159c6e241c7bea81aa930fb04d11ae",
+      "size": 8202
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_freetier_producer.py",
+      "sha256": "0d0638728465fccb9d3df6bef1619124f05672c9fb195a1b3926a3539e7a5c10",
+      "size": 11553
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_freetier_scan.py",
+      "sha256": "7e12ecdc218ee571d1b12570f273cc0c215fd66159a5b25beb38a7b9c0010e8e",
+      "size": 8915
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_governance_producer.py",
+      "sha256": "e2fb5a454abc81979a96bf0801a3e00aadcce8be7cb3b7f851bbc54664584f34",
+      "size": 11353
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_governance_scan.py",
+      "sha256": "b117a7a9a1a767c69b64b5cc1979f40dfc958c310ee41b2d7e2d259f69fb1860",
+      "size": 11258
+    },
+    {
+      "category": "tests",
       "path": "tests/standalone/test_identity.py",
       "sha256": "ffa9a17f676cdb30a0aa3295b54e02554261ce5f370b06a509f9a5d21bbe0a82",
       "size": 8763
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_identity_alias.py",
+      "sha256": "74a13ed9502fdb1e0703fd3b28f67da2650ae808bb541b697a44a993b8d551ba",
+      "size": 811
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_identity_inventory.py",
+      "sha256": "44295581cd4ffbb3ce6a2646348c3f6be5c6712b1ec1724a0801a734a5c3ce95",
+      "size": 3564
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_identity_producer.py",
+      "sha256": "184bda636ee04b147e934d4636a6b71119e5eb09343568cde0d2bebeb293f8bd",
+      "size": 8088
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_identity_scan.py",
+      "sha256": "4e5c49f41d193bde7fbee5ccdf53725fbd3f0c9a2e447b8dc0a67a8d4e6f4d99",
+      "size": 9593
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_inventory_bundle.py",
+      "sha256": "f4106a9f91fdc4cf3bcc73202fe04a603492d14a569eff3bcd2bc7eb070f402c",
+      "size": 3988
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_inventory_producer.py",
+      "sha256": "07320e4360c5c84ed20370bfdaca8a5a94dbff5edf8d7ea32291c0e2f9eb76c2",
+      "size": 9003
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_ipv4_bundle.py",
+      "sha256": "c6ac40459e65bd41649d39809d22215227a8aada756830e232e3db411fb41472",
+      "size": 3942
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_ipv4_producer.py",
+      "sha256": "1498f3d9726537cc0c39fc0f9df56fe3a65d673a8a0d991d998376bf5aa1be2a",
+      "size": 5886
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_json_scan.py",
+      "sha256": "ca39856366393e2c8f36c8e27d4a1bcac9ca0414ca6ded6c286123270b443879",
+      "size": 3710
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_key_producer.py",
+      "sha256": "cb5d9a7a97357019a3dfe0c2d3d4083aa8b491d6e74447c4f1d9164500f0e5c7",
+      "size": 8819
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_key_scan.py",
+      "sha256": "1ec853ca6afb729f20bc7176d0838fe7d54c2d30d71175372c8571497930848d",
+      "size": 11064
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_lambda_producer.py",
+      "sha256": "eec4f1913241b6a387fbba19b8b451f8e83607aac89c247dc883a526ae82447d",
+      "size": 5274
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_leak_structure.py",
+      "sha256": "6453e8dea4d851e071c8b9f28ec80020e822eddc4c74581d1e1f4b9f19aaf3ed",
+      "size": 6639
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_ledger_lifecycle.py",
+      "sha256": "2a63c977c505db0e0d86fbaa06af9d61a18b2a9bbd39f164308e3068bc3c3cc6",
+      "size": 2681
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_lifecycle_collision.py",
+      "sha256": "7e1d9a8c6f4c552dc981ec0c3a0a13ca77f209424cb60c1aa9f05f79e7f962a1",
+      "size": 2949
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_lifecycle_producer.py",
+      "sha256": "22d29e9f499741c1f81682a2d3bcff3044d720fff7d2198db8b477945a610194",
+      "size": 9769
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_logs_branches.py",
+      "sha256": "0c7a4195f5b483a22486866b37c70ed3e325f6843d992b2783f9987821ad948a",
+      "size": 3224
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_logs_bundle.py",
+      "sha256": "e1f0b366be73f35323ea4e68bf6a9b01805c85b2e05b8a0e6e9c3351f2aa50b3",
+      "size": 4330
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_logs_producer.py",
+      "sha256": "89596bd81485be7af7ce3c27c7459ff48e08cdeb010946c7d0ae8ffc14577b7f",
+      "size": 9900
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_managed_producer.py",
+      "sha256": "c99b90a0971d4df390b0257e3bc8194fe20cb61953360fddb614a45c3c20556b",
+      "size": 11741
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_managed_scan.py",
+      "sha256": "44f371c8d31d709e0517d8accb09e68dd17a337c8debc0a6cbc2b1fc0558181f",
+      "size": 3654
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_nat_bundle.py",
+      "sha256": "96b5eb6ad544fdf13cb263218b8cb14451850aeb8eaadb5ddb42503f25273a5c",
+      "size": 4448
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_nat_producer.py",
+      "sha256": "86e198707ec551fa03d8e5fce9c7cd73b16e8af046a2a14229a5c625f3d4fa3a",
+      "size": 7716
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_natcost_bundle.py",
+      "sha256": "7231ddd0854a99b690f51b4c2ef9c6325ab94404600d7e8dd862fdfa26352eb2",
+      "size": 3987
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_natcost_producer.py",
+      "sha256": "775e7fe6acab0bfe702b03571aaea23424abcd9ff109844bcd02b9f2944a4c44",
+      "size": 6217
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_native_guards.py",
+      "sha256": "a84fab85e7e4549052e6c0745471a3d0d075f4f8ad315e8b323d14675bb54bca",
+      "size": 2399
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_negative_smoke.py",
+      "sha256": "87074fcda90a491ff63b10d58ddb0d2b7a21fd11ba90977d08b645bfb244f815",
+      "size": 2965
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_network_facts.py",
+      "sha256": "19f7ad0bf94471def69e8184caa71f64b8c034546177aa6865ace8099a1dbfd0",
+      "size": 5962
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_no_cost.py",
+      "sha256": "82e8b0e60995456f24b60427368b0f31032c32028a69b13c633ff524760151c1",
+      "size": 7041
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_permission_producers.py",
+      "sha256": "aa5dff946e6e00eeb9c234cbd39032836d261c594c06ddef7018517b77c286d1",
+      "size": 8170
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_polling_producer.py",
+      "sha256": "7107d7fb495c4a303e72fab29259842a0b694ab16a09ab0cdcd24250aee8d65d",
+      "size": 6731
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_privatelink_bundle.py",
+      "sha256": "96f8a99f2e581c5af08f0bb14c5c330a16a31924fd12fd607ad209959d0f6af8",
+      "size": 3953
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_privatelink_producer.py",
+      "sha256": "3ee3510a045d1d7c6063c15c7b989055cb13a3f8239599774f712fe6ea18806f",
+      "size": 4974
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_producer_paths.py",
+      "sha256": "bdd7534fcecc41c496c5c615e44ce2045ed5624890dbdf7301b3c8867205249c",
+      "size": 4798
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_producers.py",
+      "sha256": "20879a3fe2bddc3f4e75f4aaa8cbfd5879058e9c879572c2b76d8bf22d494393",
+      "size": 14586
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_progress.py",
+      "sha256": "de80e535c82d99e6b9f34c9728941eb25108d414f484689802e83c44277bbdaa",
+      "size": 3546
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_protocol_scan.py",
+      "sha256": "d72d0b849ed58451bdf9d0d52c5c191ad695f3753ad9fabd8e709dca148f4cd7",
+      "size": 8797
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_public_literals.py",
+      "sha256": "57c1cb10112fa70c8d07128893eb97bace1faeee0a57d6e140c7d47a2e9a4456",
+      "size": 5849
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_public_paths.py",
+      "sha256": "3c054955bbd3d25bf770417ba6a9cb331bce85be49699e9cc3a87c4b2eb89fdb",
+      "size": 3154
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_quota_producer.py",
+      "sha256": "e209d7964dd1d1f7563ad56ab6f4d914d2bb56bc966d784845d51abbee3126d2",
+      "size": 9394
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_quota_scan.py",
+      "sha256": "7660d108d529fa778133f899681d8ba8dcd325b7f6f7299ac6e1c75359faa989",
+      "size": 7081
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_rds_legacy.py",
+      "sha256": "e69a5498103125f89481261e9cce03316e0e0b7cf9924aee20512a18c6c5bba4",
+      "size": 1566
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_rds_producer.py",
+      "sha256": "ab283e9ad405d9afa2524a0f6d941ad7198fda37dd18afa7d78e3f5598c96913",
+      "size": 7439
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_rds_schema.py",
+      "sha256": "2a5acce1547d725ac11546bba3f01c869f2fc385f7fb45f2691255403b68e551",
+      "size": 8744
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_recommendation_producer.py",
+      "sha256": "c6dca7107c07b4fbf8155e93c3741b1d49d7172bef3ff532057e22a28b6ba85b",
+      "size": 9779
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_recommendation_scan.py",
+      "sha256": "ea6d018e63d3317421d700c0655e1e648b9798773442b21a91b969a9cc6126ce",
+      "size": 11705
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_reference_scan.py",
+      "sha256": "411e0e2335f26293e033a7fc2c04dfa1d543f8832e2e50fe056df4365bc0edaa",
+      "size": 4319
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_result_times.py",
+      "sha256": "cd084e6cb5e05b859e3b515005396fe9f20b12641c38db4dd7c67a9fad593983",
+      "size": 7656
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_retention_producer.py",
+      "sha256": "3616aef537b3181a20be72f8008f92e6e10738d65aa0f5b787480d155a680e10",
+      "size": 12379
     },
     {
       "category": "tests",
@@ -230,9 +776,153 @@
     },
     {
       "category": "tests",
+      "path": "tests/standalone/test_s3_bundle.py",
+      "sha256": "090cd3d9efff4891544f2c641cef6f2634f29632a33bfea9eb5d856bdbdc3d98",
+      "size": 4015
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_s3_literals.py",
+      "sha256": "2cc40fd3c6c4e413b2011587364c705aec6faa0bedc4f8036087dce83821f953",
+      "size": 2460
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_s3_producer.py",
+      "sha256": "faeaa8a4c9d7e7faaa09e1e30e61d3659bd3f801a9fee1b4d678d0492a6fde4a",
+      "size": 5946
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_sdk_wrappers.py",
+      "sha256": "5f0a20114acbc0c2b6aac95a4ad7609db7c745baad5c254accc493cdee87f576",
+      "size": 11299
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_security_bundle.py",
+      "sha256": "4037042c121b2244b277074280ae631013c1d368ba92741c55e5cdca1079c455",
+      "size": 4036
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_security_producer.py",
+      "sha256": "1e09b580e5895828b6fc94c6d393063c96122a62c2acc9d7dffd1a46bb617024",
+      "size": 7904
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_serverless_shapes.py",
+      "sha256": "d36e9083ee8971a36c97089b53eb422219a1e3338094f18a6b231d84e890d146",
+      "size": 2778
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_service_bundle.py",
+      "sha256": "395f7c218c6dfae5b3dd7c0d3ea2f180b76f1121b89a039814c541a4057f927c",
+      "size": 3921
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_service_literals.py",
+      "sha256": "af06bcc1bd6a379b3dd1001c8f59b1fd1c6a38f5e17eff674b538fbf2c2b6d96",
+      "size": 3082
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_service_producer.py",
+      "sha256": "970736c0108bce1c90ca9f20aafdf00ea01f834ddc030c9a89703806ecfbd928",
+      "size": 5303
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_snapshot_bundle.py",
+      "sha256": "bc9a3a8d58f5092916d3d9dff13309fa244e2bc4a9531c8b1f2e8bf09d5e5cc0",
+      "size": 3901
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_snapshot_producer.py",
+      "sha256": "1c55c2230478d2b7036afc412d3d233b5859a34c186b2ef39f55e8b3bcc748c5",
+      "size": 6603
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_stabilised_scan.py",
+      "sha256": "af06385a92cc04f5e0bbabcd7a2f1d980fbf9b78bccba3d1804fca0171b7f363",
+      "size": 8553
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_storage_bundle.py",
+      "sha256": "c2ed61de6eb288217db73473757adb5cb1a4aa1c9d396386385b8e8e238db5d8",
+      "size": 3975
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_storage_producer.py",
+      "sha256": "3957f078fa8f1de7886e0a18b5ed1228c052a436cdbcfaa15d5447793c09f395",
+      "size": 9553
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_strict_tokens.py",
+      "sha256": "aea6f722d0868bbcb59086546bd57385b583b0ec4f1e2c46f38572f065372418",
+      "size": 8541
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_summary_shapes.py",
+      "sha256": "d6fd4047edbb5bd303c02221fef8867e1c6415502f1157e154509d718001cfd8",
+      "size": 5684
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_temporal_roles.py",
+      "sha256": "cd9ed7c71be5a458f115befdd1512a7eaea35d4398f4729eb0553132025425f2",
+      "size": 7848
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_transit_bundle.py",
+      "sha256": "6d06332e23ad6e20593fc9e3f6482c3ac7192a1991a8efebf807b88ad09360a4",
+      "size": 4106
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_transit_producer.py",
+      "sha256": "fdf36084426ed7a926c4341ff4c779791d4ffcb58c1b00bb64030a8e0a0788a4",
+      "size": 7468
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_transport_codes.py",
+      "sha256": "28d41f16fc9fe1ba3edf2338357a7ced32bf10ccddd8ddcf908ea5a43a93beaf",
+      "size": 8783
+    },
+    {
+      "category": "tests",
       "path": "tests/standalone/test_typing.py",
       "sha256": "632e8b86a9fd86ddc6ef87ee918de4b19e13854236aaa7c33ea555f9910340bd",
       "size": 4728
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_unknown_roles.py",
+      "sha256": "e601c83f983b83a7c86b7a339e8b7d4a90dcc442db85de0fd6b516f675c4bbb9",
+      "size": 5480
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_vpc_bundle.py",
+      "sha256": "f2c5684270c88d3fdee2781f712219694e81735ac835c3207489cc88524b7b6d",
+      "size": 4076
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_vpc_producer.py",
+      "sha256": "ad966b36889efe62b71b556951f2ec4497aa271c4863a4517d7a84389d3486db",
+      "size": 1457
     },
     {
       "category": "repository_metadata",
@@ -249,8 +939,500 @@
     {
       "category": "repository_metadata",
       "path": "tools/build_native_collector.py",
-      "sha256": "70386ac6c1290ee948f9f8d49de2ecb3ead70db42a0242683f6eb2f2e42ddfa3",
-      "size": 31424
+      "sha256": "c2e1836c2e241e71bceae773d707352d05ab783b3df9a2f2dbe626159b674cca",
+      "size": 65632
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_address_fixture.py",
+      "sha256": "9401f1c1c1e8b958edab185759e53ba4bcba22f7605a382ac1b357029883b212",
+      "size": 4300
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_analytics/__init__.py",
+      "sha256": "a6e1a5007283ff48d737fc50a43a6e4a34688ebefc12dd172e61388942ba0f06",
+      "size": 60
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_analytics/fixture.py",
+      "sha256": "512cedbf0e615447e935574dd37c6fdf577780d0f36fe2a6c6cca9b13111b98e",
+      "size": 4058
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_analytics/search.py",
+      "sha256": "8b6b1f2918964350e021308fde14894af7ab79d9907788a219978207eb95937c",
+      "size": 6228
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_analytics/session.py",
+      "sha256": "ed08e1006775631a3f1102fd6cb8c5489f4bd147709dd74321c45e593e46d15b",
+      "size": 7849
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_athena_fixture.py",
+      "sha256": "2b6060830fad41110a10a63dd26bb0a3ccf75894f5382ace9c9e39ad471b76b3",
+      "size": 7709
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_attribution/__init__.py",
+      "sha256": "ba776ae7db3e373144ef7c38364add82bce526b69b1e1682c4e235828c5a3d2d",
+      "size": 86
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_attribution/flow.py",
+      "sha256": "0d68717afabaf017fea9479c133cbb2c7ff0164296aadc4eeb67fa0d0dff418b",
+      "size": 2821
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_attribution/responses.py",
+      "sha256": "ee6f09cac29ef92aa11ca2fe2310fcefe464f7c86f1bbb0fc488fba314bd4eb2",
+      "size": 7524
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_attribution/session.py",
+      "sha256": "558aac9ec2f976afa998d73af79987198aab982e3688a088626c0f48c0352ef7",
+      "size": 3015
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_attribution/tagging.py",
+      "sha256": "b1d3f5880bd34a7f4a40c072fd3d2c8a540206fc69c093e0ad13ddb0de49e416",
+      "size": 4809
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_audit_fixture.py",
+      "sha256": "7fffbab73974bab7261be57558dab3f2a2b1ac6df2e05f330788a3ae05bb9758",
+      "size": 12093
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_backup/__init__.py",
+      "sha256": "dec8decf8267dd69394a414c067c9799fa9d425e2ba8cc8d40b7dc000f792c3a",
+      "size": 68
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_backup/client.py",
+      "sha256": "601b9362b708382195f7214f4cefb08d53dae0c002e2c4447bd914b90c880228",
+      "size": 9082
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_backup/fixture.py",
+      "sha256": "cb30ea4cf01b84765764cf2c971233feb15bc08e95f8a0ce56aa5eaa4cf8ffba",
+      "size": 3652
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_backup/session.py",
+      "sha256": "65a550a926ef4be51ac66e28b1728c8c471fad4bc301536f3125ca51b55825aa",
+      "size": 1659
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_balancer_fixture.py",
+      "sha256": "356bffe9bd55d006d47a3ea37dceb4c094a74db0a7d91cb3f4264c40161a8a52",
+      "size": 7612
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_bedrock_fixture.py",
+      "sha256": "3ecaf2b7bdb99b862fe2fb855936a610747519c0e086bede46114db77cb3ab1f",
+      "size": 6301
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_billing/__init__.py",
+      "sha256": "f8762c35649f4ae6503a30c13efe8bd339f8b05f873e17db842aeb1fde40f3e3",
+      "size": 71
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_billing/client.py",
+      "sha256": "7ed3af5378e1e253d4b4a7a68f2bd27d9be65b3534cd4c2a7a662559fa73fc4f",
+      "size": 1215
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_billing/fixture.py",
+      "sha256": "69891af53245c00d155753f749b0403c840cab0d0978e9fb0961195c53fa5f98",
+      "size": 3575
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_billing/response.py",
+      "sha256": "387d398f39629ef0b9536b34416e71b2281ad02436777041a215fa7f74df1c76",
+      "size": 4408
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_billing/session.py",
+      "sha256": "fae04b06763856d6b497dc2fbcb80dade4ef4e53571505312b880f24360eefc2",
+      "size": 4902
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_cache_fixture.py",
+      "sha256": "fd65b751bf859cff0e5746dea903f46eb0c4151cdebb9195ce6778472734cdfb",
+      "size": 2522
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_commitment/__init__.py",
+      "sha256": "0787fcedbf6cb3c253dbae90e2a34b9f0a8a5ce8e337efab286a7bb9f120ab9c",
+      "size": 83
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_commitment/fixture.py",
+      "sha256": "aa92bdfb1ecce3d920911f0184c01c7d3e84aa3dc5594b1159ff3bdf74d91df9",
+      "size": 2361
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_commitment/responses.py",
+      "sha256": "f843425b0328c61d4a42815ef1457a31122f7268b7836fabda7b7f838a9a9914",
+      "size": 4429
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_commitment/scenario.py",
+      "sha256": "8b638dbcb8b13b216da6f606ef7887ca9d0f0c1fda183b51f07ccffe70f6de20",
+      "size": 3972
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_commitment/session.py",
+      "sha256": "59e6169ef35e1e9f2b7dd4cc600f03a8ef5207b4ebfb2daa9e95f3a496b472c5",
+      "size": 2557
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_compute/__init__.py",
+      "sha256": "b4942f7cfc678147e777cb79314d66f1234462bae2e53df28a3b563bf4228f57",
+      "size": 71
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_compute/fixture.py",
+      "sha256": "76ac475d025bc2244f02d74b17daefcf704614f880969c588246f2d528855ba3",
+      "size": 7751
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_compute/session.py",
+      "sha256": "2f181ab9c41a5e9c83d92c12aebd72c563002a49b2e2a7bc8703fc4ba39a2429",
+      "size": 5611
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_cur_fixture.py",
+      "sha256": "edbe00995a8d3cd0504ed973700d072a615442ea1fc395300996229ed84d5b96",
+      "size": 6056
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_daily_fixture.py",
+      "sha256": "687359010b185017a7ac34472f7dff06b8ababa67f3fb4658d36a31b0b0c80f1",
+      "size": 2576
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_delta_fixture.py",
+      "sha256": "c8657b1bca715b8475f66b707fedb4891eb6da4929482ddb4f2ece7be15441af",
+      "size": 8164
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_dynamodb/__init__.py",
+      "sha256": "8b3307d6d10be6d8a22a54ae03a91a38e3148d5f269628a7f6d01f0bff5ff4f8",
+      "size": 81
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_dynamodb/client.py",
+      "sha256": "09be9c3a3b5126797804af6a7e912bd02754b240263f4b87149306e4521e34b0",
+      "size": 4268
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_dynamodb/fixture.py",
+      "sha256": "ed30ef02ce5b06550c26416d9a37f2eae3e7d9d21758bb8d2913a270f5700226",
+      "size": 5023
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_dynamodb/metric_client.py",
+      "sha256": "f73e5ec2211c121fbf7d75972c6659d0a4339efb029b8a66af5ef66bec64adc6",
+      "size": 2607
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_dynamodb/scaling_client.py",
+      "sha256": "575c978f50206ddb9bce0a3452865c16916fa9aa2105d34ee4e22b483f8d2ed6",
+      "size": 1242
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_dynamodb/session.py",
+      "sha256": "b6f1c6e4d04702c873ef360bda2959cbddedaca1d4e66024a4b09d5f5794082b",
+      "size": 1858
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_dynamodb/table_client.py",
+      "sha256": "86622b5434075e284e1e96176f7699bfd753a095490d65fb71af8173f5c6ef48",
+      "size": 3493
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_dynamodb/tagging_client.py",
+      "sha256": "b9b293472def7d7cf1124075b976c48bc58e08d506fe7a5c5e071c0aa75f51a1",
+      "size": 1046
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_edge/__init__.py",
+      "sha256": "caa24dcfbd5f115a36b1cd65fa441f809ccdc0b08ad120f02a581a4fb0c055dc",
+      "size": 75
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_edge/clock.py",
+      "sha256": "cd34bf5543e40371aaf175491deccd1f65046130b06e9bd2481f82f052e9cba3",
+      "size": 712
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_edge/fixture.py",
+      "sha256": "7be55d4d7d1bc861b8a457149ce16f6547bf268b8dd6cb34574fd7897e98db55",
+      "size": 5764
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_edge/responses.py",
+      "sha256": "476dda20c55898b05be8d4f4a3c6bfb2bc4e67e8110b5919dbc784c1dbcb2195",
+      "size": 5919
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_exposure/__init__.py",
+      "sha256": "e0a55234cf8fbbae6ba227f4b5012373931331071835de4e2ca8fb74f348c02e",
+      "size": 79
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_exposure/fixture.py",
+      "sha256": "b99c5e278bf2bf4cbe6d5af5552511ae4b387fc36b47a555ed79242d5d2455c7",
+      "size": 8169
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_exposure/responses.py",
+      "sha256": "ebe97133d569e418b338316ca19d9f5caedca04c16c12864e0e20fb160946744",
+      "size": 6144
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_final/__init__.py",
+      "sha256": "9d7bb05202cde6b5683b36157c7acb80acb1a898ba830f8850bf84cd65b39f8b",
+      "size": 85
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_final/fixture.py",
+      "sha256": "28f2a3df9a06a1c548b1a147cefb2136d6eba76011268dd3f38281fee31418c6",
+      "size": 3141
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_freetier_fixture.py",
+      "sha256": "56986b858a72afe173001f8ed03be150918e695bb6babbf8e1145c5196abaf42",
+      "size": 8738
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_gateway_fixture.py",
+      "sha256": "53891e286df73ed66367423ef280f0d2be86e1057a31601d8a06c157234dc468",
+      "size": 7691
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_governance/__init__.py",
+      "sha256": "351cd2d0a4485ae5142c92232d1e615590ba3fe07cd663828b2c4135e47fce3a",
+      "size": 84
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_governance/fixture.py",
+      "sha256": "cbbb0079fc2d7d7f386d81da7c846534c7ebc2ce326382b8ce355cdbd9f8ce6c",
+      "size": 10185
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_governance/responses.py",
+      "sha256": "4aa6a2f5a13e31bc3755f8998565f0788419dfe96a5bf5a9776e3380b31a7a71",
+      "size": 7022
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_identity_fixture.py",
+      "sha256": "2d2a6b9aa39d0a366ec1fb65f9c0118e6654a701b5164d2b45339d6a56987ee9",
+      "size": 8742
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_identity_responses.py",
+      "sha256": "e7cdabe04d0beca926d8bb858cc6e9884ce84e27dc4acfec7739dc9286968c7d",
+      "size": 9587
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_ipv4_fixture.py",
+      "sha256": "0c7798538f9525306d8c0b2a78d4b0fe638f5d7e62fa741301b5aa9bfde1357b",
+      "size": 6155
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_key_fixture.py",
+      "sha256": "00461d7eeb9544b6626aebc0de0919b6be1b213857fef8791e26cc5f16e4bad2",
+      "size": 9406
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_key_responses.py",
+      "sha256": "90ef977256e5929a0b5f4da5da1161749236f4f7fd72f4925b90382ba9a8b8f3",
+      "size": 5835
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_logs_fixture.py",
+      "sha256": "d617aec8984c35005b3dd8f624176991214da9ba76d87f42e16110b57b881eb6",
+      "size": 7009
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_managed/__init__.py",
+      "sha256": "e3347279beb0265cc13925114a26b8858041ec4749c5f0a96dde9ac565401c1f",
+      "size": 68
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_managed/base.py",
+      "sha256": "f2ba77ed6b6f5649e15c90e283ad03f4ae1dcea821775e05305baaf1c3b289d5",
+      "size": 2801
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_managed/cache.py",
+      "sha256": "a9503aafb56d7f8e30a72130ef3c4c7af30ee3306304a801b98443be5fcaeb45",
+      "size": 2407
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_managed/ecs.py",
+      "sha256": "d2b07e1d27b3d970848ccd05be808e62c0dde13b78cf7821eb8c358c372c1188",
+      "size": 3793
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_managed/eks.py",
+      "sha256": "a6a628c705aa96720bef6c2310b8634fc97e5011559809590a7e64a58794f5c7",
+      "size": 2987
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_managed/fixture.py",
+      "sha256": "46dfa1f603a4d0648f811c9d01defb34867d1a07b41e18969b10036b62b7acb8",
+      "size": 4428
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_nat_cost.py",
+      "sha256": "862fbd4b8c69abc4e9e07016df77a23a3c5a9d231792e7718f48b6d4721a55c9",
+      "size": 3897
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_nat_fixture.py",
+      "sha256": "b420159f724e0d19df6cea0f2ce3720bd3093351126a253f65aaf5875dd04828",
+      "size": 6904
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_permission_fixture.py",
+      "sha256": "48cbd4c7bd778794f9870d0418fe87ee4608a91098d052d6cd1aa848a66206b5",
+      "size": 4959
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_privatelink_fixture.py",
+      "sha256": "b256540665bf965a36e475f6fa112b96ffd169b27f14dc8ae2cbf3de9e20f86e",
+      "size": 5023
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_quota_fixture.py",
+      "sha256": "18605f11e6b3cedd9bf6602b8c4aeda9a0f50a42d03647f46b915b602c30bf31",
+      "size": 9921
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_rds/__init__.py",
+      "sha256": "ec62b8e3d1f534c07d53ac3152e9ff3fd2780ffeeec32750531a60aeb6344341",
+      "size": 74
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_rds/client.py",
+      "sha256": "3cb11c43e63d6f3bc937860c2a1cbecd499bed83cc87447da7a3244eae6f6eed",
+      "size": 6979
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_rds/fixture.py",
+      "sha256": "1e80614ec491b227fb32dc20690fa89800794f6cfd9953f4e099380307d68403",
+      "size": 4809
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_rds/session.py",
+      "sha256": "9338517dbe6da52df88b9d30d14326410336b7333430205baeaedbe4881430d8",
+      "size": 1753
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_recommendation/__init__.py",
+      "sha256": "5dabf2fb772c7f79a24cfca7b20804502ed81654c93133f43fca6f55ed318365",
+      "size": 84
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_recommendation/fixture.py",
+      "sha256": "88e05c1f01b5c9d7a6370008a6f551777df13035a23652f9e2489b5fcf4bbe89",
+      "size": 4014
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_recommendation/response.py",
+      "sha256": "13c79ce67ba47bbd76398f2de8643dba81da6559fb5dcdaf604c0b98f7e8245e",
+      "size": 3662
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_recommendation/session.py",
+      "sha256": "be654788e503a8211801836a3029f1afa307c3e4cf5cf78dab508d2ed1431dac",
+      "size": 8140
     },
     {
       "category": "repository_metadata",
@@ -261,8 +1443,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/collector_repository/__main__.py",
-      "sha256": "4939369472ccca6552c7f1dfa3b3662561d71e16a358d3705edd6217697ae816",
-      "size": 2698
+      "sha256": "9af6e2cb19ad4f3d1dc736b868cd721a1ea0499a1e04d5846925852ba5cddacc",
+      "size": 3167
     },
     {
       "category": "repository_metadata",
@@ -315,8 +1497,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/collector_repository/security.py",
-      "sha256": "cf33b0558ed2ec6ebeeab04b052633c595b010c4b49bcf0a46cc29eb37c29b3a",
-      "size": 10308
+      "sha256": "d9d354f96ab1beed79e5a786984a820dcfb20367f79680f19c242a5924df66a1",
+      "size": 10398
     },
     {
       "category": "repository_metadata",
@@ -327,8 +1509,128 @@
     {
       "category": "repository_metadata",
       "path": "tools/collector_repository/validation.py",
-      "sha256": "beddc0834ae13c220852865f39e5e5a420c1390ae4dd0d70bc61e20333493361",
-      "size": 6904
+      "sha256": "17ccfc81f52007c9ea2a40ce12c17bea83dd7be810aa180f66a54ab48dfb59b0",
+      "size": 7320
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_risk_fixture.py",
+      "sha256": "fbf4803fd30fe5e1ca61f3963b2e76b60020ef6c76e7529b468aabf949bbe8cf",
+      "size": 6962
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_s3_fixture.py",
+      "sha256": "04890e09f4a574d3fdd1c2999f05acb3c5fca6f3d77fb929699cf3fe84d02d37",
+      "size": 11680
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_scanner_fixture.py",
+      "sha256": "f633c2ae98a4414c9e520d3248ddf2d3b7cb78907bdb75d2914e8b8fad799bd3",
+      "size": 2923
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_sdk_fixture.py",
+      "sha256": "b31a0e302bd0446ee74f90567356f6ac873035ef2a8fc84d8ae734ad1e76f89d",
+      "size": 6731
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_security_fixture.py",
+      "sha256": "8ef2dc50abd3dfdbc6218aa99f5582bbca9fd6a26e087ec51493b14d0198bfd4",
+      "size": 8116
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_serverless/__init__.py",
+      "sha256": "057c20039bf35bec7ebd5f58bb766a6c8b792c08dd5a11c904c68dcf42eed03d",
+      "size": 72
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_serverless/base.py",
+      "sha256": "ecfd1c6aa25f43a33bcc8b7c60bbb820ace2dcc425791c5cb9599c3ef643ea3f",
+      "size": 2255
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_serverless/fixture.py",
+      "sha256": "0f40a3dbcc347778beaead80377b78a874a9b2b899b07a2bf50a88f26588c9f3",
+      "size": 5106
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_serverless/lambda_client.py",
+      "sha256": "e4f50bf2ec098f35fb6c0fdd3cfe9a1c6887383f6fb26110274f1111d2ff79ec",
+      "size": 4289
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_serverless/lifecycle_client.py",
+      "sha256": "8d16ebe1f0eeb825b5457587e16284991ee574aeae856b7f3a2bcea71b494822",
+      "size": 4611
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_serverless/metric_client.py",
+      "sha256": "08dd18121bf5d55737bffe647b8cb17d868ef8f2a5b599310f322d998d4e9bed",
+      "size": 1232
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_serverless/runtime.py",
+      "sha256": "7586e7c6f5aed202b5f3b6bb16de66d0615bd791d73361deeb6df20e695cd070",
+      "size": 2851
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_serverless/s3_client.py",
+      "sha256": "deb0767b1bd2a9de9e6ab94b07a6fcf3a83bfe93bd4c939d087c03d014abc279",
+      "size": 1678
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_serverless/session.py",
+      "sha256": "d258c5d6dee047a36fbfcb4b0a75ae2cc72e73a504022976b92efb7e9846f4ad",
+      "size": 2456
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_service_fixture.py",
+      "sha256": "ecc0ed537e31c412356e3d3cda8b71732e708a703813514a90486e47536a2128",
+      "size": 10103
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_snapshot_fixture.py",
+      "sha256": "5fc47c3abe6d81ec76d4868cf6997be7c74610569ab598cddf6f7d3a051ee814",
+      "size": 3984
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_storage_fixture.py",
+      "sha256": "e06c0e224323e43ef2bc62e7e646dbb9d6e245602525301a0b391e98bf9a7200",
+      "size": 7520
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_summary_fixture.py",
+      "sha256": "e0746089f91b923806f30176a595c9461a00dfa9a4930a5dfed573e1070cb25a",
+      "size": 4370
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_transit_fixture.py",
+      "sha256": "45f097df11d07ed515ba1250e33b6b982d1caeb4cea9b37e65766afb2ddb0915",
+      "size": 5431
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_vpc_fixture.py",
+      "sha256": "e586839b9358f6a3f931025541dce48ff2ba9b58094fda7fc3589dcac4c92059",
+      "size": 7941
     },
     {
       "category": "repository_metadata",
@@ -341,6 +1643,12 @@
       "path": "tools/native_locks.py",
       "sha256": "cbe7018fa679d65c674408a20d47602d05877a30e5236ffd76d0a839fd15f4a6",
       "size": 14575
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/native_protection.py",
+      "sha256": "af4f0d837c8c231574f31026446aaf61600b165f8815be341216d3e252b741cd",
+      "size": 6288
     },
     {
       "category": "repository_metadata",
@@ -363,8 +1671,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/package_native_collector.py",
-      "sha256": "fe7fc1b19b2f3771d813098c7bf59fae6983aeff0c12206cc207ed5b22cc8b33",
-      "size": 12913
+      "sha256": "2a26556eb7299a4e004e17caad05d9337f9004d8c0966392bb98d67fdcf17daa",
+      "size": 15996
     },
     {
       "category": "repository_metadata",
@@ -377,6 +1685,42 @@
       "path": "tools/validate_collector_wheel.py",
       "sha256": "685d3d2ad8feeac2a2f8e6ad0041cd54de6836bc9846cd4a2562c7658fc1b7a7",
       "size": 60277
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/windows_installer/__init__.py",
+      "sha256": "da209406119f7387533b6bd319b9fc14cfae35c8034697d0dbd62cf497f9b8f7",
+      "size": 58
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/windows_installer/fixtures.py",
+      "sha256": "92c8c250b605b27ed1980597d0b714a915ebcc38ab7d7776bb5851d489d3c1df",
+      "size": 5249
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/windows_installer/identity.py",
+      "sha256": "f9317f6f70a9dce526672afd69ccd8cc1d582bc2e8643ea4e4345ff14f7789c6",
+      "size": 2765
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/windows_installer/metadata.py",
+      "sha256": "c0caced21be3323d743cda2c3e7b526c15335cfacd7631c35ebe7ef4fc4eaa3f",
+      "size": 7278
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/windows_installer/policy.json",
+      "sha256": "faffbec6b7e68bd510f443fc983f6a41859b27cfe398d10f2a44b5fbdde6573b",
+      "size": 98
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/windows_installer/smoke.py",
+      "sha256": "07b8b4ae5d49fe1a9f65c572c92b41dc38980b393c7de3013f87cfa807ad42d2",
+      "size": 775
     },
     {
       "category": "collector_source",
@@ -1670,6 +3014,12 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/aws/ecs/service/failure.py",
+      "sha256": "e98656a67e8a3da6a8113869eeb36b2e195d5b7d77be80207a471cf8c62615ca",
+      "size": 994
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/aws/eks/__init__.py",
       "sha256": "0fec2672fd6dc9564b3b54f7c8c25963e3a3fbbd4f4161b2c432a5fb10452d59",
       "size": 36
@@ -1940,6 +3290,12 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/aws/lambda_cost/cycle/environment.py",
+      "sha256": "5835dc0b73ee0c660459c0a704204f06ab41fa1cd7f5707b61d68e3218ca840a",
+      "size": 542
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/aws/lambda_cost/cycle/inventory/__init__.py",
       "sha256": "10e23139bd6ba6a8b37a8bc9fbf73686e99cd20880140b1b206811c4187baeda",
       "size": 211
@@ -1965,8 +3321,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/aws/lambda_cost/cycle/record.py",
-      "sha256": "ba20d9cfadd9befbd368d1b098cd0129c868069f05b76758194412442c6f6e7b",
-      "size": 1199
+      "sha256": "f8e2c4acce0a88a7f8a777c4dce94086f2ff89182b4eabc18f79fa603cdef686",
+      "size": 1248
     },
     {
       "category": "collector_source",
@@ -2331,8 +3687,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/aws/platform_inventory/ecs/api.py",
-      "sha256": "ca2f2cde39d9056e5974065583dd3951af4d580c7e102d1058a507c844774995",
-      "size": 13790
+      "sha256": "507cdc3fe55de8bbfa6efdbcf88362837fa183d4f18c61e43aa1b461fcc98955",
+      "size": 14150
     },
     {
       "category": "collector_source",
@@ -3129,8 +4485,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/collector/bundle/validation/permission_records.py",
-      "sha256": "53469331727d8d13540a91163c53751016e62febb2ebd6e5733c8d1edef7d104",
-      "size": 5150
+      "sha256": "ba078890ea860159e0eaf939a1a55fabb72f01734ec7253c45eb870cad89e651",
+      "size": 5256
     },
     {
       "category": "collector_source",
@@ -3385,6 +4741,12 @@
       "size": 240
     },
     {
+      "category": "collector_source",
+      "path": "unio_collector/collector/package/native/build_identity.py",
+      "sha256": "75f0f24661d9736ff904684252e536bcb9db8eb41c240a34bc16661fd00a954f",
+      "size": 2481
+    },
+    {
       "category": "repository_metadata",
       "path": "unio_collector/collector/package/native/inventory.py",
       "sha256": "0a5ac509106cb02939afc2653ecd8d50c7b6867ed7d233817a0ae13ad72ce356",
@@ -3615,8 +4977,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/collector_cli/command_parsers.py",
-      "sha256": "4881860687c47f3b6df18d9a85a3a65665667406b29a82de69e570dd724f51fb",
-      "size": 17287
+      "sha256": "a686ec1d4dbb6c3da4585cb1a7e80f168785be5c0ec0aae8ceea015aca8b067e",
+      "size": 17420
     },
     {
       "category": "collector_source",
@@ -3777,8 +5139,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/collector_cli/services/privacy.py",
-      "sha256": "7179d269fcb078f6d5f8cc1ee920b1cd731df40521db7979939bca3ffa254176",
-      "size": 14456
+      "sha256": "831234f574c86bb873d7292b77f5d56db3472b8c136757e9debbdbe388af943c",
+      "size": 14472
     },
     {
       "category": "collector_source",
@@ -3819,8 +5181,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/collector_cli/services/version.py",
-      "sha256": "380ed660bdd7f71c5c0289dea6c03f92fcf97eb9973b74a9fb594e01c6841fc7",
-      "size": 1795
+      "sha256": "928ea4fa46d114c0c0ec902be0e03dafc1ae7239928811ea8fb7ffa588b8526e",
+      "size": 2267
     },
     {
       "category": "collector_source",
@@ -3855,14 +5217,32 @@
     {
       "category": "collector_source",
       "path": "unio_collector/collector_launcher/app.py",
-      "sha256": "1c32d34ac4159366ca561888711ca16cacba8b8345eba64c76ae45a21fd28047",
-      "size": 23315
+      "sha256": "dee94858987e16c5a09920827dcf32de485c4d87b8122b82e58ccacc3d170d93",
+      "size": 24178
     },
     {
       "category": "collector_source",
       "path": "unio_collector/collector_launcher/controller.py",
-      "sha256": "9023a33f43dd18583e90b022a0c7e1186d79b01df5236d646e4608d9d3a31972",
-      "size": 12935
+      "sha256": "6a5050f17bbfb200f3f9586e4c7bdec28b8ac7a946536698599e00eb7875193a",
+      "size": 13766
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/collector_launcher/feedback.py",
+      "sha256": "f4d5e6ec4ddf3909cfa075aeb49bfad88fc43ba0dc83083fe4332e0c93c816ee",
+      "size": 3196
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/collector_launcher/progress.py",
+      "sha256": "59e07dffcedc460efee2c1dd69fe6a91aef9fb2f1858cb247df7f7eeeb4eee84",
+      "size": 2559
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/collector_launcher/protection.py",
+      "sha256": "ccc7fb3e460caf9eed3f0b425fb8a84fa1ea11daad25da85e169261ce3234905",
+      "size": 3630
     },
     {
       "category": "collector_source",
@@ -3875,6 +5255,18 @@
       "path": "unio_collector/collector_launcher/selection.py",
       "sha256": "ed750ca5eee0030f8bbc7ab564efa7847df89cbcd769bdb2277dfadc05ecd171",
       "size": 642
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/collector_launcher/stage.py",
+      "sha256": "4aaba9b2965c0acb477e7642bd97e0959264c03ee48829be74af196d73e19a0b",
+      "size": 336
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/collector_launcher/task.py",
+      "sha256": "0c3a486d91db4bcef24c0e888e8da4f997fc919b490d6404f80ec1b61c238401",
+      "size": 1748
     },
     {
       "category": "collector_source",
@@ -4205,6 +5597,12 @@
       "path": "unio_collector/environment/classifier.py",
       "sha256": "0d5372cd99d080b63204465872172e0a34d2ddedc1f636d48c70cedd2c71e776",
       "size": 7621
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/environment/context.py",
+      "sha256": "9191c4c467746c6add5d9618b2e1f73cd25e093c8dd0f98304eb5d5fdd041f50",
+      "size": 671
     },
     {
       "category": "collector_source",
@@ -4580,9 +5978,21 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/privacy/account_risk.py",
+      "sha256": "90c7b1cf9a4a41eda0ee26c3d841a6b34a6f7af1402ab54b677f853fa34cb1e0",
+      "size": 5114
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/privacy/acl_assessment.py",
       "sha256": "e110d8e7fcbab59e126733fd30ca362937fd853cb6e146fd15be1005f24179f7",
       "size": 993
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/active_findings.py",
+      "sha256": "914a4836be8801d60bc5ec0449106cb3b578e086aa07b2473c7174b29895bbc1",
+      "size": 3978
     },
     {
       "category": "collector_source",
@@ -4604,9 +6014,33 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/privacy/analytics/__init__.py",
+      "sha256": "e387dac2292d001dd306cb230e49819239e03fe4376e894bc305f0e6a86f6911",
+      "size": 69
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/analytics/fields.py",
+      "sha256": "67378fff080845eea03d84a2a8a096a3d7ddf98f1d0ee905a364457d44053e9a",
+      "size": 3684
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/analytics/glue.py",
+      "sha256": "da707cfd88e8b66ed707f0949566b7a03e05a2509d061bb42cf2fae758b85a44",
+      "size": 3910
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/analytics/sagemaker.py",
+      "sha256": "24446d1684315ef54bb72b36bf827e84772e91949d7f2ff287c0f27acd301c07",
+      "size": 943
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/privacy/archive_scan.py",
-      "sha256": "a938942efd46f370c112db7abe3dafee1d5c7ebbd510e4426427f97d7c6e3eae",
-      "size": 1080
+      "sha256": "c42375c211bb948e83462116507a7660895a355f8d9539e59726cf77c9748617",
+      "size": 1453
     },
     {
       "category": "collector_source",
@@ -4622,6 +6056,204 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/privacy/athena.py",
+      "sha256": "683b364bdb3398c811f28d55ce135c225c1cb5852cecaefe0cc97345f673bdc4",
+      "size": 6900
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/__init__.py",
+      "sha256": "0757b666c14de5cff0064ba2145cff4cf25280e97ed637d0aba45526cea30c20",
+      "size": 70
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/condition.py",
+      "sha256": "efeddbc3411d48866220fdc15273284fb3fa3c27bdd5c45a9198ba670f6af489",
+      "size": 2859
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/contract.py",
+      "sha256": "4139c3c9c9b5776763739dcd1e83519e754f21a61f19b836962cfe3b6821d69d",
+      "size": 3184
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/fields.py",
+      "sha256": "66e3954c8cf5391e486a07dcbba1b2dbe79485c8a9d19612664b462d5805747c",
+      "size": 11416
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/governance/__init__.py",
+      "sha256": "bf33711270551c3651a5c99faeec505d6ba437c14070710006e8154642d78028",
+      "size": 81
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/governance/config.py",
+      "sha256": "3c169b33d089a5be48029a61b3086d368cb2c99324ca59dccfaf05579d951532",
+      "size": 504
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/governance/contract.py",
+      "sha256": "d2d7364267fae8089a654b3d4a9169a8bbff918098aa7ad437768e4bd44c53a9",
+      "size": 1165
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/governance/fields.py",
+      "sha256": "cdb7f6c14142767c64ece60bb10fb869a70a9c85666bde0fa9285b818cfb4166",
+      "size": 7531
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/governance/guardduty.py",
+      "sha256": "75094134a784e4c458d6a198edfbee6f79bca030834e39c17fc04a93989aa061",
+      "size": 503
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/governance/limit.py",
+      "sha256": "12c05b9149184165711a6f68bf10773c07e3973224f7f7118d9c9b8836e9d9fd",
+      "size": 2573
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/governance/security.py",
+      "sha256": "62ffd445806dca5b9ed5496bc10b74ed21b0ac9ef40c2092b0c9117bee06b3fe",
+      "size": 516
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/governance/waf.py",
+      "sha256": "2b71b01be765ff4851c88c32f92af3421ad373936836a00c25457708cc54fc92",
+      "size": 485
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/notes.py",
+      "sha256": "8318196b0043ee3556b84d0bb0d985a89d7c240205a086bb3b137ebd3d52f6e6",
+      "size": 6610
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/secrets.py",
+      "sha256": "f352ae8a88460230bb76e311ededd5f8451f7bf7c40a621289055a11115f3e76",
+      "size": 535
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/selection.py",
+      "sha256": "1cc37eacd0bd4ea05d777ce025b4f585d09bfc5340648b333e29879940136232",
+      "size": 1955
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/trail/__init__.py",
+      "sha256": "a2e0da049f057e27116a3c5bee988ba84e493313c74584e6250892a81bc6ff17",
+      "size": 53
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/trail/cost.py",
+      "sha256": "28ad787dd99e6e313119c1ab699c0f4885cafc2b1a08a35de12f66cfad136b73",
+      "size": 533
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/trail/security.py",
+      "sha256": "f08b3c0d27e389a1ea81a32c980e4ce1c457599a79c411d0e4a25de9530a2c6f",
+      "size": 547
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/audit/xray.py",
+      "sha256": "e348b11e550aab9e9c53b4fa3399b029dd9c3850d4bb06a5397f9dfa58b8d338",
+      "size": 520
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/backup/__init__.py",
+      "sha256": "686fd56a476ebd530403576cceac1c2ddb748358bb9ec1e4110604b946109d09",
+      "size": 61
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/backup/contract.py",
+      "sha256": "47410ea5e2414c6396500dd17dea2ed05bab636cc3e09bd64212ac830c944516",
+      "size": 6742
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/backup/fields.py",
+      "sha256": "7918a21ababb91148ac7cd8e03cb18add3682ebaa016e23bfa11fc36446e053f",
+      "size": 5515
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/backup/notes.py",
+      "sha256": "bb9edc2c27d7405b5dcab09ec0b582e16f07334bef7bbb496e022a2f576e7200",
+      "size": 5878
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/bedrock.py",
+      "sha256": "ffd5ce4d91a9b7770a81e395ed8778c364769b7a21e2b2fed82399f2b30ccd9a",
+      "size": 7309
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/billing/__init__.py",
+      "sha256": "bc1bf004ff55d1c4b2a19ac098bf4cd7d660f5d371d10ecd600a6766742d646c",
+      "size": 70
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/billing/alarm.py",
+      "sha256": "c3fb91db9fd663436a3acb48dc9ad029357d9d3d63915916fc261d42cfd11920",
+      "size": 12074
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/billing/anomaly.py",
+      "sha256": "dcb91f3edcaf4fa33c8902dab74c4af40260ae2ceefc511222c627bb875127c9",
+      "size": 7757
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/billing/budgets.py",
+      "sha256": "51ba22159c0d6b3a81b9441e74728e95edb7afa0596ba5776b21a1e5af10a248",
+      "size": 12294
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/billing/contract.py",
+      "sha256": "db40ee3630856e2863e963caaa7a053ce030a1ed53850e2c01a8c4807cdb6e39",
+      "size": 10232
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/billing/index.py",
+      "sha256": "877dd402aa1be97ebe59d1934151cf844fb59b8182f6e603d44e873c52e5f110",
+      "size": 1969
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/billing/notes.py",
+      "sha256": "1ef446efac3edf19b84e854da1f41c222f24a16bdb2857ee19c8f49d471735b9",
+      "size": 4143
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/billing/value.py",
+      "sha256": "26ce47d6d3dd3d5eadb122be0babf040f0d0f92ae70d3becdcde14c0bc30b31f",
+      "size": 2109
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/privacy/binding_verification.py",
       "sha256": "0c3a5d1d0222d95cb4204419968f58a0ca1c606c24ea6fbd50d6f44de16cc5d0",
       "size": 5458
@@ -4629,14 +6261,92 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/bundle.py",
-      "sha256": "37b8c6e85112a320f532e9fe703f2628f52c8abfa2bd7a14203501e4845596da",
-      "size": 23550
+      "sha256": "a1aa7d2221e484767747c043724050ae003e699670636947cf4442fb17ea9739",
+      "size": 24579
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/cache/__init__.py",
+      "sha256": "3ef743ab05edd0a829b43dc9b7a5c9391fc0b9dd6e049f4543f4c00c7ff2eeb6",
+      "size": 51
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/cache/notes.py",
+      "sha256": "124aeac974feb7659b0e2e564debaefc2fad147379013e8de8859de2d89b9a39",
+      "size": 3874
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/cache/preflight.py",
+      "sha256": "fe4ce8c3b01740edd4e75947955df5a01f30c3c37def05e538fc7cd559bd713b",
+      "size": 1742
     },
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/canonicalization.py",
       "sha256": "5cb8b278bdce183932bc295c9945e3ce02deed64cb21338c3a789b136091a9a3",
       "size": 2657
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/closed_schema.py",
+      "sha256": "9b70d274233b0bc19b2fe50b7ca61f05064bae8b4a98935a5a293d5bbae43b3d",
+      "size": 6351
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/commitment/__init__.py",
+      "sha256": "20905988cfe36084198dba0a1c4feef8682cad7ef7f034cfafdfc52cff440ee8",
+      "size": 53
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/commitment/base.py",
+      "sha256": "907934f25b65103294c0e8c83b56ac7d32d3e7218038ff27355b3c0b7530ca6b",
+      "size": 3330
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/commitment/contract.py",
+      "sha256": "bcc0d90e3087620354c31d2dd5c74aece197c3d657519f0a4c63d3fddf95e483",
+      "size": 1399
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/commitment/dimension.py",
+      "sha256": "fa163e583f61f67d4d2cd299cb4ac6691d3eccf7259fcbaf2097d1a1e7b05b83",
+      "size": 1428
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/commitment/fields.py",
+      "sha256": "ab688d6d99a3b17e396c8f8d219320625c7324335c39d5dee5eca663bf87daef",
+      "size": 4732
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/commitment/location.py",
+      "sha256": "7a13c535175e422c6db17c49601f14acbcf31ec7c9a2dfe1b2a17b1e466f9403",
+      "size": 515
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/commitment/scan.py",
+      "sha256": "ae0dac03826cc4023de808e6bd350c5bfb2d5bd9b27499d5f74b8b1f12ce7e02",
+      "size": 1349
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/commitment/vocabulary.py",
+      "sha256": "42778ddf0038325b8e1bed39aae43b7d49132a58e0630fb0517b6b7e054d04ed",
+      "size": 3994
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/config_compliance.py",
+      "sha256": "9d424fd438b6a4165a3987564afa48c88519833489e7607a1475be3774cf0e67",
+      "size": 3191
     },
     {
       "category": "collector_source",
@@ -4652,9 +6362,201 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/privacy/cost_delta.py",
+      "sha256": "d825432ca591d2e6f4df3c051c6f3a00961e176cab04a303568078f2bc0edbbf",
+      "size": 6904
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/privacy/crypto.py",
       "sha256": "0b7622ac0784c3e1aa39fd47118ac60130ab63b77d8c6fad810e0ab9ab75e1bb",
       "size": 8051
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/cur.py",
+      "sha256": "655472f686fa9dd571016f7c56ea9e00a854751bc4cda13993f0e20450c133e4",
+      "size": 6979
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/daily_evidence.py",
+      "sha256": "a5e05d045f33687c170125f7ad4cf012e879895cd85431cfeecb76c8e32b9bb4",
+      "size": 3241
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/diagnostics.py",
+      "sha256": "216a63825f7253d950acfd67f1aa6120de944bc6d0b1668c44317f0403f8352c",
+      "size": 710
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/dynamodb/__init__.py",
+      "sha256": "e64cacd617485f50a692ca0dc53a7f48f392fa000e7a049581945b62d498a483",
+      "size": 76
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/dynamodb/contract.py",
+      "sha256": "0a92948fbd9d02ce83f77822ea524810a26bb860eaa827d7c1a560e07a363c3c",
+      "size": 2845
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/dynamodb/fields.py",
+      "sha256": "6df6a5c4cbf91383dee05bb3fff05524a2c444f76855128b93e2eac8e5702997",
+      "size": 2274
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/dynamodb/notes.py",
+      "sha256": "72ca18b4d9e8a2891163e780d3024d99c64b7d38b345032b650af7f4d4ecaa04",
+      "size": 6610
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/__init__.py",
+      "sha256": "ccc8d4876aa49bf95c12fe59d0e3a095d3199dc4088c4bfe13d402f0e1321bae",
+      "size": 68
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/base.py",
+      "sha256": "af2701c69c0b8009d532ba26caf50cda6c6c5663d493c5928e81d525dd608e64",
+      "size": 4919
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/elastic_ip.py",
+      "sha256": "e69e4247ef49ae042c436929cec04c73641c59b326bb1be934bce478630e9e15",
+      "size": 2074
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/idle.py",
+      "sha256": "2defb31d94af7b97bb56d8e0400eb605fd7ef22ef7c9265f26c595456c6bbc7c",
+      "size": 3722
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/iops.py",
+      "sha256": "e11a70d37231058e3d253fc7eba5f81012d8af32e3415cbc1ededeba68527aec",
+      "size": 945
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/load_balancer.py",
+      "sha256": "7617d9fd55056b909d2ba5dc46f43ab848300c97809617039a1ffe4cca7091ca",
+      "size": 6874
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/metric.py",
+      "sha256": "16a316c57cffc053131baa15b3301598c2e8391057fe55d35ccd183cd27a7e7f",
+      "size": 2974
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/nat_inventory.py",
+      "sha256": "dde7f73fd59f576438729171ad21ced5d90f1b24f4b601dc4f8112e2c6824b12",
+      "size": 6194
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/notes.py",
+      "sha256": "ea922bed8dcb1559e81a55302b1672125fcd3f8382054608a167fb91b2eb2ab0",
+      "size": 2895
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/running.py",
+      "sha256": "98d5e575c84ee7c92609c2745ead24e659aac3fed6729be91ec32aad05374521",
+      "size": 6855
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/schedule.py",
+      "sha256": "48a64dabd3128185e27653fdedde2324bea6074489ab4fcdacb7b7b93de10840",
+      "size": 4356
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/snapshot.py",
+      "sha256": "42dc7abc228a37fa58326e09c79b4ebeba588849af1cfefa72ebef2b8e708ad4",
+      "size": 2036
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/stopped.py",
+      "sha256": "10f74dccff1a70c07024e67ed03b7784ea790182c5ec5a7ac02cce48810d055a",
+      "size": 985
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/ec2/volume.py",
+      "sha256": "3d9f247c55e51e5c57858828e32f0ead53947f8a775bb058c20678e1b8751c1b",
+      "size": 997
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/edge/__init__.py",
+      "sha256": "7d7a215b506ad81fad031cc728b88d3096a7360270acb880bf28c52a5276211e",
+      "size": 64
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/edge/alb.py",
+      "sha256": "5f9d243bc76e312a0fbd146aa60c19019fcd77cef347cb2cb37236fa5e4086d9",
+      "size": 602
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/edge/contract.py",
+      "sha256": "0a88117fff95c0560bf8b42e1d119e4ee4c89148c5989e8ab78a1ba65d37b16f",
+      "size": 4287
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/edge/cost.py",
+      "sha256": "1f88e3bb0350c6f6c0cde9d961aae1e1faa962dd372555634b799f718a2a8d21",
+      "size": 578
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/edge/coverage.py",
+      "sha256": "0e75fcb1b4c8c29b56f5231bfadf71b4882bdf069815ac9b20c18485a963db3a",
+      "size": 2101
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/edge/fields.py",
+      "sha256": "971baca48f895343d82cc9d2243c2c156ed02907d458babc3e80b70e07cde916",
+      "size": 7978
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/edge/notes.py",
+      "sha256": "053bb6793edf1bf065f13d121e0b755b1f36fc17dac5a68ab7ba82ac4945ae01",
+      "size": 3883
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/edge/regional.py",
+      "sha256": "9ba801b61043a7cef94fff748cc9bc27e456c045176649924fc44e757386844e",
+      "size": 446
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/edge/scan.py",
+      "sha256": "05d7bee5c71c879acd3fc88195780ff4900970bbfa467d6f2c6307c139b4feb2",
+      "size": 1981
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/edge/vocabulary.py",
+      "sha256": "769b61d506d9ac79263d829c4c2f4c30b5402ea7be6ddbb07a811143b0bc3299",
+      "size": 2340
     },
     {
       "category": "collector_source",
@@ -4676,9 +6578,225 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/privacy/exposure/__init__.py",
+      "sha256": "a18f73721c9a59e1393479426cd49a4c1bd076fd18f40627b184dd9232e247f1",
+      "size": 83
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/exposure/contract.py",
+      "sha256": "09642bf663172e186464529d138d79304c5fdf977abc64dcb972b364cb310831",
+      "size": 2572
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/exposure/ecr.py",
+      "sha256": "90356f1953f1de37c8afa62e2f6170c35ec605d4ff043f0c63f9dd2d9e2efbbf",
+      "size": 471
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/exposure/fields.py",
+      "sha256": "f1a7208a4ec4ff8910f5139720d1bc59d74c51f4fa8c35e920dbd62488d62360",
+      "size": 5074
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/exposure/group.py",
+      "sha256": "2693101a002efc483cb99a79be6b3f02751f72169773d0f7db8c847025191e28",
+      "size": 802
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/exposure/notes.py",
+      "sha256": "c1ff1983233b1a422a2d87c749647247deef3d066fdd537af2913e6d9bcc9861",
+      "size": 3400
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/exposure/public.py",
+      "sha256": "ca2c52b9b308a78085a48416529bfea99f73d8c5d3ded8abb2763ad9d43c33d0",
+      "size": 484
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/exposure/root.py",
+      "sha256": "72df2d7088200283b6acacb71b113a1c492f130ab11d6ad19f097a4bcb66d72a",
+      "size": 482
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/privacy/file_safety.py",
       "sha256": "11468382a76c6d8bdf9c764c8cb72b3514390a4fb139e1a3bc9da057a23a9660",
       "size": 962
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/flow/__init__.py",
+      "sha256": "472588f959d8fb665cb2463e71159107fa59faf4e808d5ad50179bbd80dadeee",
+      "size": 64
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/flow/association.py",
+      "sha256": "d788656355bdb77e7969c0725cb56ff0c68475b6612ad7207f8acd08deb8dcad",
+      "size": 753
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/flow/base.py",
+      "sha256": "8afa15d59e422ca08c2e4b20606671f67d98fb548321db718b4cd658c7963f0b",
+      "size": 5008
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/flow/contract.py",
+      "sha256": "6e97702335887aef0f2d1333ee208895a1e03795a4bb95797a249cc9521450d1",
+      "size": 2460
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/flow/fields.py",
+      "sha256": "81e7fcaaf0a13c1874902110959d55cb4b1dd4e24e04d907e7025add018ace0e",
+      "size": 3203
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/flow/interface.py",
+      "sha256": "414e6dd35e75eb5934dbf55a36cd0e20bac4d69f2b16027a945c52d5a423bfe7",
+      "size": 428
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/flow/pair.py",
+      "sha256": "6e60b47bffc4351a8d29cb49968b1a4667f4fbe571e8d8a45b9af81c794c0501",
+      "size": 706
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/flow/record_fields.py",
+      "sha256": "4ba0d06be4a7010c91b421d2992a0ede4bf78f81243fe40bdfb3e7d2d6fbd10a",
+      "size": 1972
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/flow/route.py",
+      "sha256": "ad6dc539492305f87a0e4e714877dc46b23f6924286a3bea577717a24af9d7aa",
+      "size": 1230
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/flow/scan.py",
+      "sha256": "5f9994d432f6147af32b0669c4f131604c3d08c300667d4e6c508f9a6f530e39",
+      "size": 1240
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/flow/target.py",
+      "sha256": "f09f26e76a4167f22f1f36b1b69ffca52c89d13aff02fd031c0abb992f4f784c",
+      "size": 923
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/flow/topology_fields.py",
+      "sha256": "35a24be82014effa4e6674a64e73a508712e9003264ef54baa382bb19d49377b",
+      "size": 2961
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/flow/vocabulary.py",
+      "sha256": "400ccf0f80be179f80d179d7b6ee195740a04a279651803b3f2149a0142b0c3e",
+      "size": 2385
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/free_tier.py",
+      "sha256": "77ca417d1e150b21836c364c57d9d2d80724973228bb24a277dcbc13e92a2120",
+      "size": 8197
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/gateway.py",
+      "sha256": "4fcbd28d7643089634fc1c4ed44d9f6fe10ae2a496971347ed06abfe2eb17d54",
+      "size": 5163
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/generalisation.py",
+      "sha256": "1226bac4d252bdc2d5641da8f6f29c4423396a0d3da1638f9e6d127fe3b0f5e4",
+      "size": 1217
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/identity/__init__.py",
+      "sha256": "31178eb75c97cb3ecf3cee44ac57191913cff51ca75b2401a231d0957fe7a817",
+      "size": 87
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/identity/account.py",
+      "sha256": "6615b81c83436f813d640840d5f767bd6e1f0ca7b4c09a6d342b1be97c58e008",
+      "size": 480
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/identity/analyzer.py",
+      "sha256": "f67464c68d0e867725a2f446888968bd52cf5a8bc395791cfae9d42746310884",
+      "size": 489
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/identity/center.py",
+      "sha256": "f7507d5ec05864598f680a87f0933f4a1f065f8c1c8f66e8fc9e5ba7e3d93102",
+      "size": 499
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/identity/contract.py",
+      "sha256": "65ad8a8fc326c98c169c8fa265ad45518f4639ce552a731d5a161bd542dd1dc0",
+      "size": 4675
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/identity/coverage.py",
+      "sha256": "fc8be0353e9fc4fcd1398af7398e62a8c0c19ce34581bed55056b5f7940389dc",
+      "size": 499
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/identity/fields.py",
+      "sha256": "4b8a68319920c08280977e259e087892c471f74ec9b6c503fa04728593306cea",
+      "size": 9050
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/identity/notes.py",
+      "sha256": "ae44832b5b9c389a690c057d8f6294abe5e8c747e0bf4dac058439c6be1d1b8a",
+      "size": 5099
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/identity/option.py",
+      "sha256": "4370769229078b1e88ed7eccd5a23dffbf967461a2f0d6ea208f1aba0599d236",
+      "size": 341
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/identity/password.py",
+      "sha256": "31d5c5edbf1336db37f10e2199fdcb08c24959abde17b0f27b93abadb42bb247",
+      "size": 349
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/identity/policy.py",
+      "sha256": "049de9916cf354d0679c733ad182a005b75f62af1def4e3dbb326a9d1888418f",
+      "size": 3316
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/identity/visibility.py",
+      "sha256": "beb0cd90e6b165b7180b8a0ef54de837af95e6f41d8f7a05dfae9c4f73f88a50",
+      "size": 349
     },
     {
       "category": "collector_source",
@@ -4694,9 +6812,63 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/privacy/inventory_notes.py",
+      "sha256": "ac639070a5141dc7f233431a11276dc4c6dbcbb1f1fbe65adc29a19d149d8f28",
+      "size": 11799
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/key_controls/__init__.py",
+      "sha256": "e60a498c124375ef9ff04dc6d968ddfd15d7de4c28de183ad5dc70f4a722e51a",
+      "size": 76
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/key_controls/contract.py",
+      "sha256": "4c8eda51ff3d08fa50ad3df186b18776dae62e53eb70f627210fbd7f5561cf62",
+      "size": 1071
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/key_controls/encryption.py",
+      "sha256": "f2431ed6943fe6b82504bcfc0a7e7f85f14b89079ab7aadecebb84521e465a4a",
+      "size": 482
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/key_controls/fields.py",
+      "sha256": "13bdfefd71a9e3ff306bbb2311e43a28ad81ffbda8bc94cc42025e3fcdeb0d5f",
+      "size": 7738
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/key_controls/kms/__init__.py",
+      "sha256": "9ecb0f4bd2c78fe93a0d082c3561520457050b0b3d7576c60c9f4f196dfcd20e",
+      "size": 60
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/key_controls/kms/cost.py",
+      "sha256": "0f59ac9951fb6dfb8cbab08f08210bc7a54e33a975fbed105ffb5a34f2b2c486",
+      "size": 479
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/key_controls/kms/posture.py",
+      "sha256": "39b71e6a6486ec6b8d6806a01addb945ea6bb2c7afada086cb5582e14e1b8484",
+      "size": 474
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/key_controls/securityhub.py",
+      "sha256": "dc4b36c93d86079e74d5b7eb68e0c3efe171179d78d06e9b2119c6616cf20d87",
+      "size": 502
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/privacy/known_originals.py",
-      "sha256": "1d397504f52230c46deb534c97e675d579d139712be69d4f61b230129e3a2efa",
-      "size": 747
+      "sha256": "74e7dba6aba757598e79849fc2ea78b865e7b2d2001a37a58a42f49fc7eb2469",
+      "size": 635
     },
     {
       "category": "collector_source",
@@ -4712,6 +6884,96 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/__init__.py",
+      "sha256": "6e2d2eebbfd72af8c8744205fa2617a78ba3bb8ef041f6ffe2197e47732fcc02",
+      "size": 71
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/environment.py",
+      "sha256": "7b8e2504fd26c0ff77ded06277728a25a94750f65354fc4a2e2d57a96cb7be5a",
+      "size": 2043
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/legacy.py",
+      "sha256": "1f778d18dd86154b12a7775a7ca31edb56671daa29cebdc959a1d84cdfbe3a22",
+      "size": 1735
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/lifecycle.py",
+      "sha256": "87ac87bf754fd22374f15fbe5e3928236ea11aec3274a6a7acec60ee38e0fad7",
+      "size": 3492
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/metadata.py",
+      "sha256": "82c978f59a8c004c0298f5533226c53b8adb9b16430e996cff790d1252ec4036",
+      "size": 18880
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/network.py",
+      "sha256": "aae3329ac298f3d37f4e2e2fd77521d733e4b3163caf5759f2ea4732c6db4b71",
+      "size": 1559
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/operational.py",
+      "sha256": "379573f08604559802530a1d40c2495135fb04d768b93a76585e3d78b3caf9a0",
+      "size": 3596
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/paths.py",
+      "sha256": "4b597537e4d6eda48fad77e0fc50278f5253b00ae0f460ac93067c11680254d4",
+      "size": 2092
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/protocol.py",
+      "sha256": "b1fa49b60d506c282fa372842b933ed6b600819112b8bdb4e02a05232551f240",
+      "size": 10853
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/region.py",
+      "sha256": "99cefbf93a2f9073f3ee5c281230dc725f5ec470315347015e12441eaed11a66",
+      "size": 2820
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/result.py",
+      "sha256": "020bd39b56e8a9df22d3b3ef4ec375bcd8513cecad33cba7b4af6e54c6569862",
+      "size": 3212
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/serverless.py",
+      "sha256": "c21ece4c6c995b302ed70e65d8f8a8417a99bdea38f4ecd0b7e83a34768474f5",
+      "size": 3359
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/service.py",
+      "sha256": "f17198891f0ed464edf0a7988506be47ebc6ad52f3a58647ea9dc9f3ed7771c0",
+      "size": 1910
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/temporal.py",
+      "sha256": "2e4152b912d1fad8f5f6005dc7028b878d90bf5444b7d8767ba7204e4927bf58",
+      "size": 6455
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/public/transport.py",
+      "sha256": "8752deffd0cadef0fb04ab0906e309d5c9e2c64e38bb700c99228b8b7daa3652",
+      "size": 6433
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/privacy/leak/result.py",
       "sha256": "882ba9f8dcad9f8b7441a18e5c5310529324bc89e5f4e7fa7983693d7f8c4f86",
       "size": 802
@@ -4719,8 +6981,14 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/leak/scan.py",
-      "sha256": "1533836da6def9d75bb9be46e069e71655d07e30d459a5c5daada5842ac50900",
-      "size": 7244
+      "sha256": "f129e488d8d6ffae945ec7bcfe4149db303100635320055c228f7442df3c7bdb",
+      "size": 9742
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/leak/structure.py",
+      "sha256": "f5abddef7f1e726ae3613a43d082818169a036cbc150a236138f87f787b05aaf",
+      "size": 21253
     },
     {
       "category": "collector_source",
@@ -4731,8 +6999,20 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/lifecycle_verifier.py",
-      "sha256": "ab1dc15e711c8cd88347e32193c6d01eeba9c23528473a8a845a4331c36d4982",
-      "size": 3211
+      "sha256": "8df25d4d7b828ce695670121b98ebce64bb90a04eaa645dc776e4665e417db08",
+      "size": 3314
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/log_activity.py",
+      "sha256": "a9c85cf8a4394893a614004c56e1e71bcb4cdcb9ef3276d3626f0cffc1ab32a3",
+      "size": 7308
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/mapping.py",
+      "sha256": "d674a282aec110ead786977d4b35db3d62e89c357136ea9f39a622dec72b4787",
+      "size": 4098
     },
     {
       "category": "collector_source",
@@ -4745,6 +7025,72 @@
       "path": "unio_collector/privacy/native_security_api.py",
       "sha256": "fe8cf02975aa0ad593f67e5ffb051577b4810e0e45f8f5e8e9e7ba8c25587e53",
       "size": 3215
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/network/__init__.py",
+      "sha256": "5d970efd6ee31f42ca90e497eb2d5f6187c9edf51962d30a2cecab0dec02d723",
+      "size": 61
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/network/base.py",
+      "sha256": "db5acce9918a2e8e70cc468f3f76ec1e84e696dc78db2768f534c11041c6b54b",
+      "size": 5613
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/network/facts.py",
+      "sha256": "bd4633bf5bb10813029ecae1d92243ebdf3baa53c112faceaccd9c9dac2edd55",
+      "size": 6442
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/network/fields.py",
+      "sha256": "8bc96b41e0c2d7722aa8f69a3709440124da16b2780787f0ec00f6b33473fa07",
+      "size": 5539
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/network/nat_cost.py",
+      "sha256": "7fd180e9734d1ed24a7a433a010c8c705e94f6170fd24369b0dc12e875e3d4a2",
+      "size": 2850
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/network/privatelink.py",
+      "sha256": "5724c981f98bddb18783c2f4451742ac672462b49c429bfad17d9ab2c6ac5632",
+      "size": 1831
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/network/public_ipv4.py",
+      "sha256": "a305a0a095600a0c5caed15fbe6169680f05ee4d9b57ca130ec4eac34243929e",
+      "size": 1581
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/network/transit.py",
+      "sha256": "ee3a526b69a1d00602b3354e490d92e9b96951dc9bcde5c09daa3948da59d45d",
+      "size": 2883
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/network/vpc.py",
+      "sha256": "b0027dc96bbb343b75b14155d4753bed88510d0e95319b75b8054bbc919a510c",
+      "size": 3636
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/network/vpc_fields.py",
+      "sha256": "c7dbd6b6bf3c9dfaa28f8c4d25373623a596e7a0096a36070df0ed85a331f9a1",
+      "size": 4671
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/note_preflight.py",
+      "sha256": "3861bf0596b9f2aa206a02abaf1fd8cd9d07c0fac9b90d01ba10df8e8166dd77",
+      "size": 1773
     },
     {
       "category": "collector_source",
@@ -4761,8 +7107,68 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/patterns.py",
-      "sha256": "adc4f47f1253359e53907f3abd1e05131d38d9b46059d7babf49f01607c93873",
-      "size": 746
+      "sha256": "b4ed0f0ed3805daf5c0704dfaf1dd87cc7f07b2962cd14867511a8428828bfe1",
+      "size": 964
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/permission_fields.py",
+      "sha256": "ef8e2b47b85e1a842a1b5062c298042ce004e0728eebc952404829b8d16b3449",
+      "size": 6086
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/platform/__init__.py",
+      "sha256": "0ddab444966b57d7cddbe7785e48e62e914ec9046272adddf523469f5d436b5f",
+      "size": 60
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/platform/ecs.py",
+      "sha256": "bc723d5c258e3ab47791f0103a7847b240d3119724158d34f4cdc68636bbbba1",
+      "size": 2948
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/platform/eks.py",
+      "sha256": "2770e0fb160affb8dc0b3ebe3c2122097c6f4ee11a1659607b744b83bfc04bbd",
+      "size": 1740
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/platform/elasticache.py",
+      "sha256": "e78900cf3be02a6326fab78bd1389a7a8b1a3d3dcde7e49586f101e38c30f103",
+      "size": 6245
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/platform/fields.py",
+      "sha256": "185ed73a78b163f7d91d93527c9b49f656b4df8032af706340bfb71c78a53eb6",
+      "size": 893
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/platform/metric_scan.py",
+      "sha256": "7ffc469c0bac3bb3dea3c72417f6e69baf4949146317fd8a6f20147d9fe1db82",
+      "size": 1400
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/platform/notes.py",
+      "sha256": "87f1aab588c4b48c208215464afee4d3e102c0e12741c2c13895d8dd8ace2db0",
+      "size": 8060
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/platform/opensearch.py",
+      "sha256": "9411f71b09d0f9b6d6fe8cb7788dbbd385a80b9da4f2047a95906ca4133bd0f3",
+      "size": 1210
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/platform/redshift.py",
+      "sha256": "e799a49d8b478fc8b077495ec473441934641aec4191fc85cb1df4f2f8e50a03",
+      "size": 1306
     },
     {
       "category": "collector_source",
@@ -4785,14 +7191,20 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/previewer.py",
-      "sha256": "2c9529a48623c9b19f92e6398e8b3820864eab3e0adffa61b5bbf0a23b3e93f3",
-      "size": 4656
+      "sha256": "6ac8e51161ed241be23efcd589a54700515e03104cc504a0c56887b01902a527",
+      "size": 4758
     },
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/private_artifact_writer.py",
       "sha256": "f275c022825b09fb9c059028b48730512798fc2c1305c3a548d728109aef0daa",
       "size": 7958
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/producer_fields.py",
+      "sha256": "04386a35f59300ff51b4ce0e08df36c28557662ecf0357f9615a34fed828dcdc",
+      "size": 15994
     },
     {
       "category": "collector_source",
@@ -4820,6 +7232,12 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/privacy/provenance_fields.py",
+      "sha256": "b9a4231b07ae3d5a39c1dc9140451bd4a20196feff2bbaa79f86bbd50745a89b",
+      "size": 6315
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/privacy/public_writer.py",
       "sha256": "4b878d76b86217c8be087bf788673f9c4c9b8ff6424b7d75dca45c1755da9463",
       "size": 2896
@@ -4832,9 +7250,201 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/privacy/quota.py",
+      "sha256": "13d452a70e52d396bf3f8920a55116e9cc074b834ff043a52c0ed0544e51b888",
+      "size": 7317
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/rds/__init__.py",
+      "sha256": "3280a475e2ba38d8470cd95e113a17315e7bac8f607c173528b03935f2064fe5",
+      "size": 73
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/rds/base.py",
+      "sha256": "a14da279ce73fb74eb95c2d26a4a415435203da6c10fee67e794fb266b141883",
+      "size": 4711
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/rds/instance.py",
+      "sha256": "a25bb3e9358c3413c0ba8b7f604931829141fca3d5f821e5e87c2e00ca04ddbf",
+      "size": 5076
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/rds/snapshot.py",
+      "sha256": "a73a0637e9162c4a883c4ddb9867867d760fbd87f11b97452db40c7c0a0f035b",
+      "size": 1652
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/privacy/receipt.py",
       "sha256": "c16f1b5ad4812bf7f7f3253d9154c3e6871e2d24f4c3cfaef41ccd3b39a5f8fa",
       "size": 7669
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/__init__.py",
+      "sha256": "f85e6addef46560d0869a85a4698f40055158fa271ac14c4cefc800770cd6f57",
+      "size": 79
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/compute.py",
+      "sha256": "f592b54f3a4c9fc3815150166104b7b1638568211465a797a3bd9b8706fb595b",
+      "size": 838
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/contract.py",
+      "sha256": "b09195ab592344805ec3f8ab1ae7d58f14328caa3e837c4afff93fb616f82fa8",
+      "size": 6148
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/ebs.py",
+      "sha256": "8fe5ad75e050ce883190ab82f3477e6eeed474e859fcd0dd0c8d4662970a7f68",
+      "size": 824
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/ec2.py",
+      "sha256": "3f024c3a7f9d8ce5357484f4f82052249dc9f99ae6326fdfcf7577a22c3d1473",
+      "size": 830
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/ecs.py",
+      "sha256": "081f68e5735afb5cb6333ad8f44b52b81be66611a65b15b7fb9bf17cffdb1fd4",
+      "size": 827
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/errors.py",
+      "sha256": "b17764e0048ff76042be33aa14ecef053abed74a0dba0fd3485ff4127999c29a",
+      "size": 1284
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/fields.py",
+      "sha256": "055f1cad744dcc5c1eeacafd9e18c4c0125a5fee9d25af8df8a0da3b5f0c10ae",
+      "size": 4306
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/hub.py",
+      "sha256": "0187dad88f995e4029bc3f1ccc427bd398c8025d7530a5e2cda449172b2ab2f1",
+      "size": 850
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/hub_record.py",
+      "sha256": "48ac597e62ebc98c71eb413bf44e1e5bf97063550598210ff7eb69dbe0b04c60",
+      "size": 813
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/idle.py",
+      "sha256": "90c56bb5589570f035886d08b475df779809aafc7b4dbf0a087d554d19648038",
+      "size": 807
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/lambda_.py",
+      "sha256": "d439e5aec28837c40cf55a920b816e671239e9eb876a6e59484b0164c9bb7e80",
+      "size": 842
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/rds.py",
+      "sha256": "6938c38eb3f79700e8871a9381e3104abc1a7c0c16ac3f669e8e100fbe725c78",
+      "size": 830
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/record.py",
+      "sha256": "0cd8f3ad382bfbd1cad1a2996ca02e2b1e60ff096c07a801413f654dd03d267d",
+      "size": 6201
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/records.py",
+      "sha256": "fa229eddba7f1f84b730bcb0577466a7da8b42f68533f1ea8f598c988496226c",
+      "size": 1375
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/sdk/__init__.py",
+      "sha256": "25989e6760d0dbd59617eb44c3fb84128de7ec602a3ca19d05f30e11598638f2",
+      "size": 82
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/sdk/ebs.py",
+      "sha256": "511431d088ccdd06d7486f027af5393af007ac216cb636ad3812aeb97b6651eb",
+      "size": 6038
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/sdk/ec2.py",
+      "sha256": "9d22a530a3448cbabbdede771f211594a4b48dd71bd430fa18c27663c5d2bed0",
+      "size": 6642
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/sdk/ecs.py",
+      "sha256": "4d9d41cf983f9f89c21ad486b1c991c49a2b3442292467a40015d5a43568bca5",
+      "size": 6455
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/sdk/hub.py",
+      "sha256": "8a48b4a066fb3298c848d210af2a29329d834187a4d914f794946255ca44d194",
+      "size": 2177
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/sdk/idle.py",
+      "sha256": "456876cff6bd69b37267a46f28b9727a8b66708c487bc517222bc3145db8c666",
+      "size": 3588
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/sdk/lambda_.py",
+      "sha256": "7f5acb60ed66986e817ecc1e2413cc6b66fd51da0002d0f17e7ef66cb492a348",
+      "size": 5280
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/sdk/rds.py",
+      "sha256": "49b6a2ab1fade69e7c760ee54aea41a7817dd26dae52ff267fb26d5e091358c9",
+      "size": 7085
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/sdk/summary.py",
+      "sha256": "d68d583aeaacccf788fe1e9cb99d10794166ba219a44fd57cd02b375ffc02617",
+      "size": 3665
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/sdk/vocabulary.py",
+      "sha256": "b0e6f0c6390c35a353304160e98d7a4e6557c35d43f249db9367e3d37f2edf29",
+      "size": 5711
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/sdk_fields.py",
+      "sha256": "d8b0d8db89a1d309c65d9a4cf89dd0b7087136aeb95075c129239e847baa7b4b",
+      "size": 1038
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/recommendation/values.py",
+      "sha256": "f915a45ddd6b65c9314c96ca13f5f8110cf26fef96e1ce0ed01cc38413593cd7",
+      "size": 2254
     },
     {
       "category": "collector_source",
@@ -4845,8 +7455,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/registry.py",
-      "sha256": "fb94cd5412eedbb73314e85e27f2e2026060d5f89c70d8c8bf65b6e134e8966d",
-      "size": 16762
+      "sha256": "d12bb891a3577e1339ce9fb68a6c7bb637bc1d9ed2267c80d3a51ef286312ac6",
+      "size": 16855
     },
     {
       "category": "collector_source",
@@ -4857,8 +7467,14 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/resolver.py",
-      "sha256": "322ddb20d39bf264e0f491b3b41911caca069ef2fb095d22ff1170e778af4b47",
-      "size": 7260
+      "sha256": "839a0377041d8188404c56df862bc3cff38d8dafbbf8afb1f01178719022b4af",
+      "size": 8585
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/retention.py",
+      "sha256": "d0d5dd9bf9757c3e061e60cf7a3ebc31c712d80ff9169661778af784c7877247",
+      "size": 2857
     },
     {
       "category": "collector_source",
@@ -4881,8 +7497,50 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/rules.py",
-      "sha256": "1856ea815e9971fd22bac2616257170da7441da176c18e57c95729dd188bf63b",
-      "size": 2683
+      "sha256": "dc5735eae50aa2c25c7566f3303b442eaabda7b2c6862ba0c049a84c43f5081f",
+      "size": 2776
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/runtime_fields.py",
+      "sha256": "a9966183a428e91e83b1f40a352317bc871daa59dc5397093517b0d592ab5dac",
+      "size": 6387
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/s3/__init__.py",
+      "sha256": "27d60e7f97c03f7aec4d21cb1c0992597a62efe27837272139b2a48ce32c3a23",
+      "size": 67
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/s3/base.py",
+      "sha256": "3b960d5ca862491468bb23510652db2da1c263e4ff9aad0c1d7420f7ad7e7e2a",
+      "size": 4295
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/s3/fields.py",
+      "sha256": "deff7aafe274138d08ec5a0658ea9d4b22e69049940912a66e95a557a149b9f7",
+      "size": 10080
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/s3/lifecycle.py",
+      "sha256": "42a2f54f492399d5438fba9b44a2762079ac46db6945155bf6d98b6fbec21faa",
+      "size": 662
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/s3/multipart.py",
+      "sha256": "c7915ef0326ae6cd6bd7c5b10d44c76998909c65b028af8f475bf80b7df9d42d",
+      "size": 569
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/s3/public_access.py",
+      "sha256": "ed6e6a78c0fabda236d0b3f7abbc98948c04d7b5649987e01c6f368e9905559f",
+      "size": 568
     },
     {
       "category": "collector_source",
@@ -4895,6 +7553,96 @@
       "path": "unio_collector/privacy/security_warning.py",
       "sha256": "079315fbd96ac71e3a5d7e9d247d61d85c49d4fd96454d5962b469184f144d03",
       "size": 756
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/selection.py",
+      "sha256": "fae736e66e5214a3df22481841ed1df9f04d9ec3ae47c5bfa248deea2dd01d76",
+      "size": 10164
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/serverless/__init__.py",
+      "sha256": "9b5d99ec9e9e30949806b49e92e08171d8de70c4906ad65864f133c1da647691",
+      "size": 74
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/serverless/lambda_cycle/__init__.py",
+      "sha256": "3ef743ab05edd0a829b43dc9b7a5c9391fc0b9dd6e049f4543f4c00c7ff2eeb6",
+      "size": 51
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/serverless/lambda_cycle/contract.py",
+      "sha256": "675c092a9527203bd46a69fc3d7a8759498822d587f601627d922bdc8a5b0142",
+      "size": 6309
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/serverless/lambda_cycle/fields.py",
+      "sha256": "6d71eb7fb82cf98434e48aa66906c13e12c840a07f87ea3e91860c57d5c38d44",
+      "size": 5128
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/serverless/lambda_cycle/literals.py",
+      "sha256": "e1abd151830c0f55b2d85aba4a5cab7a97db3f348c55f53f48bbdfc0ff8337fe",
+      "size": 1243
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/serverless/lifecycle.py",
+      "sha256": "e41e002422b42e36285eb352bbdb77a46b7096729e448c1adaa444dc7b3f6952",
+      "size": 9347
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/serverless/lifecycle_literals.py",
+      "sha256": "c09e2545c7d5fd67a01ad803dfb94cd78733156b6c5b22037f05a6e4106942a4",
+      "size": 2436
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/serverless/metric.py",
+      "sha256": "38cd4e8baf565af6e7fbd6130632ed85f91a8fec923cc469a40814c96a014742",
+      "size": 6029
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/serverless/notes.py",
+      "sha256": "0678e89b693abaa393d24c8411595940cda1d00f75d81f76c435fe43c74af2a0",
+      "size": 3775
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/serverless/polling.py",
+      "sha256": "1ec882ebd3e3ae957f4d4bdbb59966198997e55bca688e72f9821b566629cec9",
+      "size": 4302
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/serverless/preparation.py",
+      "sha256": "91526f497152fe994dcf8a152f25897c897f21b80a68265e9a0f1ada852862ae",
+      "size": 1962
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/service/__init__.py",
+      "sha256": "131bef75964ef29b1b3a8ea0d1a2f2439b5c5eca665604e3a6b6ae9701991df3",
+      "size": 62
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/service/coverage.py",
+      "sha256": "b3683264739ea07e26400b72e77c688636136617497191094ecb28e8991fa41a",
+      "size": 5522
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/service/fields.py",
+      "sha256": "6baeb95867508613bebb375bf8584d377d0ed1d99012d532031436072d9b5fff",
+      "size": 4979
     },
     {
       "category": "collector_source",
@@ -4911,14 +7659,38 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/strict_verifier.py",
-      "sha256": "d667081f101f67bacf5becdef72b164703649f9a3f9e92be6e87c7f61120ef82",
-      "size": 3431
+      "sha256": "e4b670f3a5cce76dd2dc0ab99dfaa446e8756a4d7d63f6dafed6ee8e0a8154a3",
+      "size": 8260
     },
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/synthetic_private_markers.py",
       "sha256": "ed8146a4ab9eedab582368309d71426a4cf21b1430cd5d011fdec9b3e873a327",
       "size": 406
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/tagging/__init__.py",
+      "sha256": "b985e78890bc82add0cd27cb8abbbad36f4708002b06145eeabfb36166524c4e",
+      "size": 77
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/tagging/contract.py",
+      "sha256": "6ee826fd11d7d1ae20fa6ccd2952fe00dad590f13e698d95e209bb0794c8f8f2",
+      "size": 3011
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/tagging/fields.py",
+      "sha256": "e784129df2b9cbfcf31b47b4d357b745dc2f1f378f240d97ae1afce4ac3fe496",
+      "size": 1704
+    },
+    {
+      "category": "collector_source",
+      "path": "unio_collector/privacy/tagging/notes.py",
+      "sha256": "87e8d3929335cbb7a2b3ee59c8030ced4f4039c7e39d298cb6003f6784243fb5",
+      "size": 5455
     },
     {
       "category": "collector_source",
@@ -4952,6 +7724,12 @@
     },
     {
       "category": "collector_source",
+      "path": "unio_collector/privacy/token/transformer.py",
+      "sha256": "167b588868e32c08dbf4ea32b2b0a4028d7324529ccf1cb7482860bc06c007c6",
+      "size": 3832
+    },
+    {
+      "category": "collector_source",
       "path": "unio_collector/privacy/token/vault_builder.py",
       "sha256": "f253d2c42e5845b59fdb8a895bb683f89089066f200689a73eba3686cec49ed9",
       "size": 1359
@@ -4971,8 +7749,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/transform.py",
-      "sha256": "34782895a2a1ea981746bfa78569153b529e670750fa7cf6cdbc53dfa5eb9837",
-      "size": 19474
+      "sha256": "b871798b64569c86a7a6b9dd37dc45ef10834e18e61592f3302021da877fd20a",
+      "size": 20590
     },
     {
       "category": "collector_source",
@@ -7035,8 +9813,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/scanners/aws_native/collection/coordinator.py",
-      "sha256": "f6dd794d6997dd57efc0386e0a24e2e752fd56f6dacc5d74d09b859a4f414f03",
-      "size": 8612
+      "sha256": "0930f2850267ffd121ed30dbe01b719f6a57545c49d654d6d414479329344cfd",
+      "size": 8673
     },
     {
       "category": "collector_source",
@@ -7065,8 +9843,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/scanners/aws_native/compute_optimizer/collector.py",
-      "sha256": "259713b58015ba2f81bec5dbbeeba20ff8c7a485ec00782240feff2e382d9860",
-      "size": 10226
+      "sha256": "2f8e75fb2ec05ca841dbaa636605bfadad7041a64bbc89a11ba8158270dd9407",
+      "size": 10395
     },
     {
       "category": "collector_source",
@@ -7665,8 +10443,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/scanners/ecr/image_scan/collector.py",
-      "sha256": "58f882dff114a3787d0fc9e2f05258e44c02c8d7225acff0a8ff90257a42e18d",
-      "size": 7234
+      "sha256": "ee830b82501281bd8efb73e9557948c960add8f45c0ac7c21e28b60461c8c42e",
+      "size": 7226
     },
     {
       "category": "collector_source",
@@ -9639,8 +12417,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/scanners/service_quota/collector.py",
-      "sha256": "6216200620a8101f228790d1bcb09d7c8230d62f5f0f67663cb9023541abe859",
-      "size": 10397
+      "sha256": "f1a362dd3086b253602a5321e37696da7a645a83606497cc5f8b1c68c49ae1fd",
+      "size": 10459
     },
     {
       "category": "collector_source",
@@ -9818,5 +12596,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "e0b9b27f6b6e69b9c02bc30ca7de3b8dce09f33de0f2d98dabcf7bb228085d2b"
+  "tree_digest": "1c76d7df6ddd3e93d3f061e7ad737c4a69bc4408d38a9b769d9c80f7f38bf524"
 }

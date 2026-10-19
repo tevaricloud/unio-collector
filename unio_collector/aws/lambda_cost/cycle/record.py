@@ -31,3 +31,4 @@ class LambdaCostCycleRecord:  # noqa: D101
     derived_metric_policy_fields_populated: bool = True
     tag_evidence: LambdaTagEvidence | None = None
     collection_errors: tuple[str, ...] = ()
+    environment_bucket_match: bool | None = None

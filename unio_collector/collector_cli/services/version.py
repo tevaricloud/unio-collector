@@ -5,6 +5,7 @@ import os
 from typing import Any
 
 from unio_collector import __version__
+from unio_collector.collector.package.native.build_identity import CollectorBuildIdentity
 from unio_collector.collector_cli.services.versioning.checker import CollectorVersionChecker
 from unio_collector.collector_cli.services.versioning.options import VersionCheckOptions
 
@@ -18,6 +19,12 @@ class CollectorVersionService:
 
     def run(self, args: object) -> int:
         """Print the collector CLI version."""
+        if bool(getattr(args, "build_info", False)):
+            if bool(getattr(args, "check", False)):
+                message = "--build-info is local-only and cannot be combined with --check."
+                raise ValueError(message)
+            self.console.print(json.dumps(CollectorBuildIdentity().read(), sort_keys=True), markup=False, soft_wrap=True)
+            return 0
         if not bool(getattr(args, "check", False)):
             self.console.print(f"unio-collector {__version__}")
             return 0

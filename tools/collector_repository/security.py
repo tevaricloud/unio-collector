@@ -156,6 +156,8 @@ class RepositorySecurityValidator:
                     "-I",
                     "-m",
                     "pip_audit",
+                    "--cache-dir",
+                    str(workspace / "advisory-cache"),
                     "--path",
                     site,
                     "--strict",

@@ -197,12 +197,13 @@ class ServiceQuotaProximityReviewCollector(ServiceQuotaUsageCountMixin, BaseUnio
             limitation = f"Service Quotas record for {spec.resource_type} was not found in {region}."
         elif quota_value is None:
             limitation = f"Service Quotas value for {spec.resource_type} was unavailable or malformed in {region}."
+        quota_name = quota.get("QuotaName") if quota else spec.check_id
         return ServiceQuotaObservation(
             check_id=spec.check_id,
             region=region,
             service=spec.service,
             resource_type=spec.resource_type,
-            quota_name=str(quota.get("QuotaName") if quota else spec.check_id),
+            quota_name="" if quota_name is None else str(quota_name),
             quota_code=(str(quota.get("QuotaCode")) if quota and quota.get("QuotaCode") else None),
             quota_value=quota_value,
             quota_found=quota is not None,

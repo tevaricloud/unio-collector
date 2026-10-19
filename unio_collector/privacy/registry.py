@@ -2,6 +2,7 @@ from __future__ import annotations  # noqa: D100
 
 from dataclasses import dataclass, field
 
+from unio_collector.privacy.producer_fields import producer_entries
 from unio_collector.privacy.region_scope import region_scope_entries
 from unio_collector.privacy.registry_entry import PrivacyRegistryEntry
 from unio_collector.privacy.terms import (
@@ -393,6 +394,7 @@ def _generated_key_entries() -> tuple[PrivacyRegistryEntry, ...]:
 
 PATH_REGISTRY: tuple[PrivacyRegistryEntry, ...] = (
     *region_scope_entries(),
+    *producer_entries(),
     *_BASE_PATH_REGISTRY,
     *_generated_key_entries(),
 )
