@@ -45,8 +45,8 @@
     {
       "category": "repository_metadata",
       "path": ".github/workflows/native.yml",
-      "sha256": "9b1f58e19efc2044c1d1fcb7c66ff2c2eac8cb1178c941eb268d2bb5ac2a581a",
-      "size": 5551
+      "sha256": "8f998f6e2c2ea61a06980b36c488bace1c8691753095c6d67bc45f16a9fc3b95",
+      "size": 5613
     },
     {
       "category": "repository_metadata",
@@ -12596,5 +12596,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "00d925db221b323af6fc05c89475401ab803cf4b1acbea79eba1e3ef87099625"
+  "tree_digest": "1fb788525f0d8a1f1bc45ec8d5f62566eac21c6b44514a1df171f86998fe3018"
 }
