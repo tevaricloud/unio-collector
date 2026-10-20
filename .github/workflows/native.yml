@@ -19,12 +19,16 @@ jobs:
         include:
           - runner: windows-2022
             target: windows-x86_64
+            pytest_workers: 2
           - runner: ubuntu-22.04
             target: linux-x86_64
+            pytest_workers: 2
           - runner: macos-15-intel
             target: macos-x86_64
+            pytest_workers: 4
           - runner: macos-15
             target: macos-arm64
+            pytest_workers: 2
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -66,9 +70,9 @@ jobs:
         shell: bash
         run: |
           if [[ "$RUNNER_OS" == Linux ]]; then
-            xvfb-run -a python -B -m tools.collector_repository native --root . --pytest-workers 2 --output "$RUNNER_TEMP/unio-collector-native-${GITHUB_RUN_ATTEMPT}"
+            xvfb-run -a python -B -m tools.collector_repository native --root . --pytest-workers "${{ matrix.pytest_workers }}" --output "$RUNNER_TEMP/unio-collector-native-${GITHUB_RUN_ATTEMPT}"
           else
-            python -B -m tools.collector_repository native --root . --pytest-workers 2 --output "$RUNNER_TEMP/unio-collector-native-${GITHUB_RUN_ATTEMPT}"
+            python -B -m tools.collector_repository native --root . --pytest-workers "${{ matrix.pytest_workers }}" --output "$RUNNER_TEMP/unio-collector-native-${GITHUB_RUN_ATTEMPT}"
           fi
       - name: Retain compact validation evidence
         if: always()

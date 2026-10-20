@@ -45,8 +45,8 @@
     {
       "category": "repository_metadata",
       "path": ".github/workflows/native.yml",
-      "sha256": "48d890e46640cae07012c858a333fbae3172a9ff3189e159f106cebfed8c87c3",
-      "size": 5373
+      "sha256": "9b1f58e19efc2044c1d1fcb7c66ff2c2eac8cb1178c941eb268d2bb5ac2a581a",
+      "size": 5551
     },
     {
       "category": "repository_metadata",
@@ -1713,7 +1713,7 @@
     {
       "category": "repository_metadata",
       "path": "tools/windows_installer/policy.json",
-      "sha256": "5c9eb80e6e157d6cd43ae3ef63dad91e12ee2a4317388b4641265acfadc8405d",
+      "sha256": "9e64f7394c5db584246eb9a5b17245435f48085e2b370f803be7433fa8951f79",
       "size": 98
     },
     {
@@ -12596,5 +12596,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "615bf5e04b6e3bf808ab709784d8db169ebf2ac5affca7c5e84ab78969c1781c"
+  "tree_digest": "00d925db221b323af6fc05c89475401ab803cf4b1acbea79eba1e3ef87099625"
 }
