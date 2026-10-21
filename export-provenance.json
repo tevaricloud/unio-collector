@@ -5,14 +5,14 @@
     "repository_metadata": 223,
     "tests": 127
   },
-  "envelope_policy_sha256": "a9ded40e0ef24946cde8853830aae5d4604eb4b7e0557ab4081576e974755aa2",
+  "envelope_policy_sha256": "2f95b9dde60f406560408b7594b6895d43464a0cfaf6f9e8073fd83b4a4cc13e",
   "envelope_policy_version": "2026-09-collector-envelope-v2",
   "file_count": 2107,
   "generation_tool_version": "2026-09-collector-repository-v2",
   "licence_name": "Tevari Cloud Unio Collector Source-Available License",
   "licence_status": "approved",
   "licence_version": "1.0",
-  "manifest_sha256": "9753169723059ad889cc58300f6afafa27413932f1f448c94fc2b8a680de283f",
+  "manifest_sha256": "6c8f84054e91cde9803a03ec686ee081622675f8e6a215aaf26c35e85758a454",
   "package_plan_version": "2026-02",
   "policy_schema_version": "2026-09-collector-export-policy-v2",
   "policy_sha256": "d15cec3541b44e7c8d47730e58d02a46b810b80c0d33f5fa0df4016242149519",
@@ -27,9 +27,9 @@
     "project_disclosure": "clean"
   },
   "source_byte_identity": false,
-  "source_git_tree": "8b18873726f6e9ae7609d10bad9d1ba87ba92f02",
+  "source_git_tree": "555ad535b2a148dcf10053ce6d0a63c3a603fdf1",
   "source_repository": "tevari-cloud/unio-private-source",
-  "source_sha": "30a09c0fea907d6af86354a4dea07eb555c47f99",
+  "source_sha": "5df8452d62ced8170c77d4a954c19b9968739937",
   "source_state_clean": true,
-  "tree_digest": "873d50f499da21f1c4add5686b0e80a852dba5ac0326cacd0bdcc592cd8bf655"
+  "tree_digest": "3413ac1935bc6af194d808f3025edbcc3e10720f7b15492ddaeef320f435008e"
 }

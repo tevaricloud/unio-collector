@@ -141,8 +141,8 @@
     {
       "category": "repository_metadata",
       "path": "requirements/dev-constraints.txt",
-      "sha256": "2c067746256b1857ba1d8181a0131c04c116736b0afdef620eff084a4bcd253c",
-      "size": 1176
+      "sha256": "3d7992f078071fdb8b366132d90a4f98f596557689ca589ca2a40b30be8102a4",
+      "size": 1177
     },
     {
       "category": "repository_metadata",
@@ -12632,5 +12632,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "873d50f499da21f1c4add5686b0e80a852dba5ac0326cacd0bdcc592cd8bf655"
+  "tree_digest": "3413ac1935bc6af194d808f3025edbcc3e10720f7b15492ddaeef320f435008e"
 }
