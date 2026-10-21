@@ -10,8 +10,10 @@ from pathlib import Path
 
 from tools.collector_repository.artifacts import PublicAssistantArtifactPolicy
 from tools.collector_repository.comments import PublicCommentPolicy
-from tools.collector_repository.identity import RepositoryIdentity, canonical_json
+from tools.collector_repository.evidence import SourceValidationEvidence
+from tools.collector_repository.identity import RepositoryIdentity, canonical_json, read_json
 from tools.collector_repository.naming import PublicNamingValidator
+from tools.collector_repository.partition import MAX_TEST_SHARDS
 from tools.collector_repository.paths import external_output, require
 from tools.collector_repository.process import RepositoryProcess
 from tools.collector_repository.secrets import GitleaksSecretScanner
@@ -20,8 +22,27 @@ from tools.collector_repository.secrets import GitleaksSecretScanner
 class RepositoryValidator:
     """Coordinate the bounded public checks and existing collector build tools."""
 
-    def validate(self, root: Path, output: Path, *, native: bool = False, source_sha: str | None = None, pytest_workers: int = 1) -> dict[str, object]:
+    def validate(
+        self,
+        root: Path,
+        output: Path,
+        *,
+        native: bool = False,
+        source_sha: str | None = None,
+        pytest_workers: int = 1,
+        emit_source_evidence: bool = False,
+        source_evidence: Path | None = None,
+        test_shard: int = 0,
+        test_shards: int = 1,
+    ) -> dict[str, object]:
         """Validate source or a pristine export, recording honest partial failures."""
+        require(not emit_source_evidence or (not native and source_evidence is None), "Invalid source-transfer mode.")
+        require(source_evidence is None or native, "Source evidence requires native packaging.")
+        require(
+            type(test_shards) is int and 1 <= test_shards <= MAX_TEST_SHARDS and type(test_shard) is int and 0 <= test_shard < test_shards,
+            "Invalid test partition configuration.",
+        )
+        require(test_shards == 1 or emit_source_evidence or source_evidence is not None, "Test shards require source transfer.")
         require(pytest_workers >= 1, "Pytest worker count must be a positive integer.")
         root = root.resolve()
         PublicAssistantArtifactPolicy().validate(root)
@@ -41,6 +62,7 @@ class RepositoryValidator:
             "status": "failed",
             "pristine_export": before is not None,
             "pytest_workers": pytest_workers,
+            "validation_scope": "source-for-native" if emit_source_evidence else "native-packaging" if source_evidence is not None else "complete",
         }
         payload["project_disclosure"] = "verified-publication-attestation" if before is not None and "sensitive_data_validation" in before else "not-attested"
         with tempfile.TemporaryDirectory(prefix="unio-collector-standalone-validation-", dir=output.parent) as raw:
@@ -50,10 +72,28 @@ class RepositoryValidator:
             try:
                 payload["secret_scan"] = GitleaksSecretScanner().scan(root, output)
                 python = self._environment(root, workspace, process)
-                self._source(root, workspace, python, process, pytest_workers=pytest_workers)
-                wheel = self._wheel(root, output, python, process, source_sha=source_sha)
+                if emit_source_evidence or source_evidence is not None:
+                    require(before is not None, "Native job transfer requires a pristine export.")
+                    source_sha = SourceValidationEvidence().checkout_sha(root, source_sha)
+                    process.run("dependency-inventory", [str(python), "-I", "-m", "pip", "list", "--format=json"], cwd=workspace)
+                if source_evidence is None:
+                    self._source(root, workspace, python, process, pytest_workers=pytest_workers, test_shard=test_shard, test_shards=test_shards)
+                    if test_shards > 1:
+                        payload["test_partition"] = read_json(workspace / "partitions/partition.json")
+                    wheel = (
+                        self._build_wheel(root, output, python, process)
+                        if emit_source_evidence
+                        else self._wheel(root, output, python, process, source_sha=source_sha)
+                    )
+                else:
+                    transfer = SourceValidationEvidence()
+                    context = transfer.context(root, source_sha, output / "dependency-inventory.log", pytest_workers, test_shards)
+                    wheel, payload["source_validation"] = transfer.accept(root, source_evidence, output, context)
+                    self._validate_wheel(root, output, python, wheel, process, source_sha=source_sha)
                 if native:
                     self._native(root, output, python, wheel, process)
+                if emit_source_evidence:
+                    process.run("dependency-inventory-final", [str(python), "-I", "-m", "pip", "list", "--format=json"], cwd=workspace)
                 if before is not None:
                     require(RepositoryIdentity().verify(root) == before, "Validation changed the pristine export.")
                 payload["status"] = "passed"
@@ -61,6 +101,8 @@ class RepositoryValidator:
             finally:
                 payload["steps"] = process.steps
                 (output / "validation-summary.json").write_bytes(canonical_json(payload))
+        if emit_source_evidence:
+            SourceValidationEvidence().write(root, output, source_sha, pytest_workers, test_shards)
         return payload
 
     def _environment(self, root: Path, workspace: Path, process: RepositoryProcess) -> Path:
@@ -77,11 +119,15 @@ class RepositoryValidator:
         process.run("dependency-check", [str(python), "-I", "-m", "pip", "check"], cwd=workspace)
         return python
 
-    def _source(self, root: Path, workspace: Path, python: Path, process: RepositoryProcess, *, pytest_workers: int = 1) -> None:
+    def _source(
+        self, root: Path, workspace: Path, python: Path, process: RepositoryProcess, *, pytest_workers: int = 1, test_shard: int = 0, test_shards: int = 1
+    ) -> None:
         executable = str(python)
         tests = ["-m", "pytest", "-q", "-p", "no:cacheprovider", "--durations=20", "--basetemp", str(workspace / "pytest")]
         if pytest_workers > 1:
             tests.extend(["-n", str(pytest_workers), "--dist", "loadscope"])
+        if test_shards > 1:
+            tests.extend(["-p", "tools.collector_repository.pytest_partition"])
         tests.append("tests/standalone")
         for name, arguments in (
             ("compile", ["-m", "compileall", "-q", "unio_collector", "tools", "tests/standalone"]),
@@ -90,7 +136,25 @@ class RepositoryValidator:
             ("pyright", ["-m", "pyright", "--pythonpath", executable]),
             ("tests", tests),
         ):
-            process.run(name, [executable, *arguments], cwd=root)
+            if name == "tests" and test_shards > 1:
+                previous = {key: os.environ.get(key) for key in ("UNIO_TEST_SHARD_INDEX", "UNIO_TEST_SHARD_COUNT", "UNIO_TEST_SHARD_OUTPUT")}
+                try:
+                    os.environ.update(
+                        {
+                            "UNIO_TEST_SHARD_INDEX": str(test_shard),
+                            "UNIO_TEST_SHARD_COUNT": str(test_shards),
+                            "UNIO_TEST_SHARD_OUTPUT": str(workspace / "partitions"),
+                        }
+                    )
+                    process.run(name, [executable, *arguments], cwd=root)
+                finally:
+                    for key, value in previous.items():
+                        if value is None:
+                            os.environ.pop(key, None)
+                        else:
+                            os.environ[key] = value
+            else:
+                process.run(name, [executable, *arguments], cwd=root)
 
     def _wheel(
         self,
@@ -101,13 +165,20 @@ class RepositoryValidator:
         *,
         source_sha: str | None = None,
     ) -> Path:
+        wheel = self._build_wheel(root, output, python, process)
+        self._validate_wheel(root, output, python, wheel, process, source_sha=source_sha)
+        return wheel
+
+    def _build_wheel(self, root: Path, output: Path, python: Path, process: RepositoryProcess) -> Path:
         wheel_dir = output / "wheel"
         process.run(
             "wheel-build", [str(python), "-B", "-m", "pip", "wheel", "--no-deps", "--no-build-isolation", "--wheel-dir", str(wheel_dir), str(root)], cwd=output
         )
         wheels = list(wheel_dir.glob("*.whl"))
         require(len(wheels) == 1, "Expected exactly one standalone wheel.")
-        wheel = wheels[0]
+        return wheels[0]
+
+    def _validate_wheel(self, root: Path, output: Path, python: Path, wheel: Path, process: RepositoryProcess, *, source_sha: str | None = None) -> None:
         process.run(
             "installed-wheel",
             [
@@ -127,7 +198,6 @@ class RepositoryValidator:
             cwd=root,
             source_sha=source_sha,
         )
-        return wheel
 
     def _native(self, root: Path, output: Path, python: Path, wheel: Path, process: RepositoryProcess) -> None:
         native = output / "native"

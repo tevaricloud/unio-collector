@@ -45,8 +45,8 @@
     {
       "category": "repository_metadata",
       "path": ".github/workflows/native.yml",
-      "sha256": "8f998f6e2c2ea61a06980b36c488bace1c8691753095c6d67bc45f16a9fc3b95",
-      "size": 5613
+      "sha256": "54ac8c55c0f7b957a042437a5adec70250f87a36017a6443da8e2cfd17ac3302",
+      "size": 10655
     },
     {
       "category": "repository_metadata",
@@ -123,8 +123,8 @@
     {
       "category": "repository_metadata",
       "path": "requirements/ci-tools.json",
-      "sha256": "a5892eb2bf460b155cb1e73285129bfa160bf8a4dfc4f39716673226d07d0a2e",
-      "size": 3328
+      "sha256": "79fb9651ae83c54f6e1877b971e893199dde7ca69db6c8452489709358843f1f",
+      "size": 3405
     },
     {
       "category": "repository_metadata",
@@ -335,6 +335,24 @@
       "path": "tests/standalone/test_cache_notes.py",
       "sha256": "2724e63884a64a5e563539341fefa96528a1252422c37954e989cfa62b7b8d4b",
       "size": 5682
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_ci_partitions.py",
+      "sha256": "05e2592beda9d6965adc3ecc6198f0ae85f4a920860cd1681f1a965a2bbe3770",
+      "size": 7138
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_ci_timeouts.py",
+      "sha256": "41a19024ed9cbc12bf42ed406d714e4b9d97e623cf901f3f9ad2804be0bb941e",
+      "size": 4508
+    },
+    {
+      "category": "tests",
+      "path": "tests/standalone/test_ci_transfer.py",
+      "sha256": "daf909dc4fbe438d119f70cc2b89ba93d0342b75785777dd2611e61d9ccbd059",
+      "size": 7273
     },
     {
       "category": "tests",
@@ -1443,8 +1461,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/collector_repository/__main__.py",
-      "sha256": "9af6e2cb19ad4f3d1dc736b868cd721a1ea0499a1e04d5846925852ba5cddacc",
-      "size": 3167
+      "sha256": "4688c9a4387395e59756f7e233fe3fdaf398654b2b9e0abdacf7a87c702dcaad",
+      "size": 4247
     },
     {
       "category": "repository_metadata",
@@ -1466,6 +1484,12 @@
     },
     {
       "category": "repository_metadata",
+      "path": "tools/collector_repository/evidence.py",
+      "sha256": "f315649858217c44dc14a8d62754fcee4a62172cea2c8236c4984d4dae7c8ca0",
+      "size": 10080
+    },
+    {
+      "category": "repository_metadata",
       "path": "tools/collector_repository/identity.py",
       "sha256": "0e6287ad7e47b2f78d97b276350361091dc89585d51b29933eea7f88d3d36894",
       "size": 9225
@@ -1478,6 +1502,12 @@
     },
     {
       "category": "repository_metadata",
+      "path": "tools/collector_repository/partition.py",
+      "sha256": "ccbad81342c7a6a3f201c614580cb854380519d2a62a906a5fcf927e995f8bd7",
+      "size": 2590
+    },
+    {
+      "category": "repository_metadata",
       "path": "tools/collector_repository/paths.py",
       "sha256": "b66a332ba4ce6d537cdcbcf9248d94c6e788eb22c78aa2e26be4f8b52052a7b2",
       "size": 4291
@@ -1485,8 +1515,14 @@
     {
       "category": "repository_metadata",
       "path": "tools/collector_repository/process.py",
-      "sha256": "81820653a8ea02d237e793fb2aa61377885254deef2e6652bc882ccf5d68314d",
-      "size": 6296
+      "sha256": "52626075f258ede1070a5958e6273a825e3b5d8d9f1f57001adc3fa5eb5fdf39",
+      "size": 10904
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/collector_repository/pytest_partition.py",
+      "sha256": "075b94d3ce67bb542ffecdc46cd0aa79aa83e8ddb030888efe906c06b74e26ba",
+      "size": 1896
     },
     {
       "category": "repository_metadata",
@@ -1509,8 +1545,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/collector_repository/validation.py",
-      "sha256": "32e975dd87a031b82e27b6ae88ced12a8b2231c831ae8bc4b8a82e587134f44c",
-      "size": 7338
+      "sha256": "b73a9ea411636d3f6727426f5ae87903bf0780014f71e32f3a4a2d38a9d921d5",
+      "size": 11445
     },
     {
       "category": "repository_metadata",
@@ -1713,7 +1749,7 @@
     {
       "category": "repository_metadata",
       "path": "tools/windows_installer/policy.json",
-      "sha256": "9e64f7394c5db584246eb9a5b17245435f48085e2b370f803be7433fa8951f79",
+      "sha256": "6d51c9c03f5cd87cf0e5f91cbe0b3d3caabb45cba2af086637bec60349451cc9",
       "size": 98
     },
     {
@@ -12596,5 +12632,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "1fb788525f0d8a1f1bc45ec8d5f62566eac21c6b44514a1df171f86998fe3018"
+  "tree_digest": "873d50f499da21f1c4add5686b0e80a852dba5ac0326cacd0bdcc592cd8bf655"
 }
