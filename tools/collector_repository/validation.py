@@ -6,10 +6,12 @@ import os
 import tempfile
 import tomllib
 import venv
+from contextlib import suppress
 from pathlib import Path
 
 from tools.collector_repository.artifacts import PublicAssistantArtifactPolicy
 from tools.collector_repository.comments import PublicCommentPolicy
+from tools.collector_repository.durations import PytestDurationDiagnostics
 from tools.collector_repository.evidence import SourceValidationEvidence
 from tools.collector_repository.identity import RepositoryIdentity, canonical_json, read_json
 from tools.collector_repository.naming import PublicNamingValidator
@@ -99,6 +101,16 @@ class RepositoryValidator:
                 payload["status"] = "passed"
                 payload["wheel"] = wheel.name
             finally:
+                with suppress(Exception):
+                    PytestDurationDiagnostics().retain(
+                        output,
+                        source_sha=source_sha,
+                        export=before,
+                        workers=pytest_workers,
+                        shard=test_shard,
+                        shards=test_shards,
+                        enabled=source_evidence is None,
+                    )
                 payload["steps"] = process.steps
                 (output / "validation-summary.json").write_bytes(canonical_json(payload))
         if emit_source_evidence:

@@ -31,6 +31,13 @@ TABLE_FIELDS = {
 class WindowsMsiInspector:
     """Inspect the actual database, including WiX-generated default actions."""
 
+    def __init__(self, *, executable: Path | None = None) -> None:
+        """Allow a trusted caller to pin an absolute host PowerShell executable."""
+        if executable is not None and not executable.is_absolute():
+            message = "MSI inspection executable must be absolute."
+            raise ValueError(message)
+        self.executable = executable
+
     def read(self, installer: Path) -> dict[str, object]:
         """Use read-only Windows Installer COM; never invoke installation APIs."""
         counts = json.dumps(TABLE_FIELDS)
@@ -58,7 +65,7 @@ $out | ConvertTo-Json -Depth 8 -Compress
 """
         environment = {**os.environ, "UNIO_MSI": str(installer.resolve()), "UNIO_MSI_TABLE_FIELDS": counts}
         result = subprocess.run(  # noqa: S603
-            ("powershell", "-NoProfile", "-NonInteractive", "-Command", script),  # noqa: S607
+            (str(self.executable) if self.executable is not None else "powershell", "-NoProfile", "-NonInteractive", "-Command", script),
             env=environment,
             check=True,
             capture_output=True,

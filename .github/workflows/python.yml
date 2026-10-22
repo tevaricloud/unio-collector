@@ -43,6 +43,14 @@ jobs:
             ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/installed-wheel-summary.json
           retention-days: 3
           if-no-files-found: warn
+      - name: Retain filtered pytest timings
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: pytest-timings-python-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/unio-collector-python-${{ github.run_attempt }}/pytest-durations.json
+          retention-days: 3
+          if-no-files-found: warn
       - name: Retain failure diagnostics
         if: ${{ failure() && vars.RETAIN_CI_DIAGNOSTIC_ARTIFACTS == 'true' }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f

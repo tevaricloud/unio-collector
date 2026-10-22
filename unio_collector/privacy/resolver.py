@@ -17,6 +17,25 @@ if TYPE_CHECKING:
 class PrivacyRegistryResolver:
     """Resolve privacy treatments from the path/treatment registry."""
 
+    def __init__(self) -> None:
+        """Own an index of immutable registry rules, never input paths or values."""
+        self._suffix_registry: tuple[PrivacyRegistryEntry, ...] | None = None
+        self._suffix_index: dict[tuple[str, str, str | None], tuple[PrivacyRegistryEntry, ...]] = {}
+
+    @staticmethod
+    def _index_suffix_rules(registry: tuple[PrivacyRegistryEntry, ...]) -> dict[tuple[str, str, str | None], tuple[PrivacyRegistryEntry, ...]]:
+        """Keep ambiguous member patterns on the matcher path in registry order."""
+        groups: dict[tuple[str, str, str | None], list[tuple[int, PrivacyRegistryEntry]]] = {}
+        for ordinal, entry in enumerate(registry):
+            member = None if any(char in entry.member_pattern for char in "*?[") else entry.member_pattern
+            for profile in set(entry.allowed_profiles):
+                groups.setdefault((entry.domain, profile, member), []).append((ordinal, entry))
+        index: dict[tuple[str, str, str | None], tuple[PrivacyRegistryEntry, ...]] = {}
+        for (domain, profile, member), rows in groups.items():
+            candidates = rows if member is None else sorted([*rows, *groups.get((domain, profile, None), ())], key=lambda row: row[0])
+            index[(domain, profile, member)] = tuple(entry for _, entry in candidates)
+        return index
+
     def resolve(
         self,
         *,
@@ -166,9 +185,14 @@ class PrivacyRegistryResolver:
         key: str | None,
         profile_id: str,
     ) -> PrivacyRegistryEntry | None:
-        for entry in PATH_REGISTRY:
-            if entry.domain != domain or profile_id not in entry.allowed_profiles:
-                continue
+        registry = PATH_REGISTRY
+        if self._suffix_registry is not registry:
+            self._suffix_index = self._index_suffix_rules(registry)
+            self._suffix_registry = registry
+        candidates = self._suffix_index.get((domain, profile_id, member_path))
+        if candidates is None:
+            candidates = self._suffix_index.get((domain, profile_id, None), ())
+        for entry in candidates:
             if not self._member_matches(entry.member_pattern, member_path):
                 continue
             if not self._json_suffix_matches(

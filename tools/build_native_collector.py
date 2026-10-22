@@ -450,11 +450,11 @@ class NativeCollectorBuilder:
             )
             if name == "build_identity" and completed.returncode == 0:
                 verify_launched_identity(json.loads(completed.stdout), build_identity, cli)
-            if name == "launcher" and completed.returncode == 0:
-                verify_launched_identity(json.loads((workspace / "gui-build-identity.json").read_text(encoding="utf-8")), build_identity, launcher)
+            _verify_launcher_smoke(name, completed, build_identity, launcher, workspace)
             if name == "collect_fixture" and completed.returncode == 0:
                 ledger_namespace = _add_synthetic_region_scope(bundle, self.root / "tests/standalone/fixtures/region-scope.json")
                 source_digest = hashlib.sha256(bundle.read_bytes()).hexdigest()
+            if name == "validate_bundle" and completed.returncode == 0:
                 shutil.copyfile(bundle, workspace / "unknown.zip")
                 _add_synthetic_region_scope(workspace / "unknown.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_ledger_field=True)
                 unknown_digest = hashlib.sha256((workspace / "unknown.zip").read_bytes()).hexdigest()
@@ -575,6 +575,12 @@ class NativeCollectorBuilder:
             "producer_fixture_sha256": hashlib.sha256((self.root / "tests/standalone/fixtures/protection-producers.json").read_bytes()).hexdigest(),
             "ledger_namespace": ledger_namespace,
         }
+
+
+def _verify_launcher_smoke(name: str, completed: subprocess.CompletedProcess[str], build_identity: dict[str, object], launcher: Path, workspace: Path) -> None:
+    """Verify a successful launcher command against its retained build identity."""
+    if name == "launcher" and completed.returncode == 0:
+        verify_launched_identity(json.loads((workspace / "gui-build-identity.json").read_text(encoding="utf-8")), build_identity, launcher)
 
 
 def _verify_completion_receipt(name: str, output: str) -> None:

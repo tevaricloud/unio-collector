@@ -45,14 +45,14 @@
     {
       "category": "repository_metadata",
       "path": ".github/workflows/native.yml",
-      "sha256": "54ac8c55c0f7b957a042437a5adec70250f87a36017a6443da8e2cfd17ac3302",
-      "size": 10655
+      "sha256": "9d02639b29ba3c30eae70c3ca37bea8ae1c50d4a3cf4515d13beb08551dc8a7d",
+      "size": 16383
     },
     {
       "category": "repository_metadata",
       "path": ".github/workflows/python.yml",
-      "sha256": "40888ced12f3291614ee39180073ebc4fc48e2ceb6c2f8da1c29688883eb6e9a",
-      "size": 2890
+      "sha256": "48af679062b66040237c4e48de9bab625060453578a5dcf6d7289b293c029512",
+      "size": 3280
     },
     {
       "category": "repository_metadata",
@@ -113,6 +113,12 @@
       "path": "THIRD_PARTY_NOTICES",
       "sha256": "89b0403d2a1a9de86d50679aef83ce8956251704a22e6ca921c91e837261f1eb",
       "size": 2306
+    },
+    {
+      "category": "repository_metadata",
+      "path": "docs/pr-test-packages.md",
+      "sha256": "2ca35cacdce707d51e3b24018bc47e99e9c5b07a4fa11082f5286437054e1e4d",
+      "size": 11954
     },
     {
       "category": "repository_metadata",
@@ -957,8 +963,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/build_native_collector.py",
-      "sha256": "c2e1836c2e241e71bceae773d707352d05ab783b3df9a2f2dbe626159b674cca",
-      "size": 65632
+      "sha256": "a6df42ad589eba0b0e3f77f045b76447bcd0a86bfe83cd0cf4b6463874aceb1b",
+      "size": 66023
     },
     {
       "category": "repository_metadata",
@@ -1484,6 +1490,12 @@
     },
     {
       "category": "repository_metadata",
+      "path": "tools/collector_repository/durations.py",
+      "sha256": "638ba4c62c0cf8e511396a01632aef7caad5585a3a1c8a57c069d31982cf103e",
+      "size": 5821
+    },
+    {
+      "category": "repository_metadata",
       "path": "tools/collector_repository/evidence.py",
       "sha256": "f315649858217c44dc14a8d62754fcee4a62172cea2c8236c4984d4dae7c8ca0",
       "size": 10080
@@ -1545,8 +1557,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/collector_repository/validation.py",
-      "sha256": "b73a9ea411636d3f6727426f5ae87903bf0780014f71e32f3a4a2d38a9d921d5",
-      "size": 11445
+      "sha256": "322bce6299c5172ad05ac1e8b89c031bf362084f6a4172a81a866cb184ce28a7",
+      "size": 11981
     },
     {
       "category": "repository_metadata",
@@ -1718,6 +1730,90 @@
     },
     {
       "category": "repository_metadata",
+      "path": "tools/test_packages/__init__.py",
+      "sha256": "e2f06d10e056116eb5a2322a095cb4fe46b3073d000c8de5263a3be01b459100",
+      "size": 87
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/test_packages/__main__.py",
+      "sha256": "05378cceca793150ec28425da1a8f482cc03695b300579c87befdefbb1a9738a",
+      "size": 6583
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/test_packages/api.py",
+      "sha256": "5a8c2f1e8d0295aeb705f3b3672f90412a34258bca4648f257efc26598ede7b6",
+      "size": 3954
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/test_packages/approval.py",
+      "sha256": "7209cf4ee2f805fc3a896b34bea0069e702ae5562ecd900d0184f23ff71148c7",
+      "size": 3115
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/test_packages/archive.py",
+      "sha256": "3916a6a082dda21fa0609b63259ed2f525b24c545ca4142ff09abaa5d16c2ab9",
+      "size": 4006
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/test_packages/checks.py",
+      "sha256": "8bf273ae4158450a2aa2b27631306cce75219170d80d200e167d312bfb6a5d52",
+      "size": 5280
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/test_packages/context.py",
+      "sha256": "9576ee3a0d5153f2d8036243bee52bf56ed7a8ad849e4a4c486345a034202a98",
+      "size": 6275
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/test_packages/evidence.py",
+      "sha256": "6f4521d2cd55734733d0b43b2f9d3ce8d3f833d538383f6ce1624ed8027e89c4",
+      "size": 12020
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/test_packages/executables.py",
+      "sha256": "7ed57509ef33a48bd875cb65f2a6300a8478589448805bf9b798756cf5ddb8b4",
+      "size": 1092
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/test_packages/packet.py",
+      "sha256": "a32018b4c5d1bad1354afaff2a4e5e90b56ee9eadf8e418a69439bf96a7b81f5",
+      "size": 4873
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/test_packages/selector.py",
+      "sha256": "e0842a7bef7182a483a09bd21e8a89c453e871d09a232ed4c367fb0e3d999bcf",
+      "size": 10377
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/test_packages/transport.py",
+      "sha256": "eea7a4f52be00e0c42a5dc6670f92399b2daca4082afea384fa7d4f7c2def956",
+      "size": 2233
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/test_packages/trust.py",
+      "sha256": "9ce998c1c4974972aeeb0420e7ea24e90fad5b8d9325f427b4181e6a9445d4c5",
+      "size": 1422
+    },
+    {
+      "category": "repository_metadata",
+      "path": "tools/test_packages/workflow.py",
+      "sha256": "ad11aef3a82138305311e47dc4aa8f5bef774a61d248ee47dc6103532adb37c5",
+      "size": 3342
+    },
+    {
+      "category": "repository_metadata",
       "path": "tools/validate_collector_wheel.py",
       "sha256": "685d3d2ad8feeac2a2f8e6ad0041cd54de6836bc9846cd4a2562c7658fc1b7a7",
       "size": 60277
@@ -1743,13 +1839,13 @@
     {
       "category": "repository_metadata",
       "path": "tools/windows_installer/metadata.py",
-      "sha256": "c0caced21be3323d743cda2c3e7b526c15335cfacd7631c35ebe7ef4fc4eaa3f",
-      "size": 7278
+      "sha256": "a5919add5c435ab2f49057722587434e0c170443aa04f9013c413debf1ed1365",
+      "size": 7684
     },
     {
       "category": "repository_metadata",
       "path": "tools/windows_installer/policy.json",
-      "sha256": "6d51c9c03f5cd87cf0e5f91cbe0b3d3caabb45cba2af086637bec60349451cc9",
+      "sha256": "2221a146444b32c800a4db3a1db2f99f41240a4b9fb5400a482c8ee02525863f",
       "size": 98
     },
     {
@@ -5133,8 +5229,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/collector_cli/services/doctor.py",
-      "sha256": "d715cb1ac471a1722bc8b27bb8b6c2a3be70d6c7c90e55c6508414063bafab0c",
-      "size": 8404
+      "sha256": "db3143875cef5719b64afa0d74977783965e40adbf6aeeeaa955db5dd0599a50",
+      "size": 9602
     },
     {
       "category": "collector_source",
@@ -7503,8 +7599,8 @@
     {
       "category": "collector_source",
       "path": "unio_collector/privacy/resolver.py",
-      "sha256": "839a0377041d8188404c56df862bc3cff38d8dafbbf8afb1f01178719022b4af",
-      "size": 8585
+      "sha256": "71b48e1c3d76a21641466a9a7e9ebd4744ffa4cadf50fa62ef27bc1a9ade0426",
+      "size": 10203
     },
     {
       "category": "collector_source",
@@ -12632,5 +12728,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "3413ac1935bc6af194d808f3025edbcc3e10720f7b15492ddaeef320f435008e"
+  "tree_digest": "3f951e2befdeccafa82f150c81e687ea07f8cd4a5220d126e5b00959f90d9388"
 }
