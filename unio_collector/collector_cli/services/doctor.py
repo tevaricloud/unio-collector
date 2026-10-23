@@ -2,6 +2,9 @@ from __future__ import annotations  # noqa: D100
 
 import importlib.util
 import json
+import os
+import stat
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -118,10 +121,8 @@ class CollectorDoctorService:
                 status="warning",
                 message=f"Output parent does not exist yet: {target}",
             )
-        probe = target / ".unio-collector-doctor-write-test"
         try:
-            probe.write_text("ok", encoding="utf-8")
-            probe.unlink(missing_ok=True)
+            self._probe_output(target)
         except OSError as exc:
             return CollectorDoctorCheck(
                 name="output_writable",
@@ -133,6 +134,37 @@ class CollectorDoctorService:
             status="ok",
             message=f"Output path is writable: {target}",
         )
+
+    def _probe_output(self, target: Path) -> None:
+        descriptor, name = tempfile.mkstemp(
+            prefix=".unio-collector-doctor-write-test-",
+            dir=target,
+        )
+        identity: tuple[int, int] | None = None
+        try:
+            metadata = os.fstat(descriptor)
+            identity = (metadata.st_dev, metadata.st_ino)
+            if os.write(descriptor, b"ok") != len(b"ok"):
+                message = "Doctor write probe was incomplete."
+                raise OSError(message)
+        finally:
+            try:
+                os.close(descriptor)
+            finally:
+                if identity is not None:
+                    self._remove_probe(Path(name), identity)
+
+    def _remove_probe(self, probe: Path, identity: tuple[int, int]) -> None:
+        try:
+            metadata = probe.lstat()
+        except FileNotFoundError:
+            return
+        reparse = getattr(metadata, "st_file_attributes", 0) & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0)
+        if (metadata.st_dev, metadata.st_ino) != identity or not stat.S_ISREG(metadata.st_mode) or reparse:
+            message = "Doctor write probe ownership changed; the unexpected path was preserved."
+            raise OSError(message)
+
+        probe.unlink(missing_ok=True)
 
     def _identity_check(self, args: object, config: object) -> CollectorDoctorCheck:
         if not bool(getattr(args, "check_identity", False)):

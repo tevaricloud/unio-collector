@@ -8,6 +8,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import venv
 from importlib import import_module
@@ -24,6 +25,24 @@ try:
 except ModuleNotFoundError:
     from native_locks import lock_sha256, validate_lock
     from native_release.abi import LinuxBaselineValidator
+
+try:
+    from tools.collector_billing.fixture import add_billing_producer_payloads
+    from tools.collector_rds.fixture import add_rds_producer_payloads
+    from tools.collector_recommendation.fixture import add_recommendation_producer_payloads
+    from tools.native_protection import NativeProtectionGuards
+    from tools.windows_installer.identity import WindowsInstallerIdentity
+    from tools.windows_installer.smoke import verify_launched_identity
+except ModuleNotFoundError as exc:
+    if exc.name != "tools":
+        raise
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from tools.collector_billing.fixture import add_billing_producer_payloads
+    from tools.collector_rds.fixture import add_rds_producer_payloads
+    from tools.collector_recommendation.fixture import add_recommendation_producer_payloads
+    from tools.native_protection import NativeProtectionGuards
+    from tools.windows_installer.identity import WindowsInstallerIdentity
+    from tools.windows_installer.smoke import verify_launched_identity
 
 NATIVE_SUMMARY_SCHEMA_VERSION = "2026-08-native-build-v1"
 TCL_TK_MARKERS = ("_tcl_data", "_tk_data", "tcl8", "tk8", "tcl86", "tk86", "_tkinter")
@@ -91,6 +110,16 @@ class NativeCollectorBuilder:
         if (operating_system, architecture) not in {(item.operating_system, item.architecture) for item in native_manifest.targets}:
             message = f"Unsupported native collector target: {operating_system}/{architecture}."
             raise RuntimeError(message)
+        installer_identity = WindowsInstallerIdentity.for_repository(self.root, native_manifest.version)
+        build_identity = {
+            "application_version": native_manifest.version,
+            "source_commit": source_commit,
+            "wheel_sha256": wheel_sha256,
+            "installer_revision": installer_identity.revision,
+            "installer_version": installer_identity.installer_version,
+            "channel": installer_identity.channel,
+            "schema_version": 1,
+        }
         with tempfile.TemporaryDirectory(prefix="unio-collector-native-build-") as raw:
             workspace = Path(raw)
             environment_python, lock_evidence = self._create_environment(
@@ -106,11 +135,11 @@ class NativeCollectorBuilder:
             if forbidden:
                 message = "Collector wheel contains forbidden native build modules: " + ", ".join(forbidden[:10])
                 raise RuntimeError(message)
-            first = self._freeze(environment_python, workspace / "first", modules)
+            first = self._freeze(environment_python, workspace / "first", modules, build_identity=build_identity)
             first_inventory = inventory_module.build_native_payload_inventory(first)
             reproducibility = {"checked": verify_reproducibility, "normalized_match": None, "native_binary_differences": []}
             if verify_reproducibility:
-                second = self._freeze(environment_python, workspace / "second", modules)
+                second = self._freeze(environment_python, workspace / "second", modules, build_identity=build_identity)
                 second_inventory = inventory_module.build_native_payload_inventory(second)
                 reproducibility = _compare_inventories(first_inventory, second_inventory)
                 if not bool(reproducibility["normalized_match"]):
@@ -268,7 +297,7 @@ class NativeCollectorBuilder:
             "wheelhouse_mode": wheelhouse is not None,
         }
 
-    def _freeze(self, python: Path, workspace: Path, modules: tuple[str, ...]) -> Path:
+    def _freeze(self, python: Path, workspace: Path, modules: tuple[str, ...], *, build_identity: dict[str, object] | None = None) -> Path:
         workspace.mkdir(parents=True)
         cli = workspace / "collector_entry.py"
         launcher = workspace / "launcher_entry.py"
@@ -302,15 +331,19 @@ class NativeCollectorBuilder:
         if not payload.is_dir():
             message = "PyInstaller did not create the expected one-directory payload."
             raise RuntimeError(message)
+        if build_identity is not None:
+            (payload / "collector-build.json").write_text(json.dumps(build_identity, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         return payload
 
     def _smoke(self, payload: Path, workspace: Path, *, version: str) -> dict[str, object]:
         workspace.mkdir()
+        build_identity = json.loads((payload / "collector-build.json").read_text(encoding="utf-8"))
         suffix = ".exe" if os.name == "nt" else ""
         cli = payload / f"unio-collector{suffix}"
         launcher = payload / f"Unio Collector{suffix}"
         environment = os.environ.copy()
         environment.pop("PYTHONPATH", None)
+        environment["UNIO_LAUNCHER_IDENTITY_OUTPUT"] = str(workspace / "gui-build-identity.json")
         environment["UNIO_COLLECTOR_LAUNCHER_SMOKE_TEST"] = "1"
         for key in tuple(environment):
             if key.startswith("AWS_"):
@@ -325,11 +358,26 @@ class NativeCollectorBuilder:
         for name, command in {
             "version": (str(cli), "version"),
             "version_flag": (str(cli), "--version"),
+            "build_identity": (str(cli), "version", "--build-info"),
             "profiles": (str(cli), "profiles", "--json"),
             "scanners": (str(cli), "scanners", "--json"),
             "launcher": (str(launcher),),
             "collect_fixture": (str(cli), "collect", "--fixture", str(fixture), "--output", str(bundle), "--quiet"),
             "validate_bundle": (str(cli), "validate-bundle", str(bundle)),
+            "validate_unknown_bundle": (str(cli), "validate-bundle", str(workspace / "unknown.zip")),
+            "validate_unknown_logs_bundle": (str(cli), "validate-bundle", str(workspace / "unknown-logs.zip")),
+            "validate_unknown_nat_bundle": (str(cli), "validate-bundle", str(workspace / "unknown-nat.zip")),
+            "validate_unknown_network_bundle": (str(cli), "validate-bundle", str(workspace / "unknown-network.zip")),
+            "validate_unknown_governance_bundle": (str(cli), "validate-bundle", str(workspace / "unknown-governance.zip")),
+            "validate_unknown_rds_bundle": (str(cli), "validate-bundle", str(workspace / "unknown-rds.zip")),
+            "validate_unknown_compute_bundle": (str(cli), "validate-bundle", str(workspace / "unknown-compute.zip")),
+            "validate_unknown_final_bundle": (str(cli), "validate-bundle", str(workspace / "unknown-final.zip")),
+            "validate_unknown_billing_bundle": (str(cli), "validate-bundle", str(workspace / "unknown-billing.zip")),
+            "validate_unknown_recommendation_bundle": (str(cli), "validate-bundle", str(workspace / "unknown-recommendation.zip")),
+            "validate_unknown_delta_bundle": (str(cli), "validate-bundle", str(workspace / "unknown-delta.zip")),
+            "validate_unknown_freetier_bundle": (str(cli), "validate-bundle", str(workspace / "unknown-freetier.zip")),
+            "validate_unknown_quota_bundle": (str(cli), "validate-bundle", str(workspace / "unknown-quota.zip")),
+            "validate_unknown_audit_bundle": (str(cli), "validate-bundle", str(workspace / "unknown-audit.zip")),
             **{
                 name: command
                 for profile in ("standard", "strict")
@@ -353,7 +401,42 @@ class NativeCollectorBuilder:
                         ),
                     ),
                     (f"validate_protected_{profile}", (str(cli), "validate-bundle", str(workspace / f"protected-{profile}.zip"))),
+                    (f"receipt_{profile}", (str(cli), "privacy", "inspect", "--bundle", str(workspace / f"protected-{profile}.zip"), "--json")),
                 )
+            },
+            **{
+                f"protect_unknown_{batch}{profile}": (
+                    str(cli),
+                    "privacy",
+                    "protect",
+                    "--bundle",
+                    str(workspace / (f"unknown-{batch[:-1]}.zip" if batch else "unknown.zip")),
+                    "--output",
+                    str(workspace / f"unknown-{batch}{profile}.zip"),
+                    "--vault",
+                    str(workspace / f"private-unknown-{batch}{profile}" / "vault.json"),
+                    "--profile",
+                    profile,
+                    "--passphrase-stdin",
+                    "--acknowledge-vault-loss-risk",
+                )
+                for batch in (
+                    "",
+                    "logs-",
+                    "nat-",
+                    "network-",
+                    "audit-",
+                    "governance-",
+                    "quota-",
+                    "freetier-",
+                    "delta-",
+                    "recommendation-",
+                    "billing-",
+                    "rds-",
+                    "compute-",
+                    "final-",
+                )
+                for profile in ("standard", "strict")
             },
         }.items():
             completed = subprocess.run(  # noqa: S603
@@ -365,19 +448,306 @@ class NativeCollectorBuilder:
                 text=True,
                 input="synthetic-native-smoke-only\n" if name.startswith("protect_") else None,
             )
+            if name == "build_identity" and completed.returncode == 0:
+                verify_launched_identity(json.loads(completed.stdout), build_identity, cli)
+            _verify_launcher_smoke(name, completed, build_identity, launcher, workspace)
             if name == "collect_fixture" and completed.returncode == 0:
-                _add_synthetic_region_scope(bundle, self.root / "tests/standalone/fixtures/region-scope.json")
+                ledger_namespace = _add_synthetic_region_scope(bundle, self.root / "tests/standalone/fixtures/region-scope.json")
+                source_digest = hashlib.sha256(bundle.read_bytes()).hexdigest()
+            if name == "validate_bundle" and completed.returncode == 0:
+                shutil.copyfile(bundle, workspace / "unknown.zip")
+                _add_synthetic_region_scope(workspace / "unknown.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_ledger_field=True)
+                unknown_digest = hashlib.sha256((workspace / "unknown.zip").read_bytes()).hexdigest()
+                shutil.copyfile(bundle, workspace / "unknown-logs.zip")
+                _add_synthetic_region_scope(workspace / "unknown-logs.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_logs_field=True)
+                logs_digest = hashlib.sha256((workspace / "unknown-logs.zip").read_bytes()).hexdigest()
+                shutil.copyfile(bundle, workspace / "unknown-nat.zip")
+                _add_synthetic_region_scope(workspace / "unknown-nat.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_nat_field=True)
+                nat_digest = hashlib.sha256((workspace / "unknown-nat.zip").read_bytes()).hexdigest()
+                shutil.copyfile(bundle, workspace / "unknown-network.zip")
+                _add_synthetic_region_scope(
+                    workspace / "unknown-network.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_network_field=True
+                )
+                network_digest = hashlib.sha256((workspace / "unknown-network.zip").read_bytes()).hexdigest()
+                shutil.copyfile(bundle, workspace / "unknown-audit.zip")
+                _add_synthetic_region_scope(
+                    workspace / "unknown-audit.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_audit_field=True
+                )
+                audit_digest = hashlib.sha256((workspace / "unknown-audit.zip").read_bytes()).hexdigest()
+                shutil.copyfile(bundle, workspace / "unknown-governance.zip")
+                _add_synthetic_region_scope(
+                    workspace / "unknown-governance.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_governance_field=True
+                )
+                governance_digest = hashlib.sha256((workspace / "unknown-governance.zip").read_bytes()).hexdigest()
+                shutil.copyfile(bundle, workspace / "unknown-quota.zip")
+                _add_synthetic_region_scope(
+                    workspace / "unknown-quota.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_quota_field=True
+                )
+                quota_digest = hashlib.sha256((workspace / "unknown-quota.zip").read_bytes()).hexdigest()
+                shutil.copyfile(bundle, workspace / "unknown-freetier.zip")
+                _add_synthetic_region_scope(
+                    workspace / "unknown-freetier.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_freetier_field=True
+                )
+                freetier_digest = hashlib.sha256((workspace / "unknown-freetier.zip").read_bytes()).hexdigest()
+                shutil.copyfile(bundle, workspace / "unknown-delta.zip")
+                _add_synthetic_region_scope(
+                    workspace / "unknown-delta.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_delta_field=True
+                )
+                delta_digest = hashlib.sha256((workspace / "unknown-delta.zip").read_bytes()).hexdigest()
+                shutil.copyfile(bundle, workspace / "unknown-recommendation.zip")
+                _add_synthetic_region_scope(
+                    workspace / "unknown-recommendation.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_recommendation_field=True
+                )
+                recommendation_digest = hashlib.sha256((workspace / "unknown-recommendation.zip").read_bytes()).hexdigest()
+                shutil.copyfile(bundle, workspace / "unknown-billing.zip")
+                _add_synthetic_region_scope(
+                    workspace / "unknown-billing.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_billing_field=True
+                )
+                billing_digest = hashlib.sha256((workspace / "unknown-billing.zip").read_bytes()).hexdigest()
+                shutil.copyfile(bundle, workspace / "unknown-rds.zip")
+                _add_synthetic_region_scope(workspace / "unknown-rds.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_rds_field=True)
+                rds_digest = hashlib.sha256((workspace / "unknown-rds.zip").read_bytes()).hexdigest()
+                shutil.copyfile(bundle, workspace / "unknown-compute.zip")
+                _add_synthetic_region_scope(
+                    workspace / "unknown-compute.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_compute_field=True
+                )
+                compute_digest = hashlib.sha256((workspace / "unknown-compute.zip").read_bytes()).hexdigest()
+                shutil.copyfile(bundle, workspace / "unknown-final.zip")
+                _add_synthetic_region_scope(
+                    workspace / "unknown-final.zip", self.root / "tests/standalone/fixtures/region-scope.json", unknown_final_field=True
+                )
+                final_digest = hashlib.sha256((workspace / "unknown-final.zip").read_bytes()).hexdigest()
             checks[name] = completed.returncode
-            if completed.returncode != 0:
+            expected = 1 if name.startswith("protect_unknown_") else 0
+            if completed.returncode != expected:
                 message = f"Native {name} smoke failed: {completed.stdout} {completed.stderr}"
                 raise RuntimeError(message)
+            _verify_completion_receipt(name, completed.stdout)
+            if name.startswith("protect_unknown_"):
+                profile = name.removeprefix("protect_unknown_")
+                _verify_unknown_smoke(
+                    workspace,
+                    profile,
+                    completed,
+                    final_digest
+                    if profile.startswith("final-")
+                    else compute_digest
+                    if profile.startswith("compute-")
+                    else rds_digest
+                    if profile.startswith("rds-")
+                    else billing_digest
+                    if profile.startswith("billing-")
+                    else recommendation_digest
+                    if profile.startswith("recommendation-")
+                    else delta_digest
+                    if profile.startswith("delta-")
+                    else freetier_digest
+                    if profile.startswith("freetier-")
+                    else quota_digest
+                    if profile.startswith("quota-")
+                    else governance_digest
+                    if profile.startswith("governance-")
+                    else audit_digest
+                    if profile.startswith("audit-")
+                    else network_digest
+                    if profile.startswith("network-")
+                    else nat_digest
+                    if profile.startswith("nat-")
+                    else logs_digest
+                    if profile.startswith("logs-")
+                    else unknown_digest,
+                    ledger_namespace,
+                )
             if name in {"version", "version_flag"} and completed.stdout.strip() != f"unio-collector {version}":
                 message = f"Native {name} reports {completed.stdout.strip()!r}, expected collector version {version}."
                 raise RuntimeError(message)
-        return {"checks": checks, "expected_version": version, "version_verified": True, "source_checkout": False, "system_python_required": False}
+        NativeProtectionGuards.verify_source(bundle, source_digest)
+        return {
+            "positive_source_preserved": True,
+            "protection_guards": NativeProtectionGuards().run(cli, workspace, environment),
+            "build_identity": build_identity,
+            "checks": checks,
+            "expected_version": version,
+            "version_verified": True,
+            "source_checkout": False,
+            "system_python_required": False,
+            "expected_exit_codes": {name: 1 if name.startswith("protect_unknown_") else 0 for name in checks},
+            "producer_fixture_sha256": hashlib.sha256((self.root / "tests/standalone/fixtures/protection-producers.json").read_bytes()).hexdigest(),
+            "ledger_namespace": ledger_namespace,
+        }
 
 
-def _add_synthetic_region_scope(bundle: Path, fixture: Path) -> None:
+def _verify_launcher_smoke(name: str, completed: subprocess.CompletedProcess[str], build_identity: dict[str, object], launcher: Path, workspace: Path) -> None:
+    """Verify a successful launcher command against its retained build identity."""
+    if name == "launcher" and completed.returncode == 0:
+        verify_launched_identity(json.loads((workspace / "gui-build-identity.json").read_text(encoding="utf-8")), build_identity, launcher)
+
+
+def _verify_completion_receipt(name: str, output: str) -> None:
+    """Require the same structured completion proof as the launcher coordinator."""
+    if name.startswith("receipt_") and not import_module("unio_collector.collector_launcher.protection").ProtectionOperation._verified(output):  # noqa: SLF001
+        raise RuntimeError("Native completion receipt verification failed.")  # noqa: EM101, TRY003
+
+
+def _verify_unknown_smoke(workspace: Path, profile: str, completed: subprocess.CompletedProcess[str], input_digest: str, ledger_namespace: str) -> None:
+    """Require the negative smoke to reject the unknown field without publication."""
+    required_paths = (
+        (
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.listener_rules[].unknown_edge_control",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_edge_cost",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_tagging_control",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.metadata.topology.[redacted-region].facts[].unknown_flow_fact",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.portfolio.inventory[].payment.unknown_commitment_control",
+        )
+        if profile.startswith("final-")
+        else (
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_compute_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.stopped_instances[].unknown_compute_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.billing_facts.top_resources[].unknown_cur_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_analytics_control",
+            "scan-result/scanner-results.json.scanner_results[].coverage_notes[].detail_counts.unknown_analytics_note",
+            "scan-result/scanner-results.json.scanner_results[].coverage_notes[].detail_counts.unknown_inventory_note_count",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_managed_control",
+            "scan-result/scanner-results.json.scanner_results[].coverage_notes[].detail_counts.unknown_managed_note",
+            "scan-result/scanner-results.json.scanner_results[].coverage_notes[].unknown_cache_control",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_serverless_control",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].rules[].unknown_backup_control",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_dynamodb_control",
+        )
+        if profile.startswith("compute-")
+        else (
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].metrics[].unknown_rds_metric",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_rds_snapshot",
+        )
+        if profile.startswith("rds-")
+        else ("scan-result/scanner-evidence.json.scanner_evidence[].payload.budgets[].budget.BudgetLimit.unknown_billing_control",)
+        if profile.startswith("billing-")
+        else ("scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].recommended_configuration.unknown_recommendation_control",)
+        if profile.startswith("recommendation-")
+        else ("scan-result/scanner-evidence.json.scanner_evidence[].payload.result.service_costs[].unknown_delta_control",)
+        if profile.startswith("delta-")
+        else ("scan-result/scanner-evidence.json.scanner_evidence[].payload.usage_records[].unknown_freetier_control",)
+        if profile.startswith("freetier-")
+        else ("scan-result/scanner-evidence.json.scanner_evidence[].payload.quota_records[].unknown_quota_control",)
+        if profile.startswith("quota-")
+        else (
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_config_governance",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].feature_status_counts.unknown_guardduty_governance",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].macie_job_status_counts.unknown_security_governance",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_waf_governance",
+        )
+        if profile.startswith("governance-")
+        else (
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_secrets_audit",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_cloudtrail_cost",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.trails[].unknown_cloudtrail_security",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_xray_audit",
+        )
+        if profile.startswith("audit-")
+        else (
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.topology[].resources[].facts.unknown_network_container",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.topology[].resources[].facts.unknown_privatelink_container",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].attachment_resource_type_counts.unknown_transit_type",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.daily_costs[].unknown_nat_cost_container",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.topology[].resources[].facts.unknown_vpc_container",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].attributes.unknown_service_container",
+        )
+        if profile.startswith("network-")
+        else ("scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_nat_container",)
+        if profile.startswith("nat-")
+        else (
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].metrics[].unknown_log_metric",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.unknown_retention_field",
+        )
+        if profile.startswith("logs-")
+        else (
+            f"collection-log.jsonl.{ledger_namespace}.unknown_synthetic_field",
+            "collection-summary.json.api_runtime_summary.records[].unknown_synthetic_field",
+            "collection-summary.json.limitation_counts.unknown_synthetic_field",
+            "collection-summary.json.limitation_counts.partial",
+            "collection-summary.json.limitations[].unknown_synthetic_field",
+            "collection-summary.json.billing_region_coverage.region_scope_derivation.unknown_synthetic_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].top_usage_type_costs[].unknown_synthetic_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.account_risk.iam_summary.unknown_synthetic_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.daily_costs[].unknown_synthetic_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.scan_period.raw_input.unknown_synthetic_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.findings[].unknown_synthetic_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.conformance_pack_records[].unknown_synthetic_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_athena_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_gateway_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_storage_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].unknown_snapshot_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.records[].metrics[].unknown_balancer_field",
+            "scan-result/scanner-evidence.json.scanner_evidence[].payload.unknown_address_container",
+        )
+    )
+    if any(path not in "".join((completed.stdout + completed.stderr).split()) for path in required_paths):
+        raise RuntimeError("Native negative smoke failed for an unrelated reason.")  # noqa: EM101, TRY003
+    if any(
+        (workspace / candidate).exists()
+        for candidate in (f"unknown-{profile}.zip", f"unknown-{profile}.zip.receipt.json", f"private-unknown-{profile}/vault.json")
+    ):
+        raise RuntimeError("Native rejected protection published an artifact.")  # noqa: EM101, TRY003
+    if (
+        list(workspace.rglob("*.tmp"))
+        or hashlib.sha256(
+            (
+                workspace
+                / (
+                    "unknown-final.zip"
+                    if profile.startswith("final-")
+                    else "unknown-compute.zip"
+                    if profile.startswith("compute-")
+                    else "unknown-rds.zip"
+                    if profile.startswith("rds-")
+                    else "unknown-billing.zip"
+                    if profile.startswith("billing-")
+                    else "unknown-recommendation.zip"
+                    if profile.startswith("recommendation-")
+                    else "unknown-delta.zip"
+                    if profile.startswith("delta-")
+                    else "unknown-freetier.zip"
+                    if profile.startswith("freetier-")
+                    else "unknown-quota.zip"
+                    if profile.startswith("quota-")
+                    else "unknown-governance.zip"
+                    if profile.startswith("governance-")
+                    else "unknown-audit.zip"
+                    if profile.startswith("audit-")
+                    else "unknown-network.zip"
+                    if profile.startswith("network-")
+                    else "unknown-nat.zip"
+                    if profile.startswith("nat-")
+                    else "unknown-logs.zip"
+                    if profile.startswith("logs-")
+                    else "unknown.zip"
+                )
+            ).read_bytes()
+        ).hexdigest()
+        != input_digest
+    ):
+        raise RuntimeError("Native rejection changed input or left staging files.")  # noqa: EM101, TRY003
+
+
+def _add_synthetic_region_scope(
+    bundle: Path,
+    fixture: Path,
+    *,
+    unknown_ledger_field: bool = False,
+    unknown_logs_field: bool = False,
+    unknown_nat_field: bool = False,
+    unknown_network_field: bool = False,
+    unknown_audit_field: bool = False,
+    unknown_governance_field: bool = False,
+    unknown_quota_field: bool = False,
+    unknown_freetier_field: bool = False,
+    unknown_delta_field: bool = False,
+    unknown_recommendation_field: bool = False,
+    unknown_billing_field: bool = False,
+    unknown_rds_field: bool = False,
+    unknown_compute_field: bool = False,
+    unknown_final_field: bool = False,
+) -> str:
     """Enrich only the smoke-created fixture ZIP with producer-shaped metadata."""
     scope = json.loads(fixture.read_text(encoding="utf-8"))
     with ZipFile(bundle) as archive:
@@ -386,14 +756,173 @@ def _add_synthetic_region_scope(bundle: Path, fixture: Path) -> None:
         payload = json.loads(files[member])
         payload["region_scope"] = scope
         files[member] = json.dumps(payload, indent=2, sort_keys=True).encode("utf-8")
+    provenance = json.loads(fixture.with_name("protection-producers.json").read_text(encoding="utf-8"))
+    ledger_namespace = json.loads(files["bundle-schema.json"])["format"].removesuffix("-result-evidence-bundle")
+    if ledger_namespace not in provenance["collection_log"]:
+        message = "Synthetic ledger fixture must retain the wire-protocol envelope, not the Python import namespace."
+        raise ValueError(message)
+    if unknown_ledger_field:
+        provenance["collection_log"][ledger_namespace]["unknown_synthetic_field"] = None
+    for member, field in (("account-scope.json", "scan_period"), ("analysis-readiness.json", "pricing_replay")):
+        payload = json.loads(files[member])
+        payload[field] = provenance[field]
+        files[member] = json.dumps(payload, indent=2, sort_keys=True).encode("utf-8")
+    summary = json.loads(files["collection-summary.json"])
+    summary["api_runtime_summary"] = provenance["api_runtime_summary"]["populated"]
+    if unknown_ledger_field:
+        summary["api_runtime_summary"]["records"][0]["unknown_synthetic_field"] = None
+    from tools.collector_summary_fixture import collection_summary_shapes  # noqa: PLC0415
+
+    actual_summary = collection_summary_shapes(provenance)[provenance.get("summary_variant", "populated")]
+    for field in ("limitation_counts", "stable_limitation_counts", "secondary_classification_counts", "limitations", "billing_region_coverage"):
+        summary[field] = actual_summary[field]
+    if unknown_ledger_field:
+        summary["limitation_counts"]["unknown_synthetic_field"] = None
+        summary["limitation_counts.partial"] = 1
+        summary["limitations"][0]["unknown_synthetic_field"] = None
+        summary["billing_region_coverage"]["region_scope_derivation"]["unknown_synthetic_field"] = None
+    if mutation := provenance.get("summary_unknown"):
+        location, value = mutation["location"], mutation["value"]
+        target = (
+            summary["limitation_counts"]
+            if location == "summary_count"
+            else summary["limitations"][0]
+            if location == "summary_limitation"
+            else summary["billing_region_coverage"]["region_scope_derivation"]
+        )
+        target["unknown_synthetic_field"] = value
+    summary["billing_region_scope_derivation"] = provenance["billing_region_scope_derivation"]
+    summary["stable_limitation_details"] = provenance["stable_limitation_details"]
+    summary["collection_runtime_summary"] = provenance["collection_runtime_summary"]
+    files["scan-result/api-runtime-summary.json"] = json.dumps(summary["api_runtime_summary"], indent=2, sort_keys=True).encode("utf-8")
+    files["collection-summary.json"] = json.dumps(summary, indent=2, sort_keys=True).encode("utf-8")
+    files["collection-log.jsonl"] = (json.dumps(provenance["collection_log"], sort_keys=True) + "\n").encode("utf-8")
+    files["scan-result/pricing-context.json"] = json.dumps(provenance["pricing_context"], indent=2, sort_keys=True).encode("utf-8")
+    from tools.collector_permission_fixture import permission_producer_payloads  # noqa: PLC0415
+
+    permission_files = permission_producer_payloads(provenance)
+    files["permissions-summary.json"] = permission_files["permissions-summary.json"]
+    files["permissions/degradation-records.json"] = permission_files["permissions/degradation-records.json"]
+    files["collection-log.jsonl"] += permission_files["collection-log.jsonl"]
+    summary["strict_analysis_readiness"]["pricing_replay"] = provenance["pricing_replay"]
+    files["collection-summary.json"] = json.dumps(summary, indent=2, sort_keys=True).encode("utf-8")
+    from tools.collector_athena_fixture import add_athena_producer_payload  # noqa: PLC0415
+    from tools.collector_bedrock_fixture import add_bedrock_producer_payload  # noqa: PLC0415
+    from tools.collector_daily_fixture import add_daily_producer_payloads  # noqa: PLC0415
+    from tools.collector_gateway_fixture import add_gateway_producer_payload  # noqa: PLC0415
+    from tools.collector_risk_fixture import add_account_risk_producer_payload  # noqa: PLC0415
+    from tools.collector_security_fixture import add_security_producer_payloads  # noqa: PLC0415
+
+    add_bedrock_producer_payload(files, unknown_field=unknown_ledger_field)
+    add_account_risk_producer_payload(files, unknown_field=unknown_ledger_field)
+    add_daily_producer_payloads(files, unknown_field=unknown_ledger_field)
+    add_security_producer_payloads(files, unknown_field=unknown_ledger_field)
+    add_athena_producer_payload(files, unknown_field=unknown_ledger_field, unknown_note=unknown_compute_field)
+    add_gateway_producer_payload(files, unknown_field=unknown_ledger_field)
+    from tools.collector_storage_fixture import add_storage_producer_payloads  # noqa: PLC0415
+
+    add_storage_producer_payloads(files, unknown_field=unknown_ledger_field)
+    from tools.collector_snapshot_fixture import add_snapshot_producer_payload  # noqa: PLC0415
+
+    add_snapshot_producer_payload(files, unknown_field=unknown_ledger_field)
+    from tools.collector_balancer_fixture import add_balancer_producer_payload  # noqa: PLC0415
+
+    add_balancer_producer_payload(files, unknown_field=unknown_ledger_field)
+    from tools.collector_address_fixture import add_address_producer_payload  # noqa: PLC0415
+
+    add_address_producer_payload(files, unknown_field=unknown_ledger_field)
+    from tools.collector_logs_fixture import add_logs_producer_payload  # noqa: PLC0415
+
+    add_logs_producer_payload(files, unknown_field=unknown_logs_field)
+    from tools.collector_nat_fixture import add_nat_producer_payload  # noqa: PLC0415
+
+    add_nat_producer_payload(files, unknown_field=unknown_nat_field)
+    from tools.collector_ipv4_fixture import add_ipv4_producer_payload  # noqa: PLC0415
+
+    add_ipv4_producer_payload(files, unknown=unknown_network_field)
+    from tools.collector_privatelink_fixture import add_privatelink_producer_payload  # noqa: PLC0415
+
+    add_privatelink_producer_payload(files, unknown=unknown_network_field)
+    from tools.collector_transit_fixture import add_transit_producer_payload  # noqa: PLC0415
+
+    add_transit_producer_payload(files, unknown=unknown_network_field)
+    from tools.collector_nat_cost import add_nat_cost_producer_payload  # noqa: PLC0415
+
+    add_nat_cost_producer_payload(files, unknown=unknown_network_field)
+    from tools.collector_vpc_fixture import add_vpc_producer_payload  # noqa: PLC0415
+
+    add_vpc_producer_payload(files, unknown=unknown_network_field)
+    from tools.collector_service_fixture import add_service_producer_payloads  # noqa: PLC0415
+
+    add_service_producer_payloads(files, unknown=unknown_network_field)
+    from tools.collector_s3_fixture import add_s3_producer_payloads  # noqa: PLC0415
+
+    add_s3_producer_payloads(files, unknown=unknown_network_field)
+    from tools.collector_audit_fixture import add_audit_producer_payloads  # noqa: PLC0415
+
+    add_audit_producer_payloads(files, unknown=unknown_audit_field)
+    from tools.collector_governance.fixture import add_governance_producer_payloads  # noqa: PLC0415
+
+    add_governance_producer_payloads(files, unknown=unknown_governance_field)
+    from tools.collector_exposure.fixture import add_exposure_producer_payloads  # noqa: PLC0415
+    from tools.collector_identity_fixture import add_identity_producer_payloads  # noqa: PLC0415
+    from tools.collector_key_fixture import add_key_producer_payloads  # noqa: PLC0415
+
+    add_key_producer_payloads(files)
+    add_identity_producer_payloads(files)
+    add_exposure_producer_payloads(files)
+    from tools.collector_quota_fixture import add_quota_producer_payloads  # noqa: PLC0415
+
+    add_quota_producer_payloads(files, unknown=unknown_quota_field)
+    from tools.collector_freetier_fixture import add_freetier_producer_payloads  # noqa: PLC0415
+
+    add_freetier_producer_payloads(files, unknown=unknown_freetier_field)
+    from tools.collector_delta_fixture import add_delta_producer_payloads  # noqa: PLC0415
+
+    add_delta_producer_payloads(files, unknown=unknown_delta_field)
+    add_recommendation_producer_payloads(files, unknown=unknown_recommendation_field)
+    add_billing_producer_payloads(files, unknown=unknown_billing_field)
+    add_rds_producer_payloads(files, unknown=unknown_rds_field)
+    from tools.collector_compute.fixture import add_compute_producer_payloads  # noqa: PLC0415
+
+    add_compute_producer_payloads(files, unknown=unknown_compute_field)
+    from tools.collector_cur_fixture import add_cur_producer_payload  # noqa: PLC0415
+
+    add_cur_producer_payload(files, unknown=unknown_compute_field)
+    from tools.collector_analytics.fixture import add_analytics_producer_payloads  # noqa: PLC0415
+
+    add_analytics_producer_payloads(files, unknown=unknown_compute_field)
+    from tools.collector_managed.fixture import add_managed_producer_payloads  # noqa: PLC0415
+
+    add_managed_producer_payloads(files, unknown=unknown_compute_field)
+    from tools.collector_cache_fixture import add_cache_producer_notes  # noqa: PLC0415
+
+    add_cache_producer_notes(files, unknown=unknown_compute_field)
+    from tools.collector_serverless.fixture import add_serverless_producer_payloads  # noqa: PLC0415
+
+    add_serverless_producer_payloads(files, unknown=unknown_compute_field)
+    from tools.collector_backup.fixture import add_backup_producer_payload  # noqa: PLC0415
+
+    add_backup_producer_payload(files, unknown=unknown_compute_field)
+
+    from tools.collector_dynamodb.fixture import add_dynamodb_producer_payload  # noqa: PLC0415
+
+    add_dynamodb_producer_payload(files, unknown=unknown_compute_field)
+    from tools.collector_final.fixture import add_final_producer_payloads  # noqa: PLC0415
+
+    add_final_producer_payloads(files, unknown=unknown_final_field)
     checksums = {name: hashlib.sha256(data).hexdigest() for name, data in sorted(files.items()) if name not in {"manifest.json", "checksums.json"}}
     manifest = json.loads(files["manifest.json"])
+    manifest["permission_degradation_record_count"] = len(json.loads(files["permissions/degradation-records.json"])["records"])
+    manifest["permission_limitations"] = json.loads(permission_files["manifest.json"])["permission_limitations"]
+    manifest["product_execution"] = provenance["product_execution"]
     manifest["checksums"] = checksums
     files["manifest.json"] = json.dumps(manifest, indent=2, sort_keys=True).encode("utf-8")
     files["checksums.json"] = json.dumps({"algorithm": "sha256", "checksums": checksums}, indent=2, sort_keys=True).encode("utf-8")
     with ZipFile(bundle, "w", compression=ZIP_DEFLATED) as archive:
         for name, data in sorted(files.items()):
             archive.writestr(name, data)
+    return ledger_namespace
 
 
 def _spec_text(cli: Path, launcher: Path, modules: tuple[str, ...]) -> str:

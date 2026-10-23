@@ -46,7 +46,7 @@ def validate_permission_degradation_records(
         _validate_record_fields(item, index, errors)
         _validate_optional_bool_fields(item, index, errors)
         _validate_optional_context_fields(item, index, errors)
-        current_key = _record_sort_key(item)
+        current_key = permission_record_sort_key(item)
         if previous_key is not None and current_key < previous_key:
             errors.append(
                 "permissions/degradation-records.json records must be sorted deterministically.",
@@ -131,7 +131,8 @@ def _validate_optional_context_fields(
             )
 
 
-def _record_sort_key(item: dict[str, object]) -> tuple[str, ...]:
+def permission_record_sort_key(item: dict[str, object]) -> tuple[str, ...]:
+    """Return canonical permission-record order before and after pseudonymisation."""
     return tuple(
         str(item.get(field) or "")
         for field in (

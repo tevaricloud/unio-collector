@@ -28,6 +28,7 @@ class ProtectedExportLifecycleVerifier:
         expected_vault_plaintext: dict[str, object],
         external_preview: dict[str, object] | None,
         known_original_values: set[str],
+        generated_tokens: frozenset[str] = frozenset(),
         existing_recovery_key: bytes | None = None,
     ) -> LeakScanResult:
         """Run validation, leak scan, decrypt-test, and binding verification."""
@@ -35,6 +36,7 @@ class ProtectedExportLifecycleVerifier:
         leak_scan = ProtectedArchiveLeakScanner().scan_zip_bytes(
             archive_path=archive_artifact.temporary_path,
             known_original_values=known_original_values,
+            generated_tokens=generated_tokens,
         )
         if not leak_scan.passed:
             findings = ", ".join(f"{finding.path}:{finding.category}" for finding in leak_scan.findings[:10])

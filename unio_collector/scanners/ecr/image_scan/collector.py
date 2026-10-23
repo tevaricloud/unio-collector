@@ -111,7 +111,7 @@ class EcrImageScanPostureReviewCollector(BaseUnioScanner):
             return None
         try:
             response = require_response_mapping(operation())
-            config = require_response_mapping(response.get("registryScanningConfiguration"))
+            config = require_response_mapping(response.get("scanningConfiguration"))
             scan_type = require_response_string(config.get("scanType"))
             rules = require_response_rows(config, "rules")
         except Exception as exc:  # noqa: BLE001

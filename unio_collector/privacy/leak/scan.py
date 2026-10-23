@@ -1,12 +1,16 @@
 from __future__ import annotations  # noqa: D100
 
+import hashlib
 import ipaddress
 import re
 from typing import TYPE_CHECKING
 from zipfile import ZipFile
 
 from unio_collector.privacy.leak.finding import LeakFinding
+from unio_collector.privacy.leak.public.paths import FIXED_BUNDLE_PATHS
+from unio_collector.privacy.leak.public.region import public_region
 from unio_collector.privacy.leak.result import LeakScanResult
+from unio_collector.privacy.leak.structure import json_syntax_scan_content, known_value_scan_content
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -60,17 +64,28 @@ class ProtectedArchiveLeakScanner:
         *,
         archive_path: Path,
         known_original_values: set[str],
+        generated_tokens: frozenset[str] = frozenset(),
     ) -> LeakScanResult:
         """Scan a protected ZIP archive for obvious plaintext leaks."""
         result = LeakScanResult()
         with ZipFile(archive_path, "r") as archive:
-            for name in sorted(archive.namelist()):
+            names = archive.namelist()
+            verified_checksums = (
+                frozenset(
+                    (name, hashlib.sha256(archive.read(name)).hexdigest())
+                    for name in names
+                    if name in FIXED_BUNDLE_PATHS and name not in {"manifest.json", "checksums.json"}
+                )
+                if len(names) == len(set(names))
+                else frozenset()
+            )
+            for name in sorted(names):
                 self._scan_filename(name, known_original_values, result)
                 if not name.lower().endswith(TEXT_SUFFIXES):
                     continue
                 result.files_scanned += 1
                 content = archive.read(name).decode("utf-8", errors="replace")
-                self._scan_content(name, content, known_original_values, result)
+                self._scan_content(name, content, known_original_values, result, generated_tokens, verified_checksums=verified_checksums)
         return result
 
     def scan_text(
@@ -79,11 +94,12 @@ class ProtectedArchiveLeakScanner:
         path: str,
         content: str,
         known_original_values: set[str],
+        generated_tokens: frozenset[str] = frozenset(),
     ) -> LeakScanResult:
         """Scan one text payload such as protected report package JSON."""
         result = LeakScanResult(files_scanned=1)
         self._scan_filename(path, known_original_values, result)
-        self._scan_content(path, content, known_original_values, result)
+        self._scan_content(path, content, known_original_values, result, generated_tokens)
         return result
 
     def _scan_filename(
@@ -102,7 +118,7 @@ class ProtectedArchiveLeakScanner:
                     LeakFinding(path=path, category="private_material_filename"),
                 )
                 return
-            if self._contains_known_original_filename_value(
+            if path not in FIXED_BUNDLE_PATHS and self._contains_known_original_filename_value(
                 scan_candidate,
                 known_original_values,
             ):
@@ -148,13 +164,20 @@ class ProtectedArchiveLeakScanner:
         content: str,
         known_original_values: set[str],
         result: LeakScanResult,
+        generated_tokens: frozenset[str],
+        *,
+        verified_checksums: frozenset[tuple[str, str]] = frozenset(),
     ) -> None:
-        for original in sorted(known_original_values, key=len, reverse=True):
-            if original and original in content:
-                result.findings.append(
-                    LeakFinding(path=path, category="known_original_value"),
-                )
-                break
+
+        regional_originals = {original for original in known_original_values if public_region(original)}
+        known_content = json_syntax_scan_content(path, known_value_scan_content(path, content, generated_tokens, verified_checksums=verified_checksums))
+        regional_content = json_syntax_scan_content(
+            path, known_value_scan_content(path, content, generated_tokens, mask_arn_regions=True, verified_checksums=verified_checksums)
+        )
+        if self._contains_original_content(known_content, known_original_values - regional_originals, generated_tokens) or self._contains_original_content(
+            regional_content, regional_originals, generated_tokens
+        ):
+            result.findings.append(LeakFinding(path=path, category="known_original_value"))
         pattern_content = SHA256_RE.sub("", UUID_RE.sub("", content))
         pattern_content = PROTECTED_TOKEN_RE.sub("", pattern_content)
         for category, pattern in (
@@ -170,6 +193,23 @@ class ProtectedArchiveLeakScanner:
             if self._is_public_ipv4(match.group(0)):
                 result.findings.append(LeakFinding(path=path, category="public_ipv4"))
                 break
+
+    def _contains_original_content(self, content: str, originals: set[str], generated_tokens: frozenset[str]) -> bool:
+        """Exclude only occurrences contained inside a registered generated token.
+
+        Keep originals equal to a token, crossing either boundary or surrounding
+        it visible. Never remove text before matching a complete customer value.
+        """
+        spans = [(match.start(), match.end(), match.group(0)) for match in PROTECTED_TOKEN_RE.finditer(content) if match.group(0) in generated_tokens]
+        for original in sorted(originals, key=len, reverse=True):
+            if not original:
+                continue
+            offset = content.find(original)
+            while offset != -1:
+                if not any(start <= offset and offset + len(original) <= end and original != generated for start, end, generated in spans):
+                    return True
+                offset = content.find(original, offset + 1)
+        return False
 
     def _contains_public_ipv4(self, value: str) -> bool:
         return any(self._is_public_ipv4(match.group(0)) for match in IPV4_RE.finditer(value))

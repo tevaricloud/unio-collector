@@ -9,20 +9,41 @@ from pathlib import Path
 from tools.collector_repository.identity import canonical_json
 
 
-def main(argv: list[str] | None = None) -> int:
-    """Execute a local-only standalone repository operation."""
+def _positive_workers(value: str) -> int:
+    workers = int(value)
+    if workers < 1:
+        message = "pytest workers must be positive"
+        raise argparse.ArgumentTypeError(message)
+    return workers
+
+
+def _parser() -> argparse.ArgumentParser:
+    """Define additive source-transfer options without changing existing commands."""
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    for name in ("verify", "validate", "native", "security", "provision", "bootstrap"):
+    for name in ("verify", "validate", "native-source", "native", "security", "provision", "bootstrap"):
         command = commands.add_parser(name)
         command.add_argument("--root", type=Path, default=Path.cwd())
-        if name in {"validate", "native", "security", "provision"}:
+        if name in {"validate", "native-source", "native", "security", "provision"}:
             command.add_argument("--output", type=Path, required=True)
-        if name in {"validate", "native"}:
+        if name in {"validate", "native-source", "native"}:
             command.add_argument("--source-sha")
+            command.add_argument(
+                "--pytest-workers", type=_positive_workers, default=1, help="Source pytest processes (default: serial); all standalone tests remain selected."
+            )
+        if name in {"native-source", "native"}:
+            command.add_argument("--test-shard", type=int, default=0)
+            command.add_argument("--test-shards", type=_positive_workers, default=1)
+        if name == "native":
+            command.add_argument("--source-evidence", type=Path, help="Exact same-attempt source-validation artifact; mismatches fail closed.")
         if name == "provision":
             command.add_argument("--tools", nargs="+", choices=("gitleaks", "actionlint"), default=["gitleaks"])
-    args = parser.parse_args(argv)
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Execute a local-only standalone repository operation."""
+    args = _parser().parse_args(argv)
     try:
         if args.command in {"bootstrap", "provision"}:
             from tools.collector_repository.toolchain import CiToolchain  # noqa: PLC0415
@@ -50,6 +71,14 @@ def main(argv: list[str] | None = None) -> int:
                 args.output,
                 native=args.command == "native",
                 source_sha=args.source_sha,
+                pytest_workers=args.pytest_workers,
+                **(
+                    {"test_shard": args.test_shard, "test_shards": args.test_shards}
+                    if args.command in {"native-source", "native"} and (args.test_shards != 1 or args.test_shard != 0)
+                    else {}
+                ),
+                **({"emit_source_evidence": True} if args.command == "native-source" else {}),
+                **({"source_evidence": args.source_evidence} if args.command == "native" and args.source_evidence is not None else {}),
             )
     except (ValueError, OSError, RuntimeError) as exc:
         sys.stderr.write(f"Standalone repository operation failed: {exc}\n")

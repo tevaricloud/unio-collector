@@ -169,7 +169,7 @@ class CollectorPrivacyService:
             "errors": list(result.errors),
         }
         if args.json:
-            self.console.print(json.dumps(payload, indent=2, sort_keys=True))
+            self.console.print(json.dumps(payload, indent=2, sort_keys=True), soft_wrap=True)
         else:
             status = "passed" if result.validation_passed else "failed"
             protected = "yes" if result.protected else "no"

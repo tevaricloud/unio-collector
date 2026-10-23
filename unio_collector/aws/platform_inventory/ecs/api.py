@@ -10,6 +10,7 @@ from unio_collector.aws.collection import (
 )
 from unio_collector.aws.ecs.service.arns import EcsServiceArnCollection
 from unio_collector.aws.ecs.service.details import EcsServiceDetailCollection
+from unio_collector.aws.ecs.service.failure import describe_failure_codes
 
 
 class ManagedPlatformEcsApiMixin:
@@ -61,6 +62,7 @@ class ManagedPlatformEcsApiMixin:
                     exc=exc,
                 )
                 continue
+            self._collector._extend_unique(permission_errors, describe_failure_codes(response, operation="describe_clusters"))  # noqa: SLF001
             clusters.extend(
                 self._collector._collect_response_items(response, "clusters"),  # noqa: SLF001
             )
@@ -172,6 +174,7 @@ class ManagedPlatformEcsApiMixin:
                     exc=exc,
                 )
                 continue
+            self._collector._extend_unique(permission_errors, describe_failure_codes(response, operation="describe_services"))  # noqa: SLF001
             services.extend(
                 {
                     **service,
