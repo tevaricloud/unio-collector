@@ -90,6 +90,8 @@ class RepositoryValidator:
                 else:
                     transfer = SourceValidationEvidence()
                     context = transfer.context(root, source_sha, output / "dependency-inventory.log", pytest_workers, test_shards)
+                    with suppress(OSError):
+                        (output / "source-context.json").write_bytes(canonical_json(context))
                     wheel, payload["source_validation"] = transfer.accept(root, source_evidence, output, context)
                     self._validate_wheel(root, output, python, wheel, process, source_sha=source_sha)
                 if native:

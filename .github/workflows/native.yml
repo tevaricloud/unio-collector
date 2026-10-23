@@ -23,9 +23,6 @@ jobs:
           - runner: windows-2022
             target: windows-x86_64
             pytest_workers: 2
-          - runner: ubuntu-22.04
-            target: linux-x86_64
-            pytest_workers: 2
           - runner: macos-15-intel
             target: macos-x86_64
             pytest_workers: 4
@@ -196,7 +193,7 @@ jobs:
       actions: read
       pull-requests: read
     if: always()
-    timeout-minutes: 120
+    timeout-minutes: ${{ matrix.target == 'linux-x86_64' && 360 || 120 }}
     strategy:
       fail-fast: false
       matrix:
@@ -224,7 +221,10 @@ jobs:
         run: test "$SOURCE_RESULT" = success
       - name: Reserve diagnostic upload budget
         shell: bash
-        run: echo "UNIO_VALIDATION_DEADLINE_EPOCH=$(( $(date +%s) + 110 * 60 ))" >> "$GITHUB_ENV"
+        run: |
+          MINUTES=110
+          if [[ "$RUNNER_OS" == Linux ]]; then MINUTES=350; fi
+          echo "UNIO_VALIDATION_DEADLINE_EPOCH=$(( $(date +%s) + MINUTES * 60 ))" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
@@ -239,11 +239,6 @@ jobs:
           echo "$RUNNER_TEMP/unio-ci-tools" >> "$GITHUB_PATH"
       - name: Install validation bootstrap dependency
         run: python -B -m tools.collector_repository bootstrap --root .
-      - name: Download exact source evidence
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
-        with:
-          pattern: native-source-${{ matrix.target }}-*-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/Unio-source-transfer
       - name: Prepare Windows packaging
         if: runner.os == 'Windows'
         shell: pwsh
@@ -261,11 +256,102 @@ jobs:
       - name: Prepare macOS malware scanner
         if: runner.os == 'macOS'
         run: |
+          GH_BIN="$(brew --prefix gh)/bin"
+          test -x "$GH_BIN/gh"
+          echo "$GH_BIN" >> "$GITHUB_PATH"
           brew install clamav
           mkdir -p "$RUNNER_TEMP/unio-collector-clamav"
           printf 'DatabaseDirectory %s\nDatabaseMirror database.clamav.net\n' "$RUNNER_TEMP/unio-collector-clamav" > "$RUNNER_TEMP/unio-collector-freshclam.conf"
           freshclam --config-file="$RUNNER_TEMP/unio-collector-freshclam.conf"
           echo "UNIO_COLLECTOR_CLAMAV_DATABASE=$RUNNER_TEMP/unio-collector-clamav" >> "$GITHUB_ENV"
+      - name: Verify trusted macOS GitHub CLI
+        if: runner.os == 'macOS'
+        shell: bash
+        run: >-
+          python -B -c "from tools.test_packages.executables import host_executable; print(host_executable('gh'))"
+      - name: Validate Linux source shard 0
+        if: runner.os == 'Linux'
+        timeout-minutes: 350
+        shell: bash
+        run: >-
+          xvfb-run -a python -B -m tools.collector_repository native-source --root . --source-sha "$GITHUB_SHA"
+          --pytest-workers "${{ matrix.pytest_workers }}" --test-shard 0 --test-shards 2
+          --output "$RUNNER_TEMP/Unio-linux-source-0-${GITHUB_RUN_ATTEMPT}"
+      - name: Transfer Linux source shard 0
+        if: runner.os == 'Linux'
+        timeout-minutes: 3
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: native-source-linux-x86_64-0-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/Unio-linux-source-0-${{ github.run_attempt }}/source-evidence.json
+            ${{ runner.temp }}/Unio-linux-source-0-${{ github.run_attempt }}/validation-summary.json
+            ${{ runner.temp }}/Unio-linux-source-0-${{ github.run_attempt }}/wheel/*.whl
+          retention-days: 3
+          if-no-files-found: error
+      - name: Retain Linux source shard 0 timings
+        if: ${{ always() && runner.os == 'Linux' }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: pytest-timings-linux-x86_64-0-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/Unio-linux-source-0-${{ github.run_attempt }}/pytest-durations.json
+          retention-days: 3
+          if-no-files-found: warn
+      - name: Retain Linux source shard 0 diagnostics
+        if: ${{ always() && runner.os == 'Linux' && (failure() || cancelled()) }}
+        timeout-minutes: 3
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: native-source-diagnostics-linux-x86_64-0
+          path: |
+            ${{ runner.temp }}/Unio-linux-source-0-${{ github.run_attempt }}/*.json
+            ${{ runner.temp }}/Unio-linux-source-0-${{ github.run_attempt }}/*.log
+          retention-days: 3
+          if-no-files-found: warn
+      - name: Validate Linux source shard 1
+        if: runner.os == 'Linux'
+        timeout-minutes: 350
+        shell: bash
+        run: >-
+          xvfb-run -a python -B -m tools.collector_repository native-source --root . --source-sha "$GITHUB_SHA"
+          --pytest-workers "${{ matrix.pytest_workers }}" --test-shard 1 --test-shards 2
+          --output "$RUNNER_TEMP/Unio-linux-source-1-${GITHUB_RUN_ATTEMPT}"
+      - name: Transfer Linux source shard 1
+        if: runner.os == 'Linux'
+        timeout-minutes: 3
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: native-source-linux-x86_64-1-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/Unio-linux-source-1-${{ github.run_attempt }}/source-evidence.json
+            ${{ runner.temp }}/Unio-linux-source-1-${{ github.run_attempt }}/validation-summary.json
+            ${{ runner.temp }}/Unio-linux-source-1-${{ github.run_attempt }}/wheel/*.whl
+          retention-days: 3
+          if-no-files-found: error
+      - name: Retain Linux source shard 1 timings
+        if: ${{ always() && runner.os == 'Linux' }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: pytest-timings-linux-x86_64-1-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/Unio-linux-source-1-${{ github.run_attempt }}/pytest-durations.json
+          retention-days: 3
+          if-no-files-found: warn
+      - name: Retain Linux source shard 1 diagnostics
+        if: ${{ always() && runner.os == 'Linux' && (failure() || cancelled()) }}
+        timeout-minutes: 3
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: native-source-diagnostics-linux-x86_64-1
+          path: |
+            ${{ runner.temp }}/Unio-linux-source-1-${{ github.run_attempt }}/*.json
+            ${{ runner.temp }}/Unio-linux-source-1-${{ github.run_attempt }}/*.log
+          retention-days: 3
+          if-no-files-found: warn
+      - name: Download exact source evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: native-source-${{ matrix.target }}-*-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/Unio-source-transfer
       - name: Validate native collector
         timeout-minutes: 105
         shell: bash
@@ -284,6 +370,7 @@ jobs:
           path: |
             ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/validation-summary.json
             ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/process-progress.json
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/source-context.json
             ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/source-evidence.json
             ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/installed-wheel-summary.json
             ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native/*summary.json
@@ -298,6 +385,7 @@ jobs:
           name: native-validation-diagnostics-${{ matrix.target }}
           path: |
             ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/process-progress.json
+            ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/source-context.json
             ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/validation-summary.json
             ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native-build.log
             ${{ runner.temp }}/unio-collector-native-${{ github.run_attempt }}/native-installer.log

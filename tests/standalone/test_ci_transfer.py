@@ -140,6 +140,38 @@ def test_transfer_rejects_tampering_and_nonpassing_contracts(transfer: tuple[Pat
     assert before == {str(p): sha256(p.read_bytes()) for p in root.rglob("*") if p.is_file() and ".git" not in p.parts}
 
 
+@pytest.mark.parametrize(("source_image", "native_image"), [("20261018.327.1", "20261012.322.1"), ("same", "same")])
+def test_transfer_preserves_exact_runner_image_binding(transfer: tuple[Path, Path, Path, dict[str, Any]], source_image: str, native_image: str) -> None:
+    """The retained Linux image difference rejects; an exact context still passes."""
+    root, bundle, output, context = transfer
+    proof = read_json(bundle / "source-evidence.json")
+    proof["context"]["workflow"]["ImageVersion"] = source_image
+    (bundle / "source-evidence.json").write_bytes(canonical_json(proof))
+    context["workflow"]["ImageVersion"] = native_image
+    if source_image != native_image:
+        with pytest.raises(ValueError, match=r"mismatch \(workflow.ImageVersion\)"):
+            SourceValidationEvidence().accept(root, bundle, output, context)
+        assert not list(output.iterdir())
+    else:
+        _wheel, result = SourceValidationEvidence().accept(root, bundle, output, context)
+        assert result["status"] == "verified"
+
+
+def test_context_diagnostic_does_not_disclose_untrusted_fields(transfer: tuple[Path, Path, Path, dict[str, Any]]) -> None:
+    """Unexpected proof keys and values never become stdout diagnostics."""
+    root, bundle, output, context = transfer
+    proof = read_json(bundle / "source-evidence.json")
+    proof["context"]["untrusted\n" * 1000] = "synthetic-private-value"
+    (bundle / "source-evidence.json").write_bytes(canonical_json(proof))
+    with pytest.raises(ValueError, match=r"mismatch \(unexpected\)") as rejected:
+        SourceValidationEvidence().accept(root, bundle, output, context)
+    assert "untrusted" not in str(rejected.value)
+    assert "synthetic-private-value" not in str(rejected.value)
+    maximum_message_length = 200
+    assert len(str(rejected.value)) < maximum_message_length
+    assert not list(output.iterdir())
+
+
 def test_context_rejects_checkout_and_export_mutation(transfer: tuple[Path, Path, Path, dict[str, Any]]) -> None:
     """Actual current bytes and Git HEAD are authoritative at packaging time."""
     root, _bundle, output, _context = transfer

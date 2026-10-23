@@ -100,7 +100,10 @@ class SourceValidationEvidence:
         """Check one sealed member; only the aggregate method admits sharded coverage."""
         proof = read_json(regular_file(evidence, "source-evidence.json"))
         require(set(proof) == {"schema_version", "context", "files"} and proof["schema_version"] == SCHEMA, "Unsupported source evidence.")
-        require(proof["context"] == context, "Source evidence identity, target, dependencies or configuration mismatch.")
+        if proof["context"] != context:
+            fields = self._context_fields(context, proof["context"])
+            message = f"Source evidence identity, target, dependencies or configuration mismatch ({fields})."
+            raise ValueError(message)
         summary = read_json(regular_file(evidence, "validation-summary.json"))
         self._summary(summary, context["pytest_workers"])
         require(summary.get("test_partition", {}).get("count", 1) == context["test_shards"], "Source shard configuration mismatch.")
@@ -120,6 +123,26 @@ class SourceValidationEvidence:
             "steps": summary["steps"],
             **({"test_partition": summary["test_partition"]} if "test_partition" in summary else {}),
         }
+
+    @staticmethod
+    def _context_fields(expected: dict[str, Any], actual: object) -> str:
+        """Name bounded differing fields without disclosing untrusted values or keys."""
+        if not isinstance(actual, dict):
+            return "context"
+        fields = []
+        for key, value in expected.items():
+            if key in actual and actual[key] == value:
+                continue
+            observed = actual.get(key)
+            if isinstance(value, dict) and isinstance(observed, dict):
+                fields.extend(f"{key}.{part}" for part in value if part not in observed or observed[part] != value[part])
+                if observed.keys() - value.keys():
+                    fields.append(f"{key}.unexpected")
+            else:
+                fields.append(key)
+        if actual.keys() - expected.keys():
+            fields.append("unexpected")
+        return ", ".join(fields[:16]) or "context"
 
     def _accept_shards(self, evidence: Path, output: Path, context: dict[str, Any]) -> tuple[Path, dict[str, Any]]:
         """Verify every same-attempt source shard before admitting a packaging wheel."""

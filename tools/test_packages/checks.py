@@ -28,7 +28,9 @@ class MatrixAcceptance:
         require(run["status"] == "completed" and run["conclusion"] == "success", "Native workflow did not pass.")
         jobs = self.api.rows(f"actions/runs/{context['run_id']}/attempts/{context['attempt']}/jobs", "jobs")
         expected = {f"native ({runner}, {target})" for target, (runner, _) in TARGETS.items()}
-        expected |= {f"native source ({runner}, {target}, shard {number})" for target, (runner, _) in TARGETS.items() for number in range(2)}
+        expected |= {
+            f"native source ({runner}, {target}, shard {number})" for target, (runner, _) in TARGETS.items() if target != "linux-x86_64" for number in range(2)
+        }
         expected |= {"retention-request", "retention-approval"}
         require(
             len(jobs) == len(expected)
@@ -40,7 +42,29 @@ class MatrixAcceptance:
             ),
             "Missing/failed/ambiguous matrix job.",
         )
+        linux = next(j for j in jobs if j["name"] == "native (ubuntu-22.04, linux-x86_64)")
+        self._linux_steps(linux)
         return {target: next(j["id"] for j in jobs if j["name"] == f"native ({runner}, {target})") for target, (runner, _) in TARGETS.items()}
+
+    @staticmethod
+    def _linux_steps(job: dict[str, Any]) -> None:
+        """Authenticate co-located source coverage before accepting Linux packaging."""
+        required = [
+            "Prepare Linux native prerequisites",
+            "Validate Linux source shard 0",
+            "Transfer Linux source shard 0",
+            "Validate Linux source shard 1",
+            "Transfer Linux source shard 1",
+            "Download exact source evidence",
+            "Validate native collector",
+        ]
+        steps = job.get("steps", [])
+        selected = [step for step in steps if step.get("name") in required]
+        require(
+            [step["name"] for step in selected] == required
+            and all(step.get("status") == "completed" and step.get("conclusion") == "success" for step in selected),
+            "Missing/failed/ambiguous co-located Linux source or packaging step.",
+        )
 
     def controls(self, context: dict[str, Any]) -> None:
         """Verify exact workflow and executable controller bytes against trusted local source."""

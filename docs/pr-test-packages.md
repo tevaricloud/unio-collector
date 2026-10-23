@@ -62,7 +62,15 @@ not dispatch a workflow or recover bytes already discarded by an older run.
 
 ## Approval and job dependencies
 
-`source` remains the existing exhaustive eight-shard matrix. A separate hosted
+All eight source shards remain required. `source` runs six Windows/macOS jobs;
+the two Linux shards run sequentially inside the Ubuntu 22.04 `native` job before
+packaging, so their actual runner image cannot diverge. Each invocation retains
+its fresh disposable environment, unchanged tests/workers and complete context
+comparison. Linux uploads both original sealed shard artifacts and downloads them
+through the same attempt-specific transport before packaging. The selector checks
+the successful ordered source, transfer and native steps through authenticated
+job metadata, as well as both complete proofs. No separate Linux source job can
+substitute for that shared allocation. A separate hosted
 `retention-request` job runs only for opted-in eligible PRs, verifies configuration
 and candidate metadata, and retains a seven-day `request.json`. Its fresh random
 challenge covers repository, run/attempt, PR head/base, actual merge checkout and
@@ -83,7 +91,11 @@ The four `native` jobs depend on source, request and approval, retain their
 Ordinary non-opted-in PRs and dispatches skip both retention jobs, so normal
 validation does not wait for approval. For opted-in PRs a pending protected
 approval holds all four native jobs before runner allocation; source validation
-and separate Python/security workflows can continue. After a terminal request or
+for Windows/macOS and separate Python/security workflows can continue. Linux source
+work starts inside the native job after approval becomes terminal; it shares a
+350-minute overall subprocess deadline within a 360-minute job cap with packaging.
+This sacrifices Linux shard parallelism without skipping coverage or raising
+worker counts. After a terminal request or
 approval failure/rejection, `native: always()` still runs the existing validation
 and packaging if source validation succeeded. Every PR retention step additionally
 requires the verified `approved=true` output, so a failed/rejected approval cannot

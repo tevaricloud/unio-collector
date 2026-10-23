@@ -45,8 +45,8 @@
     {
       "category": "repository_metadata",
       "path": ".github/workflows/native.yml",
-      "sha256": "9d02639b29ba3c30eae70c3ca37bea8ae1c50d4a3cf4515d13beb08551dc8a7d",
-      "size": 16383
+      "sha256": "a3d1c078f331139ab90d2810e985b8f2a6f57ae224e73c3cdd4cd171fef4042b",
+      "size": 21078
     },
     {
       "category": "repository_metadata",
@@ -117,8 +117,8 @@
     {
       "category": "repository_metadata",
       "path": "docs/pr-test-packages.md",
-      "sha256": "2ca35cacdce707d51e3b24018bc47e99e9c5b07a4fa11082f5286437054e1e4d",
-      "size": 11954
+      "sha256": "ce91bf62a3762a70c3fb512a09a6fdc11bab65972d85c1426f99aa6893874996",
+      "size": 12860
     },
     {
       "category": "repository_metadata",
@@ -357,8 +357,8 @@
     {
       "category": "tests",
       "path": "tests/standalone/test_ci_transfer.py",
-      "sha256": "daf909dc4fbe438d119f70cc2b89ba93d0342b75785777dd2611e61d9ccbd059",
-      "size": 7273
+      "sha256": "679544c75634175ab737c8b96c337c0941330509ef46c78a17c62753ed342c77",
+      "size": 9156
     },
     {
       "category": "tests",
@@ -1497,8 +1497,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/collector_repository/evidence.py",
-      "sha256": "f315649858217c44dc14a8d62754fcee4a62172cea2c8236c4984d4dae7c8ca0",
-      "size": 10080
+      "sha256": "30c251b8f38bcc87ae991c5e72d0533c1ba8da9eeff31c61c1e29e1b932a8902",
+      "size": 11137
     },
     {
       "category": "repository_metadata",
@@ -1557,8 +1557,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/collector_repository/validation.py",
-      "sha256": "322bce6299c5172ad05ac1e8b89c031bf362084f6a4172a81a866cb184ce28a7",
-      "size": 11981
+      "sha256": "1b9bb56182a916f6ca66676d24547be67cb9e8052c86c7e08f1016a2f1a88745",
+      "size": 12119
     },
     {
       "category": "repository_metadata",
@@ -1761,8 +1761,8 @@
     {
       "category": "repository_metadata",
       "path": "tools/test_packages/checks.py",
-      "sha256": "8bf273ae4158450a2aa2b27631306cce75219170d80d200e167d312bfb6a5d52",
-      "size": 5280
+      "sha256": "e929e9ac3992c778260d361e243d2296c80643818fdda9b3cc8739831f5202df",
+      "size": 6361
     },
     {
       "category": "repository_metadata",
@@ -1845,7 +1845,7 @@
     {
       "category": "repository_metadata",
       "path": "tools/windows_installer/policy.json",
-      "sha256": "2221a146444b32c800a4db3a1db2f99f41240a4b9fb5400a482c8ee02525863f",
+      "sha256": "528fcef43a7048d99f73248be5f0599a158336762e172376217d93700a4df915",
       "size": 98
     },
     {
@@ -12728,5 +12728,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "3f951e2befdeccafa82f150c81e687ea07f8cd4a5220d126e5b00959f90d9388"
+  "tree_digest": "92911ef87b834b8223ccd09e95f2d3bd6d273a1a90deeec71d34f3dc49c34db6"
 }
