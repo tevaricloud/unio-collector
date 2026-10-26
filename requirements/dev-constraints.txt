@@ -14,7 +14,7 @@ cyclonedx-python-lib==11.11.0
 defusedxml==0.7.1
 distlib==0.4.3
 execnet==2.1.2
-filelock==3.32.3
+filelock==4.2.1
 identify==2.6.19
 idna==3.20
 iniconfig==2.3.0
@@ -50,7 +50,7 @@ requests==2.34.2
 rich==15.0.0
 ruff==0.16.5
 s3transfer==0.19.2
-setuptools==83.0.0
+setuptools==84.1.0
 six==1.17.0
 sortedcontainers==2.4.0
 stevedore==5.9.0
