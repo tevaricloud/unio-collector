@@ -3,7 +3,7 @@ FROM python:3.12-slim-trixie@sha256:f77ac9e44ae96ef2c90b8053ea08c31f8be030f82419
 ENV PYTHONDONTWRITEBYTECODE=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 WORKDIR /src
 COPY . .
-RUN python -m pip install --no-cache-dir "setuptools==83.0.0" "wheel==0.48.0" \
+RUN python -m pip install --no-cache-dir "setuptools==84.1.0" "wheel==0.48.0" \
     && python -m pip install --no-cache-dir --require-hashes --prefix /opt/runtime -r requirements/container-runtime.lock \
     && python -m pip install --no-cache-dir --require-hashes -r requirements/container-runtime.lock \
     && python -m pip wheel --no-deps --no-build-isolation --wheel-dir /tmp/wheel . \

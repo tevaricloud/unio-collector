@@ -5,7 +5,7 @@ boolean.py==5.0
 boto3==1.43.99
 botocore==1.43.99
 CacheControl==0.14.4
-certifi==2026.6.17
+certifi==2026.10.19
 cfgv==3.5.0
 charset-normalizer==3.4.9
 colorama==0.4.6
@@ -14,7 +14,7 @@ cyclonedx-python-lib==11.11.0
 defusedxml==0.7.1
 distlib==0.4.3
 execnet==2.1.2
-filelock==3.32.3
+filelock==4.2.1
 identify==2.6.19
 idna==3.20
 iniconfig==2.3.0
@@ -25,7 +25,7 @@ mdurl==0.1.2
 msgpack==1.2.1
 nodeenv==1.10.0
 packageurl-python==0.17.6
-packaging==26.2
+packaging==26.3
 pip-api==0.0.34
 pip-requirements-parser==32.0.1
 pip_audit==2.10.1
@@ -50,7 +50,7 @@ requests==2.34.2
 rich==15.0.0
 ruff==0.16.5
 s3transfer==0.19.2
-setuptools==83.0.0
+setuptools==84.1.0
 six==1.17.0
 sortedcontainers==2.4.0
 stevedore==5.9.0
@@ -60,5 +60,5 @@ types-PyYAML==6.0.12.20260518
 typing-inspection==0.4.4
 typing_extensions==4.15.0
 urllib3==2.8.0
-virtualenv==21.7.13
+virtualenv==21.14.10
 wheel==0.48.0

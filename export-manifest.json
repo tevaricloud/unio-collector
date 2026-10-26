@@ -44,6 +44,12 @@
     },
     {
       "category": "repository_metadata",
+      "path": ".github/workflows/native-lock-refresh.yml",
+      "sha256": "88328e2e22ab77e09789da2dc4585df35e5448b2cfa47a1b1fc8550b657054e5",
+      "size": 3987
+    },
+    {
+      "category": "repository_metadata",
       "path": ".github/workflows/native.yml",
       "sha256": "7a7c7a41caf16b1d5393b6a5e5c6f701cf3c377c9c3384a1b71b355b1cf55a2f",
       "size": 5234
@@ -81,7 +87,7 @@
     {
       "category": "repository_metadata",
       "path": "Dockerfile",
-      "sha256": "cd632529f781e38a3258a3ed44624601d451109dbf88273cc1619634e6ed4db6",
+      "sha256": "5c87227eb7d6a4b6db118a42ca05944e2ebd230e5b971d877de17a08fc668ca6",
       "size": 1815
     },
     {
@@ -141,8 +147,8 @@
     {
       "category": "repository_metadata",
       "path": "requirements/dev-constraints.txt",
-      "sha256": "2c067746256b1857ba1d8181a0131c04c116736b0afdef620eff084a4bcd253c",
-      "size": 1176
+      "sha256": "b17996ef62f8d175dffbdc6518645ad2fe7410651f3f755691cfb08020e1cefa",
+      "size": 1177
     },
     {
       "category": "repository_metadata",
@@ -9818,5 +9824,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "e0b9b27f6b6e69b9c02bc30ca7de3b8dce09f33de0f2d98dabcf7bb228085d2b"
+  "tree_digest": "05804dfe1e81d039913dfd97013d3d8a48ac97c7629cd959b8a4b77d67ae06d4"
 }
