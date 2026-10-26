@@ -1,0 +1,99 @@
+name: Native Lock Refresh
+'on':
+  workflow_dispatch:
+    inputs:
+      expected_source_sha:
+        description: Exact reviewed public candidate SHA (40 lowercase hex characters)
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: native-lock-refresh-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  generate:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {runner: windows-2022, target: windows-x86_64}
+          - {runner: ubuntu-22.04, target: linux-x86_64}
+          - {runner: macos-15-intel, target: macos-x86_64}
+          - {runner: macos-15, target: macos-arm64}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Require reviewed source and fresh run
+        shell: bash
+        env:
+          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha }}
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$EXPECTED_SOURCE_SHA" == "$GITHUB_SHA" ]]
+          [[ "$(git rev-parse HEAD)" == "$GITHUB_SHA" ]]
+          [[ "$GITHUB_RUN_ATTEMPT" == 1 ]]
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.10'
+      - run: 'python -m pip install --only-binary=:all: pip-tools==7.6.1 setuptools==84.1.0'
+      - name: Generate and check only the matching native lock
+        shell: bash
+        env:
+          LOCK_TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          artifact_root="$RUNNER_TEMP/native-lock-$LOCK_TARGET"
+          mkdir -p "$artifact_root"
+          python -B -m tools.native_locks generate --target "$LOCK_TARGET" --source-sha "$GITHUB_SHA" --evidence "$artifact_root/native-$LOCK_TARGET.provenance.json"
+          python -B -m tools.native_locks check --target "$LOCK_TARGET"
+          cp "requirements/native-$LOCK_TARGET.lock" "$artifact_root/"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: native-lock-${{ matrix.target }}
+          path: ${{ runner.temp }}/native-lock-${{ matrix.target }}/
+          retention-days: 3
+          if-no-files-found: error
+  consolidate:
+    needs: generate
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Require reviewed source and fresh run
+        shell: bash
+        env:
+          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha }}
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$EXPECTED_SOURCE_SHA" == "$GITHUB_SHA" ]]
+          [[ "$(git rev-parse HEAD)" == "$GITHUB_SHA" ]]
+          [[ "$GITHUB_RUN_ATTEMPT" == 1 ]]
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: native-lock-*
+          path: ${{ runner.temp }}/native-lock-artifacts
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.10'
+      - run: 'python -m pip install --only-binary=:all: pip-tools==7.6.1 setuptools==84.1.0'
+      - name: Validate the exact four-target set
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m tools.native_locks validate-set --artifact-root "$RUNNER_TEMP/native-lock-artifacts" --source-sha "$GITHUB_SHA" --destination "$RUNNER_TEMP/native-lock-set/requirements"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: validated-native-lock-set
+          path: ${{ runner.temp }}/native-lock-set/
+          retention-days: 3
+          if-no-files-found: error

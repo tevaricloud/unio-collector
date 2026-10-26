@@ -44,6 +44,12 @@
     },
     {
       "category": "repository_metadata",
+      "path": ".github/workflows/native-lock-refresh.yml",
+      "sha256": "88328e2e22ab77e09789da2dc4585df35e5448b2cfa47a1b1fc8550b657054e5",
+      "size": 3987
+    },
+    {
+      "category": "repository_metadata",
       "path": ".github/workflows/native.yml",
       "sha256": "a3d1c078f331139ab90d2810e985b8f2a6f57ae224e73c3cdd4cd171fef4042b",
       "size": 21078
@@ -81,7 +87,7 @@
     {
       "category": "repository_metadata",
       "path": "Dockerfile",
-      "sha256": "cd632529f781e38a3258a3ed44624601d451109dbf88273cc1619634e6ed4db6",
+      "sha256": "5c87227eb7d6a4b6db118a42ca05944e2ebd230e5b971d877de17a08fc668ca6",
       "size": 1815
     },
     {
@@ -123,8 +129,8 @@
     {
       "category": "repository_metadata",
       "path": "pyproject.toml",
-      "sha256": "c0690c44afb76f333b41e74b308299fe67dcfc4acd86b58073e967e65e637280",
-      "size": 5184
+      "sha256": "60b15fa1aea9302a3f8d6a8f1e70bfe234710697a6ba2b491835af2c090acb52",
+      "size": 5206
     },
     {
       "category": "repository_metadata",
@@ -147,14 +153,14 @@
     {
       "category": "repository_metadata",
       "path": "requirements/dev-constraints.txt",
-      "sha256": "3d7992f078071fdb8b366132d90a4f98f596557689ca589ca2a40b30be8102a4",
+      "sha256": "b17996ef62f8d175dffbdc6518645ad2fe7410651f3f755691cfb08020e1cefa",
       "size": 1177
     },
     {
       "category": "repository_metadata",
       "path": "requirements/native-constraints.txt",
-      "sha256": "84e42487e618cbf7bb9f7e7fc6977913811ce33c08378c66fe38c1b87c233cd4",
-      "size": 111
+      "sha256": "6a97218328f3c55e5d1188449171449e2e62fb1c935b606d72033e0eea12dc30",
+      "size": 130
     },
     {
       "category": "repository_metadata",
@@ -12728,5 +12734,5 @@
     }
   ],
   "schema_version": "2026-09-collector-repository-v2",
-  "tree_digest": "92911ef87b834b8223ccd09e95f2d3bd6d273a1a90deeec71d34f3dc49c34db6"
+  "tree_digest": "82a23d939c12d9b705f8ec02c856ebd7fac1f793a7f042cc1b2faca79fcffeb4"
 }
